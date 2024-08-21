@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "-highlight",
+    "api-language-selector@https://github.com/algorithm-archivists/gitbook-plugin-api-language-selector.git",
+    "honkit-plugin-katex",
+    "prism"
+  ]
+}

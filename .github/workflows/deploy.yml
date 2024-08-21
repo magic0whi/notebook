@@ -1,0 +1,19 @@
+# name: Build and Deploy
+# on: [push]
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v4.1.7
+#     - name: Install (cache) and build
+#     # - name: Cache
+#       # uses: actions/cache@v4.0.2
+#       # with:
+#         # path: node_moduleskey: ${{ runner.os }}-node-${{ hashFiles('**/')}}        
+#     - name: Install and build
+#       run: |
+#         yarn install && yarn link --cwd honkit-plugin-katex
+#         yarn run honkit build
+#     - name: Deploy
+#       uses: magic0whi/git
