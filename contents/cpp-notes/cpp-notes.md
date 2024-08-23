@@ -1,43 +1,26 @@
 ---
-title: C++ Notes
 date: 2020-02-08 16:45:08
 tags:
 ---
 
-Notes on Cherno C++ Tutorial
-
-<!-- more -->
-<style>
-.card:not(#back-to-top) .card-content::before {
-  background-color: #1b1b1b;
-}
-article.article .content {
-  font-family: KaTeX_Main, FZYaSongS-R-GB, serif;
-  font-size: 18px;
-  word-spacing: 2px;
-}
-article.article .content code, article.article .content pre {
-  font-family: Iosevka Term Extended, monospace;
-  font-size: 14px;
-}
-</style>
+# C++ Notes
 
 ## Notice
 
-1. If an object have pointer variable inside, write a copy constructor and use it.
+1. If an object have pointer member inside, write copy constructor, destructor.
 2. Default float type is `double`, use `float a = 5.5f`.
 3. Header or inline?  (the later copys whole function body into the area where the function is called).
 
 ## Assembly
 
-```c++
+```cpp
 int main(int const argc, char const* argv[]) {
   if (argc > 5) return 29;
   else return 42;
 }
 ```
 
-```asm
+```nasm
 cmp edi, 5      // Compare argc to 5
 mov edx, 42     // Loads 42 to edx
 mov eax, 29     // Loads 29 to eax
@@ -64,14 +47,14 @@ ret
    
    The parameter of `ld` are platform specific (mainly depends on Clang/GCC version). Enable verbose to get the parameter of the `collect2` (which is an alias of `ld`):
    For Clang:
-   ```console
+   ```bash
    # # Only run preprocess, compile, and assemble steps
    $ clang++ -v -c hello.cpp -o hello.o
    # # For GCC:
    $ g++ -v -c hello.cpp -o hello.o
    ```
    Ld may looks messy, but you can significantly shorten that link line by removing some arguments. Here's the minimal set I came up after some experimentations:
-   ```console
+   ```bash
    $ ld -I/lib64/ld-linux-x86-64.so.2 \
    -o hello \
    /usr/lib64/Scrt1.o \
@@ -90,6 +73,7 @@ ret
   trivial type can be copied and moved with `memcpy`, `memmove` and constructed destructed without doing anything. Can be checked using `std::is_trivial<Type>()`.
 
 Different memory allocation size for C++ Data Type:
+
 | | |
 |---| --- |
 | `char` | 1 byte |
@@ -112,15 +96,13 @@ Different memory allocation size for C++ Data Type:
 
 Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` includes another header file `c.h`, while you have already include `c.h` before in `a.cpp`)
 
-Two ways:
-- `#pragma once`
-- 
-  ```c++ Log.h
+- Way one: `#pragma once`
+- Way two:
+  ```cpp
+  // Log.h
   #ifndef _LOG_H
   #define _LOG_H
-
   // some sentence...
-
   #endif
   ```
 
@@ -130,7 +112,6 @@ Two ways:
 - By default VS2015 put intermediate files in debug directory
 - It's recommand to set `Output Directory` into `$(SolutionDir)bin\$(Platform)\$(Configuration)\`
   and set `Intermediate Directory` into `$(SolutionDir)bin\intermediate\$(Platform)\$(Configuration)\`
-
 - The `watch view` in VS2015 allows you to specify the variables to be monitored,
   In `memory window` you can search by keyword `&a` to show the address of variable `a`
 - The default value of uninitialized variables is `0xcccccccc`
@@ -139,8 +120,8 @@ Two ways:
 
 - The pointer represents a memory address, generally the data type of the pointer is used to represent the type of the data at the target address.
 - Pointer to Pointer:
-  ```c++
-  #include <cstring>
+  ```cpp
+  import std;
   int main() {
     char* buf{new char[8]}; // Allocate a space with 8 chars
     std::memset(buf, 0, 8); // Fill it with zero,
@@ -174,118 +155,116 @@ They are no different in low level, so a `class` can inherit a `struct` (Not rec
 `sturct` is more suitable for store multiple variables, its variables are default have attribute `public`, therefore it's convient to express a data structure. While `class` is more suitable for express object, which has both member variables and methods.
 
 
-Struct Bit-fields
-```c++
+### Struct Bit-fields
+```cpp
 struct S {
-  unsigned int a : 1 {0}; // Default value are allowed in C++20
+  unsigned int a : 1 {0}; // Set default value is allowed in C++20
   unsigned int b : 8 = 'a';
   int c : 23;
   long e : 32;
 };
 int main() {
-  std::println("Size of Sttucture with Bit Fields: {}", sizeof(S)); // Bit-field size: 1 + 7 + 24 + 32 = 64 (12 bytes), depends on the largest primitive type in structure
+  // Bit-field size: 1 + 7 + 24 + 32 = 64 (12 bytes), depends on the largest
+  // primitive type in structure
+  std::println("Size of Sttucture with Bit Fields: {}", sizeof(S));
 }
 ```
 
+### Enum
+
 Enum is a way to define a set of distinct values that have underlying integer types (, see below).
 
-```c++
-#include <iostream>
-#include <string_view>
+```cpp
+import std;
 class Log {
 // Access specifiers 'public', 'private' can be placed multiple times
 public:
   // Can use `char` type as well
   // enum Level : unsigned char
-  enum Level {
-    // Start from one, default is 0
-    LevelError = 1, LevelWarning, LevelInfo
-  };
+  enum Level { LevelError = 1, LevelWarning, LevelInfo }; // Start from one,
+  // default is 0
 private:
-  Level m_log_lv = LevelInfo;
+  Level m_log_lv{LevelInfo};
 public:
-  void set_lv(Level lv) {
-    m_log_lv = lv;
+  void set_lv(Level lv) noexcept { m_log_lv = lv; }
+  void err(const std::string_view msg) const noexcept {
+    if (m_log_lv >= LevelError) std::println("[Error]: {}", msg);
   }
-  void err(const std::string_view msg) const {
-    if (m_log_lv >= LevelError) std::cout << "[Error]:" << msg << '\n';
+  void warn(const std::string_view msg) const noexcept {
+    if (m_log_lv >= LevelWarning) std::println("[WARN]: {}", msg);
   }
-  void warn(const std::string_view msg) const {
-    if (m_log_lv >= LevelWarning) std::cout << "[WARN]:" << msg<< '\n';
-  }
-  void info(const std::string_view msg) const {
-    if (m_log_lv >= LevelInfo)
-      std::cout << "[INFO]:" << msg<< '\n';
+  void info(const std::string_view msg) const noexcept {
+    if (m_log_lv >= LevelInfo) std::println("[INFO]: {}", msg);
   }
 };
 int main() {
   Log log;
   log.set_lv(Log::LevelWarning); // Enum name is optional
-  log.err("Hello");
-  log.warn("Hello");
-  log.info("Hello");
+  log.err("Hello"), log.warn("Hello"), log.info("Hello");
 }
 ```
 
-> `using enum` to create alias for `enum`
+> In C++20 you can use `using enum` to create alias for enums
 
 ## Static
 
-- Static functions and variables outside of class limit the scope in its translation unit (like `private` in a class). But define static functions or variables that share a same name in different translation unit will cause duplicate definition error in linking stage.
+- Static functions and variables outside of class has the scope limit in its translation unit (like `private` in a class). But define static functions or variables that share a same name in different translation unit will cause duplicate definition error in linking stage.
 - Static variable inside a class or struct means that variable is going to share memory with all of the instances of the class, in other words there's only one instance of that static variable. Static methods cannot access non-static members its class, hence it don't have instance of the class.
 - Define `static` variables in header files if possible.
 - Local Static
-  ```c++
-  #include <iostream>
-  void func() {
+  ```cpp
+  import std;
+  void func() noexcept {
     static int s_i{}; // 's_' means static
-    s_i++;
-    std::cout << s_i << '\n';
+    std::println("{}", ++s_i);
   }
-  int main() { func(); func(); func(); func(); }
+  int main() { func(), func(), func(), func(); }
   ```
 
 ### Classical Singleton
 
 Singleton are classes that allow only one instance.
 - One way:
-  ```c++
-  #include <iostream>
+  ```cpp
+  import std;
   class Singleton {
   private:
-    static Singleton* s_instance;
-    Singleton() {}; // Private empty construct function prevents instantiate
+    constinit static Singleton* s_instance;
+    constexpr Singleton() noexcept {}; // Private empty construct function
+    // prevents instantiate
   public:
-    static Singleton& get() { return *s_instance; };
-    void hello() { std::cout << "Hello" << '\n'; };
+    static Singleton& get() noexcept { return *s_instance; }
+    void hello() const noexcept { std::println("Hello"); }
   };
-  // Static members in class shoud defined out-of-line, but here I given a nullptr to pass static analyze
-  Singleton* Singleton::s_instance{nullptr};
-  // Though no memory spaces created for the class, we can still access methods
-  int main() { Singleton::get().hello(); }
+  constinit Singleton* Singleton::s_instance{nullptr}; // Static members in
+  // class shoud defined out-of-line, here I given a nullptr to pass the static
+  // analyze
+  int main() { Singleton::get().hello(); } // Though no memory spaces created
+  // for the class, we can still access methods
   ```
 - Another way:
-  ```c++
-  #include <iostream>
+  ```cpp
+  import std;
   class Singleton {
   private:
     Singleton() {};
   public:
     static Singleton& get() {
-      static Singleton s_instance; // Put instance into a local static variable (Pro: less code)
+      static Singleton s_instance; // Put instance into a local static variable
+      // (Pro: less code)
       return s_instance;
-    };
-    void hello() { std::cout << "Hello" << '\n'; };
+    }
+    void hello() { std::println("Hello"); }
   };
   int main() { Singleton::get().hello(); }
   ```
 
 ## Constructors & Destructors
 
-Corstructor provides a way to initialize primitive types when creating instance. Otherwise you have to do it manually or they will be keep to whatever is left over in that memory.
+Corstructor provides a way to initialize primitive types when creating instance. Otherwise you have to do it manually or they will be keep whatever is left over in that memory.
 
-To Prevent creating instance, you can set constructor as priavate, or delete it.
-```c++
+To prevent creating instance, you can set constructor as priavate, or delete it.
+```cpp
 class Log {
 private:
   Log() {} // One way
@@ -304,107 +283,123 @@ It can be called directly: `SomeClass.~SomeClass();`
 
 ## Inheritance & Virtual Functions
 
-- Size of derived class (aka. sub class): (base class) + (defined variables)
-- Derived class implicitly call base class's constructor
+- Size of derived class (aka. sub class): `(base class) + (defined variables)`.
+- Derived class implicitly call base class's constructor.
 
 Why we need virtual function:
-```c++
-#include <iostream>
-#include <string>
+```cpp
+import std;
 class Entity {
 public:
-  std::string get_name() { return "Entity"; }  
+  constexpr std::string_view get_name() const noexcept { return "Entity"; }
 };
-// public inheritance keep public members in base class public in derived class,
-// otherwise they becomes to private
-class Player : public Entity {
+class Player : public Entity { // Public inheritance keep public members in base
+// class public in derived class, otherwise they becomes to private
 private:
   std::string m_name;
 public:
-  Player(const std::string& name) : m_name{name} {}
-  std::string get_name() { return m_name; }
+  Player(std::string const& name) noexcept : m_name{name} {}
+  constexpr std::string_view get_name() const noexcept { return m_name; }
 };
 int main() {
   Entity* entity{new Entity};
-  std::cout << entity->get_name() << '\n';
+  std::println("{}", entity->get_name());
+  delete entity;
 
   Player* player{new Player{"Cherno"}};
-  Entity* entity2{player}; // Cast player to Entity
-  std::cout << entity2->get_name() << '\n';
+  std::println("{}", static_cast<Entity*>(player)->get_name()); // Cast player to
+  // Entity
+  delete player;
 }
 ```
 Outputs:
-```console
+```bash
 Entity
 Entity
 ```
 The problem occurs that the second output should be "Cherno". When the pointer type is the main class `Entity`, the method `get_name()` uses it's main class' version even it's actually an instance of `Player`, this definitely a problem.
 
 If you want to override a method you have to mark the method in the base class as `virtual`. Correct version:
-```c++
-#include <iostream>
+```cpp
 class Entity {
 public:
-  virtual std::string get_name() { return "Entity"; } // with 'virtual' marked
+  // Now with 'virtual' qualified
+  constexpr virtual std::string_view get_name() const noexcept { return "Entity"; }
+  virtual ~Entity() { std::println("Entity destroied"); } // Have a virtual
+  // constructor to delete an derived class through a pointer to base class
 };
 class Player : public Entity {
 private:
   std::string m_name;
 public:
-  Player(const std::string& name) : m_name{name} {}
-  // 'override' is not necessary but it could avoid typo and imporve readability
-  std::string get_name() override { return m_name; }
+  Player(std::string const& name) noexcept : m_name{name} {}
+  // 'override' is not necessary but it can avoid typo and imporve readability
+  constexpr std::string_view get_name() const noexcept override { return m_name; }
+  ~Player() override { std::println("Player destroied"); }
 };
 int main() {
   Entity* entity{new Entity};
-  std::cout << entity->get_name() << '\n';
+  std::println("{}", entity->get_name());
+  delete entity;
 
   Player* player{new Player{"Cherno"}};
-  Entity* entity2{player};
-  std::cout << entity2->get_name() << '\n';
+  entity = player;
+  std::println("{}", entity->get_name());
+  delete entity;
+
+  Player player2{"Cherno"};
+  std::println("{}", static_cast<Entity&>(player2).get_name()); // Cast to
+  // reference for objects on the stack, otherwise it copies the Player to a
+  // temporary Entity objects
 }
 ```
 
 > `virtual` could reduce "dynamic dispatch" (change object's vtable in runtime).
+
 > `virtual` has its own overhead, it needs extra Vtable space, in order to dispatch the correct method it includes a member pointer in the base class that points to the vtable. And every time we call virtual method, we go through that table to decision which method to map.
 > Through the extra overhead it's still recommand to use as much as possible.
 
 ### Interface (Pure Virtual Method)
 
-```c++
-#include <iostream>
-#include <string>
+```cpp
+import import std;
 class Entity {};
 class Printable { // Interface class cannot be instantiated directlly
 public:
-  virtual std::string get_class_name() = 0; // interface (pure virtual method)
+  virtual std::string_view get_class_name() const noexcept = 0; // Interface
+  // (pure virtual method)
+  virtual ~Printable() {}
 };
-class Player : public Entity, public Printable { // a sub class can inherit multiple interface class
+class Player : public Entity, public Printable { // A derived class can inherit
+// multiple interface class
 public:
-  std::string get_class_name() override { return "Player"; }
+  constexpr std::string_view get_class_name() const noexcept override { return "Player"; }
+  ~Player() override {}
 };
-// Now even the Player instance is casted into its base class, it will still use sub class's function implement
-void print(Printable* obj) { std::cout << obj->get_class_name() << '\n'; }
+// Now through the Player instance is casted into its base class, it will still
+// use derived class's function implement
+void print(Printable* obj) noexcept { std::println("{}", obj->get_class_name()); }
 int main() {
   Player* player{new Player};
   print(player);
-  print(new Player); // don't do this, it's very easily to cause memory leak
+  delete player;
+  // print(new Player); // Don't do this, it's very easily to cause memory leak
 }
 ```
 
 ## Visibility in C++
 
 - The default visibility of a Class would be `private`. If it's a `struct` then it would be `public` by default.
-- `private` things only visiable in it's own class, nor in sub class, except friend class.
-- `protected` things can be seen by sub class.
+- `private` things only visiable in it's own class, nor in derived class, except for `friend` classes.
+- `protected` things can be seen by derived class.
 
 ## Literal Arrays & C++11 Standard Arrays
 
 > Be aware for operations out of index (e.g. `example[-1] = 0`), in C++ you can do this by force the compiler to ignore this check, and it's definitely discouraged.
 
 - Literal Array
-  ```c++
-  #include <iostream>
+  ```cpp
+  import std;
   int main() {
     int arr[5]; // On stack, destory on function end
   
@@ -412,33 +407,34 @@ int main() {
     delete[] arr2; // Use square brackets to release an array on heap
   
     int* ptr{arr}; // 'arr' is actually a pointer which stores the begin address of the array
-    for (int i = 0; i< 5; i++) arr[i] = i;
-    
-    arr[2] = 5; 
+    for (int i = 0; i < 5; i++) arr[i] = i;
+  
+    arr[2] = 5;
     *(ptr + 2) = 5; // this is equal but in a pretty wild way
     // Bacause 'ptr' has type 'int' (32 bits, 4 bytes),
     // so + 2 let it advance two 'int's length (64 bits, 8 bytes)
-    // We can also do the same operation in this form (`char` is 8 bits, 1 bytes)
-    *(int*) ((char*) ptr + 8) = 5;
+    // We can also do the same operation in this form (char is 8 bits, 1 bytes)
+    *reinterpret_cast<int*>(reinterpret_cast<char*>(ptr) + 8) = 5;
   
-    for (int i = 0; i< 5; i++) std::cout << arr[i] << '\n';
-    
+    for (int i{}; i < 5; i++) std::println("{}", arr[i]);
+  
     // You cannot dynamically chack a raw array's size.
     int count{sizeof(arr) / sizeof(int)}; // Ways like this is unstable
-    
+    std::println("arr's size: {}", count);
+  
     // A good ways is to use an constant to remember the array size,
     // or using c++11 standard arrays instead.
-    static const int&& arr_size{5};
+    static int const& arr_size{5};
     int arr3[arr_size];
   }
   ```
 - Standard Arrays
   It's more safe, but has little bit more overhead.
-  ```c++
-  #include <array>
+  ```cpp
+  import std;
   int main() {
     std::array<int, 5> arr;
-    for (int i = 0; i < arr.size(); i++) arr[i] = 2;
+    for (std::size_t i{}; i < arr.size(); i++) arr[i] = 2;
   }
   ```
 
@@ -447,30 +443,31 @@ int main() {
 ### C-style Strings (String Literals) and std::string_view
 
 C-style strings are stored in code segment (virtual address space, which is read-only), this means you can only replace new string to the variable to "change" it.
-```c++
-#include <cstring>
-#include <string_view>
+```cpp
+import std;
 int main() {
-  const char* name{"Cherno"};
-  // "Cherno" + " hello!"; // You cannot do '+()' to literal strings since it's constant
-  std::string_view name2{name}; // c++17, it's equivalent to 'const char*'
+  char const* name{"Cherno"};
+  "Cherno" + " hello!"; // You cannot call 'operator+()' to literal strings since
+  // it's constant
+  std::string_view name2{name}; // C++17, equivalent to 'const char*'
 }
 ```
 
-> Each strings at end has `\0` (named "null termination character") to prevent out of index at iteration. e.g. `char str[7] = {'C', 'h', 'e', 'r', 'n', 'o', '\0'};`
+> Each strings at end has `\0` (named "null termination character") to prevent out of index in iterating. e.g. `char str[7] = {'C', 'h', 'e', 'r', 'n', 'o', '\0'};`
+
 > Terminal character will actuall break the behavior of string in many cases, use `std::string_view` can prevent this problem.
 > ```c++
-> #include <cstring>
-> #include <iostream>
+> import std;
+> import std.compat;
 > int main() {
 >   char name[8]{"Che\0rno"};
->   std::cout << strlen(name) << std::endl;
+>   std::println("{}", strlen(name));
 > }
 > ```
 
 A sample implementation of `std::string_view`:
-```c++
-// An implementation of std::string_view
+```cpp
+import std;
 class StaticString {
   using const_iterator = char const*;
 private:
@@ -478,24 +475,32 @@ private:
   std::size_t const m_size;
 public:
   template <std::size_t N>
-  StaticString(char const (&str)[N]) noexcept : m_str{str}, m_size{N - 1} {}
-  StaticString(char const* str, std::size_t N) noexcept : m_str{str}, m_size{N} {}
-  const char* data() const noexcept { return m_str; }
-  std::size_t size() const noexcept { return m_size; }
-  const_iterator begin() const noexcept { return m_str; }
-  const_iterator end() const noexcept { return m_str + m_size; }
-  operator char const* const() const { return m_str; }
-  char operator[](std::size_t n) const {
+  constexpr StaticString(char const (&str)[N]) noexcept : m_str{str}, m_size{N - 1} {}
+  constexpr StaticString(char const* str, std::size_t N) noexcept : m_str{str}, m_size{N} {}
+  constexpr char const* data() const noexcept { return m_str; }
+  constexpr std::size_t size() const noexcept { return m_size; }
+  constexpr const_iterator begin() const noexcept { return m_str; }
+  constexpr const_iterator end() const noexcept { return m_str + m_size; }
+  constexpr operator char const* const() const { return m_str; }
+  constexpr char operator[](std::size_t n) const {
     // clang-format off
-    return n == std::numeric_limits<size_t>::max()
+    return n == std::numeric_limits<std::size_t>::max()
       ? m_str[m_size - 1]
       : n < m_size ? m_str[n] : throw std::out_of_range(std::format("static_string: out of range, index at {}", n));
     // clang-format on
   }
 };
-inline std::ostream& operator<<(std::ostream& os, StaticString const& str) { return os.write(str.data(), str.size()); }
+std::ostream& operator<<(std::ostream& os, StaticString const& str) { return os.write(str.data(), str.size()); }
+template <typename CharT>
+struct std::formatter<StaticString, CharT> {
+  template <class ParseContext> constexpr ParseContext::iterator parse(ParseContext const& ctx) const noexcept { return ctx.begin(); }
+  template <class FmtContext>
+  constexpr FmtContext::iterator format(StaticString str, FmtContext& ctx) const noexcept { return std::ranges::copy(str, ctx.out()).out; }
+};
 int main() {
-  StaticString str{"homo114514"};
+  constexpr StaticString str{"homo114514"};
+  std::cout << str << '\n';
+  std::println("{}", str);
   try {
     str[-1];
     str[-2];
@@ -1324,6 +1329,7 @@ struct std::formatter<QuotableString, CharT> {
   //   std::ostringstream out;
   //   if (quoted) out << std::quoted(s);
   //   else out << s;
+
   //   return std::ranges::copy(std::move(out).str(), ctx.out()).out; // std::move is not necessary in C++20 since it do type deducing
   // }
   template <class FmtContext>
@@ -1937,7 +1943,7 @@ constexpr std::ostream& operator<<(std::ostream& stream, Vector2 const& other) n
 
 template <>
 struct std::formatter<Vector2, char> {
-  template <class ParseContext> constexpr ParseContext::iterator parse(ParseContext const& ctx) noexcept { return ctx.begin(); }
+  template <class ParseContext> constexpr ParseContext::iterator parse(ParseContext const& ctx) noexcept const { return ctx.begin(); }
   template <class FmtContext>
   FmtContext::iterator constexpr format(Vector2 vec2, FmtContext& ctx) const noexcept {
     return std::format_to(ctx.out(), "[{}, {}]", vec2.x, vec2.y);
