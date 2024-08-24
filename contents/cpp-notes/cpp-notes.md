@@ -75,10 +75,10 @@ ret
 
 Different memory allocation size for C++ Data Type:
 
-| | |
-|---| --- |
-| `char` | 1 byte |
-| `short` | 2 bytes |
+| | | |
+|---| --- | --- |
+| `char` | 1 byte | `'a'` |
+| `short` | 2 bytes | 
 | `int` | 4 bytes |
 | `long` | 8 bytes (`c++20`), >= 4 bytes |
 | `long long` | 8 bytes |
@@ -893,6 +893,26 @@ int main() {
   }
   ```
 
+### The Arrow Operator
+
+- It's possible to overload the `operator->()` and use it in specific class such as ScopedPtr
+- It can also be used to get the variable's memory offset in an object (memory hack):
+  ```cpp
+  import std;
+  struct Vector3 {
+    float z, y, x; // I deliberately desrupt the naming order to make it in a
+    // different memory layout.
+  };
+  int main() {
+    // float has 4 bytes, 32 bits; std::size_t (unsigned long) in C++20 has 8 bytes, 64 bits
+    std::size_t const offset_x{reinterpret_cast<std::size_t>(&static_cast<Vector3*>(0)->x)};
+    // 0 can be replaced with nullptr as well
+    std::size_t const offset_y{reinterpret_cast<std::size_t>(&static_cast<Vector3*>(nullptr)->y)};
+    std::size_t const offset_z{reinterpret_cast<std::size_t>(&static_cast<Vector3*>(nullptr)->z)};
+    std::println("{}, {}, {}", offset_x, offset_y, offset_z);
+  }
+  ```
+
 ## Smart Pointers (std::unique_ptr, std::shared_ptr, std::weak_ptr)
 
 Smart pointers is that when you call `new` , you don't have to call `delete`. Actually in many cases with smart pointers we don't even have to call `new`.
@@ -976,67 +996,41 @@ int main() {
 }
 ```
 
-## The Arrow Operator
+## Dynamic Arrays (`std::vector`)
 
-- It's possible to overload the Arror Operator and use it in specific class such as ScopedPtr:
-- It can also be used to get the variable's memory offset in an object (in some memory hack):
-```c++
-#include <iostream>
-struct Vector3 {
-  float z, y, x; // I deliberately desrupt the naming order to make it in a different memory layout.
-};
-int main() {
-  // float has 4 bytes, 32 bits, long in c++20 has 8 bytes, 64 bits
-  long offset_x{(long) &((Vector3*) 0)->x}; // Or &((Vector3*) nullptr)->x;
-  std::cout << offset_x << std::endl;
-  long offset_y{(long) &((Vector3*) 0)->y}; // Or &((Vector3*) nullptr)->x;
-  std::cout << offset_y << std::endl;
-  long offset_z{(long) &((Vector3*) 0)->z}; // Or &((Vector3*) nullptr)->x;
-  std::cout << offset_z << std::endl;
-}
-```
+Vectors in C++ is not mathematical vector, it's of dynamic arrays.
 
-## Dynamic Arrays (std::vector)
-
-Vector in C++ is not mathematical vector, it's kind of dynamic arrays like.
-
-```c++
-#include <iostream>
-#include <ostream>
-#include <vector>
+```cpp
+import std;
 struct Vertex {
   float x, y, z;
 };
-std::ostream& operator<<(std::ostream& stream, Vertex const& vertex) {
-  stream << vertex.x << ", " << vertex.y << ", " << vertex.z;
-  return stream;
+std::ostream& operator<<(std::ostream& stream, Vertex const& vertex) noexcept {
+  return stream << vertex.x << ", " << vertex.y << ", " << vertex.z;
 }
 int main() {
   std::vector<Vertex> vertices;
-  vertices.push_back({1, 2, 3});
-  vertices.push_back({4, 5, 6});
+  vertices.push_back({1, 2, 3}), vertices.push_back({4, 5, 6});
   // Using range based 'for loop' to iterate the object in dynamic array
-  for (const Vertex& v : vertices) std::cout << v << '\n';
-  vertices.erase(vertices.begin() + 1); // Remove the second object by using an iterator
-  vertices.clear();                     // Or we can clean the whole dynamic array
+  for (Vertex const& v : vertices) std::cout << v << '\n';
+  vertices.erase(vertices.begin() + 1); // Remove the second object by using an
+  // iterator
+  vertices.clear(); // Or we can clean the whole dynamic array
 }
 ```
 
 ### Optimizing the usage of std::vector
 
 Two ways to reduce memory copy
-
-```c++
-#include <iostream>
-#include <vector>
+```cpp
 struct Vertex {
   float x, y, z;
-  static int copy_count;
-  Vertex(float x, float y, float z) : x(x), y(y), z(z) {}
+  constinit static int copy_count;
+  constexpr Vertex(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
   // Copy Constructor, used to capture copied times
-  Vertex(Vertex const& v) : x(v.x), y(v.y), z(v.z) { std::cout << "Copied " << ++copy_count << " times" << '\n'; }
+  Vertex(Vertex const& v) noexcept : x(v.x), y(v.y), z(v.z) { std::println("Copied {} times", ++copy_count); }
 };
-int Vertex::copy_count{};
+constinit int Vertex::copy_count{};
 int main() {
   std::vector<Vertex> vertices_bad;
   vertices_bad.push_back({1, 2, 3}); // 1 copy to store
@@ -1053,19 +1047,17 @@ int main() {
   // Trigger rearrange, new reserved 16 x Vertex
   vertices_bad.push_back({25, 26, 27}); // 8 copies to store, 1 copies to store, total 24
   // Each time push_back() will do 1 copy operation to store the Vertex to vector,
-  // And each push back may let vector do memory rearrange if reserved memory is full, which copies
-  // previous objects in dynamic array into new memory area.
+  // and each push back may let vector do memory rearrange if reserved memory is
+  // full, which copies previous objects in dynamic array into new memory area.
 
-  std::cout << "vertices good" << '\n';
+  std::println("vertices good:");
   std::vector<Vertex> vertices_good;
-  // 1. Use reserver() to prevent memory rearrange.
-  vertices_good.reserve(4);
-  // 2. Replace push_back() with emplace_back() to prevent parameter copy
-  // it acts as a proxy to process you provided parameter into Constructor.
-  vertices_good.emplace_back(1, 2, 3);
-  vertices_good.emplace_back(4, 5, 6);
-  vertices_good.emplace_back(7, 8, 9);
-  vertices_good.emplace_back(10, 11, 12);
+  vertices_good.reserve(4); // 1. Use reserver() to prevent memory rearrange.
+  vertices_good.emplace_back(1, 2, 3); // 2. Replace push_back() with
+  vertices_good.emplace_back(4, 5, 6); // emplace_back() to prevent parameter
+  vertices_good.emplace_back(7, 8, 9); // copy, it acts as a proxy to process your
+  vertices_good.emplace_back(10, 11, 12); // provided parameters into elements
+  // constructor.
 }
 ```
 
@@ -1098,14 +1090,15 @@ Visual Studio
 1. Open project setting
    -> Linker -> Input -> Additional Dependencies: `glfw3.lib;xxxxxx;balabala;...`
 2. Static Link
-   ```c++ Main.cpp
-   // quote for header in this project, regular bracket for external library
-   #include <GLFW/glfw3.h>
-   // Or `extern "C" int glfwInit();`
+   ```cpp
+   // Main.cpp
+   #include <GLFW/glfw3.h> // Quoted headers are in this project; angular
+   // bracket headers are from external library
+   // Or 'extern "C" int glfwInit();' // TODO: Review this episode
    // Since GLFW is actually a C library so we need `extern "C"`
    int main() {
-     int result = glfwInit();
-     std::cout << result << '\n';
+     int result{glfwInit()};
+     std::println("{}", result);
    }
    ```
 
@@ -1114,7 +1107,7 @@ Visual Studio
 Dynamic linking happens at runtime
 
 - Some librarys like GLFW supports both static and dynamic linking in a single header file.
-- `glfw3.dll.lib` is basically a series of pointers into `glwfw3.dll`
+- `glfw3.dll.lib` is basically a series of pointers to `glwfw3.dll`
 - Code is basically as same as static linking.
 
 Visual Studio
@@ -1123,7 +1116,7 @@ Visual Studio
 2. Put `glfw3.dll` to the same folder as your executable file (i.e: `$(SolutionDir)\Debug`)
 3. In fact, to call a function in dynamic library, it needs a prefix called `__declspec(dllimport)`
    If you explore `glfw3.h` you will see there is a prefix `GLFWAPI` in every function's definition:
-   ```c++
+   ```cpp
    /* We are calling GLFW as a Win32 DLL */
    #define GLFWAPI __declspec(dllimport)
    ```
@@ -1145,21 +1138,22 @@ Visual Studio
       Ceneral->Project Defaults->Configuration Type: Static library (.lib)
    4. Right click on projects "Game" -> Add -> Reference -> Select project "Engine"
 2. Code for project "Engine":
-   ```c++ Your_Project_Directory\src\Engine.h
+   ```cpp
+   // Your_Project_Directory\src\Engine.h
    #pragma once
    namespace engine {
      void print_message();
    }
-   ```
-   ```c++ Your_Project_Directory\src\Engine.cpp
+   // Your_Project_Directory\src\Engine.cpp
    #include "Engine.h"
    #include <iostream>
    namespace engine {
-     void print_message() { std::cout << "Hello Game!" << '\n'; }
+     void print_message() { std::println("Hello Game!"); }
    }
    ```
 3. Code for project "Game":
-   ```c++ Your_Project_Directory\src\Application.cpp
+   ```cpp
+   // Your_Project_Directory\src\Application.cpp
    #include "Engine.h"
    int main() { engine::print_message(); }
    ```
@@ -1168,9 +1162,9 @@ Visual Studio
 
 Example scenario: We have a function called `parse_shader()`, it needs to return two strings.
 
-- Return a struct cotains two strings (Cherno's choose):
-  ```c++
-  #include <string>
+- Return a struct:
+  ```cpp
+  import std;
   struct ShaderProgramSource {
     std::string vertex_source;
     std::string fragment_source;
@@ -1182,14 +1176,14 @@ Example scenario: We have a function called `parse_shader()`, it needs to return
   }
   ```
 - Use reference paremeter (Probably one of the most optimal way)
-   ```c++
-   #include <string>
+   ```cpp
+   import std;
    void parse_shader(std::string& out_vertex_source, std::string& out_fragment_source) {
      // ... (Some statements that process result 'vs' and 'fs')
      std::string vs, fs;
      std::tie(out_vertex_source, out_fragment_source) = std::tuple{vs, fs};
    }
-   // Or use pointer parameter if you want to pass nullptr (ignore the output):
+   // Or use pointer parameter if you want to pass nullptr (ignore the output)
    void parse_shader2(std::string* outVertexSource, std::string* outFragmentSource) {
      std::string vs, fs;
      if (outVertexSource) *outVertexSource = vs;
@@ -1202,11 +1196,11 @@ Example scenario: We have a function called `parse_shader()`, it needs to return
    }
    ```
 - Return a `std::array` or `std::vector`
-  The different is primarly the arrays can be create on the stack whereas vectors gonna store its underlying storage on the heap.
+
+  The different is primarly that the arrays can be create on stack whereas vectors gonna store its underlying storage on heap.
   So technically returning a standard array would be faster.
-  ```c++
-  #include <array>
-  #include <string>
+  ```cpp
+  import std;
   std::array<std::string, 2> parse_shader() {
     std::string vs, fs;
     // ... (Some statements that process result 'vs' and 'fs')
@@ -1214,62 +1208,65 @@ Example scenario: We have a function called `parse_shader()`, it needs to return
   }
   ```
 - Using `std::tuple` and `std::pair`
-  ```c++
-  #include <string>
-  #include <tuple>
+  ```cpp
+  import std;
   std::tuple<std::string, int> create_person() { return {"Cherno", 24}; }
-  std::pair<std::string, int> create_person2() { return {"Cherno", 24}; }
+  std::pair<std::string, int> create_person2() { return {"Proteus", 24}; }
   int main() {
-    // std::tuple can return more than two elements
-    auto person{create_person()};    // Automatically deduce the return type
+    auto person{create_person()}; // std::tuple can store more than two
+    // elements
     auto& name{std::get<0>(person)}; // Get values in std::tuple
     int age{std::get<1>(person)};
+  
     // std::pair is a little bit faster than tuple
-    auto [name2, age2]{create_person2()}; // c++17 structure binding
+    auto [name2, age2]{create_person2()}; // C++17 structure binding
   }
   ```
 
 ## Templates
 
-Template can improve code reuse rate and reduce duplicate code (e.g. function overload), the essence of template is similar to macros
+Templates can improve code reuse rate and reduce duplicate code (e.g. function overload), the essence of template is similar to macros.
 
 1. template type
-  ```c++
-  // In this case, template specifying how to create methods based on usage of them.
-  // So if nobody call this function, it's code will not exist in compiled file,  and
-  // even if there is a grammatical error in templated function code, it will still
-  // compile successfully.
-  #include <iostream>
-  template <class T> // exactly same with 'template<typename T>'
-  void print(T value) { std::cout << value << '\n'; }
+  ```cpp
+  // How templates specificalize to create methods is based on the usage of
+  // them. That is, if nobody calls the templated function, it's code will not
+  // exist in compiled file, even if there is a grammatical error in templated
+  // function code, it will still compile successfully.
+  import std;
+  template <class T> // Exactly same with 'template<typename T>'
+  void print(T value) { std::println("{}", value); }
   int main() {
     print(5);      // Auto deducing
-    print<int>(5); // It's a good manner specifying the type explicitly
+    print<int>(5); // For newbie, it's a good manner to specifying the type
+    // explicitly
     print<char const*>("Hello");
     print<float>(5.5f);
   }
   ```
 2. template argument
-   ```c++
-   template<class T, int N> // Multiple template targets can be in one template definition
+   ```cpp
+   import std;
+   template <class T, int N> // Multiple template targets can be in one template
+   // definition, 'N' is a non-type template argument
    class Array {
    private:
      T m_arr[N];
    public:
-     int get_size() const { return N; }
+     constexpr int get_size() const noexcept { return N; }
    };
    int main() {
-     Array<int, 5> arr; // It will generate the following code:
+     constexpr Array<int, 5> arr{}; // It will generate the following code:
      // class Array {
      // private:
      //   int m_arry[5];
      // public:
-     //   int get_size() const { return 5; }
+     //   constexpr int get_size() const noexcept { return 5; }
      // };
-     std::cout << arr.get_size() << '\n';
+     std::println("{}", arr.get_size());
    }
    ```
-3. The keyword `typename`
+3. The keyword `typename` TODO: 8/25/24
    Clearify something is a type.
    ```c++
    // C++20 makes `typename` optional on where nothing but a type name can appear
@@ -1871,6 +1868,8 @@ int main() {
 
 ## Multidimensional Arrays
 
+TODO: C++23 `std::mdspan`
+
 ```c++
 int main() {
   int** a2d{new int*[20]}; // 2D array, stores type 'int*'
@@ -2072,6 +2071,7 @@ C++'s cast can do anything that C-style casts can do, those casts make you code 
 1. Static cast (compile time checking).
 2. Reinterpret cast `reinterpret_cast<>()` (for Type Punning).
    `reinterpret_case` can only perform conversions for pointers and references. e.g. If you want to reinterpret an `int` as a `double`:
+  The `nullptr` or `0` is not guaranteed to yield the null pointer value of the target type, use `static_cast()` as a safer way for this purpose.
   ```cpp
   int x{};
   double y{reinterpret_case<double&>(x)};
@@ -2705,8 +2705,13 @@ int main() {
 }
 ```
 
+## Constrained algorithms
+
+TODO: [std::ranges](https://en.cppreference.com/w/cpp/algorithm/ranges#Constrained_fold_operations)
+
 ### References
 
 1. [C++ by The Cherno](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb)
 2. [All C++20 core language features with examples](https://oleksandrkvl.github.io/2021/04/02/cpp-20-overview.html#attr-likely)
 3. [c++20 の coroutine 使ってみる](https://qiita.com/ousttrue/items/0572c7cec966bb33067f)
+4. [Force reinterpret_cast to return nullptr](https://stackoverflow.com/a/66278895/26004653)
