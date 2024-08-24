@@ -10,6 +10,7 @@ tags:
 1. If an object have pointer member inside, write copy constructor, destructor.
 2. Default float type is `double`, use `float a = 5.5f`.
 3. Header or inline?  (the later copys whole function body into the area where the function is called).
+4. `constexpr` and `static` are independent of each other. `static` defines the object's lifetime during execution; `constexpr` specifies the object should be available during compilation.
 
 ## Assembly
 
@@ -230,7 +231,7 @@ Singleton are classes that allow only one instance.
   class Singleton {
   private:
     constinit static Singleton* s_instance;
-    constexpr Singleton() noexcept {}; // Private empty construct function
+    Singleton() noexcept {}; // Private empty construct function
     // prevents instantiate
   public:
     static Singleton& get() noexcept { return *s_instance; }
@@ -291,7 +292,7 @@ Why we need virtual function:
 import std;
 class Entity {
 public:
-  constexpr std::string_view get_name() const noexcept { return "Entity"; }
+  std::string_view get_name() const noexcept { return "Entity"; }
 };
 class Player : public Entity { // Public inheritance keep public members in base
 // class public in derived class, otherwise they becomes to private
@@ -299,7 +300,7 @@ private:
   std::string m_name;
 public:
   Player(std::string const& name) noexcept : m_name{name} {}
-  constexpr std::string_view get_name() const noexcept { return m_name; }
+  std::string_view get_name() const noexcept { return m_name; }
 };
 int main() {
   Entity* entity{new Entity};
@@ -324,7 +325,7 @@ If you want to override a method you have to mark the method in the base class a
 class Entity {
 public:
   // Now with 'virtual' qualified
-  constexpr virtual std::string_view get_name() const noexcept { return "Entity"; }
+  virtual std::string_view get_name() const noexcept { return "Entity"; }
   virtual ~Entity() { std::println("Entity destroied"); } // Have a virtual
   // constructor to delete an derived class through a pointer to base class
 };
@@ -334,7 +335,7 @@ private:
 public:
   Player(std::string const& name) noexcept : m_name{name} {}
   // 'override' is not necessary but it can avoid typo and imporve readability
-  constexpr std::string_view get_name() const noexcept override { return m_name; }
+  std::string_view get_name() const noexcept override { return m_name; }
   ~Player() override { std::println("Player destroied"); }
 };
 int main() {
@@ -362,7 +363,7 @@ int main() {
 ### Interface (Pure Virtual Method)
 
 ```cpp
-import import std;
+import std;
 class Entity {};
 class Printable { // Interface class cannot be instantiated directlly
 public:
@@ -373,12 +374,12 @@ public:
 class Player : public Entity, public Printable { // A derived class can inherit
 // multiple interface class
 public:
-  constexpr std::string_view get_class_name() const noexcept override { return "Player"; }
+  std::string_view get_class_name() const noexcept override { return "Player"; }
   ~Player() override {}
 };
 // Now through the Player instance is casted into its base class, it will still
 // use derived class's function implement
-void print(Printable* obj) noexcept { std::println("{}", obj->get_class_name()); }
+inline void print(Printable* obj) noexcept { std::println("{}", obj->get_class_name()); }
 int main() {
   Player* player{new Player};
   print(player);
@@ -406,7 +407,8 @@ int main() {
     int* arr2{new int[5]}; // on heap, would not auto destory
     delete[] arr2; // Use square brackets to release an array on heap
   
-    int* ptr{arr}; // 'arr' is actually a pointer which stores the begin address of the array
+    int* ptr{arr}; // 'arr' is actually a pointer which stores the begin
+    // address of the array
     for (int i = 0; i < 5; i++) arr[i] = i;
   
     arr[2] = 5;
@@ -456,7 +458,7 @@ int main() {
 > Each strings at end has `\0` (named "null termination character") to prevent out of index in iterating. e.g. `char str[7] = {'C', 'h', 'e', 'r', 'n', 'o', '\0'};`
 
 > Terminal character will actuall break the behavior of string in many cases, use `std::string_view` can prevent this problem.
-> ```c++
+> ```cpp
 > import std;
 > import std.compat;
 > int main() {
@@ -481,7 +483,7 @@ public:
   constexpr std::size_t size() const noexcept { return m_size; }
   constexpr const_iterator begin() const noexcept { return m_str; }
   constexpr const_iterator end() const noexcept { return m_str + m_size; }
-  constexpr operator char const* const() const { return m_str; }
+  constexpr operator char const*() const noexcept { return m_str; }
   constexpr char operator[](std::size_t n) const {
     // clang-format off
     return n == std::numeric_limits<std::size_t>::max()
@@ -512,225 +514,289 @@ int main() {
 
 It's a char array indeed.
 
-```c++
-#include <iostream>
+```cpp
+import std;
 int main() {
   std::string str{"Cherno"};
-  str += " hello!"; // '+=()' is overloaded in the string class to let you do that.
-  std::string str2{std::string{"Cherno"} + " hello!"}; // This does more object copy operations
-  std::cout << str << '\n';
-  const bool contains = str.find("no") != std::string::npos; // Check whether a string has specific word
-  std::cout << contains << '\n';
+  str += " hello!"; // operator+=() is overloaded in the string class to let you concatenate
+  std::println("{}", str);
+
+  constexpr std::string str2{"Cherno"s + " hello!"}; // This does more object copy operations, but can be calculated at compile-time
+  std::println("{}", str2);
+
+  constexpr std::string tmp1("Cherno"), tmp2("hello!");
+  std::string str3{std::format("{} {}", tmp1, tmp2)}; // C++20 std::format
+  std::println("{}", str3);
+
+  constexpr bool contains = str2.find("no") != std::string::npos; // Check whether a string has specific word
+  std::println("str2 contains \"no\"? {}", contains);
 }
 ```
 
-```c++
-#include <string>
+Raw string and multibyte character:
+```cpp
+import std;
+inline std::size_t utfrtomb(char* cur_char, char8_t in_char, std::mbstate_t* state) noexcept {
+  return std::c8rtomb(cur_char, in_char, state);
+}
+inline std::size_t utfrtomb(char* cur_char, char16_t in_char, std::mbstate_t* state) noexcept {
+  return std::c16rtomb(cur_char, in_char, state);
+}
+inline std::size_t utfrtomb(char* cur_char, char32_t in_char, std::mbstate_t* state) noexcept {
+  return std::c32rtomb(cur_char, in_char, state);
+}
+inline std::size_t utfrtomb(char* cur_char, wchar_t in_char, std::mbstate_t* state) noexcept {
+  return std::wcrtomb(cur_char, in_char, state);
+}
+template <typename T, std::size_t N>
+auto utf_to_char(T const (&str)[N]) noexcept {
+  struct {
+    char data[4 * (N - 1) + 1];
+  } ret{}; // Return a struct, otherwise stack-use-after-return would throw
+  char* cur_char{ret.data};
+  for (std::size_t read_count{}, i{}; i < N; i++) {
+    read_count = utfrtomb(cur_char, str[i], nullptr);
+    if (read_count == static_cast<std::size_t>(-1)) break;
+    cur_char += read_count;
+  }
+  return ret;
+}
+template <typename T>
+auto utf_to_char(T const& str) noexcept {
+  auto ret{std::make_unique<char[]>(4 * str.size() + 1)};
+  char* cur_char{ret.get()};
+  for (std::size_t read_count{}, i{}; i < str.size(); i++) {
+    read_count = utfrtomb(cur_char, str.c_str()[i], nullptr);
+    if (read_count == static_cast<std::size_t>(-1)) break;
+    cur_char += read_count;
+  }
+  return ret;
+}
 int main() {
-  const char8_t* name1{u8"Cherno"}; // utf-8, which is default
-  const char16_t* name2{u"Cherno"}; // utf-16, two bytes per character
-  const char32_t* name3{U"Cherno"}; // utf-32, four bytes per character
-  const wchar_t* name4{L"Cherno"}; // either 2 or 4 bytes, depends on compiler
-  // Useful or you want to keep format
-  const char* raw_string{R"(Line1
+  constexpr char raw_str[]{R"(Line1
 Line2
 Line3
-Line4)"};
-  // c++14 Standards
-  using namespace std::string_literals;
-  std::string name5{"Cherno"s + " hello"};
-  std::wstring name6{L"Cherno"s + L" hello"};
-  std::u32string name7{U"Cherno"s + U" hello"};
+Line4)"}; // Useful or you want to keep format
+  constexpr char8_t name1[]{u8"プロテウス"}; // UTF-8, new type in C++20, behaves
+  // like 'unsigned char' but may be larger than char's 1 byte
+  constexpr char16_t name2[]{u"プロテウス"}; // UTF-16, two bytes per character
+  constexpr char32_t name3[]{U"プロテウス"}; // UTF-32, four bytes per character
+  constexpr wchar_t name4[]{L"プロテウス"}; // either 2 or 4 bytes, depends on
+  // compiler
+
+  using namespace std::string_literals; // C++14 Standards
+  std::u8string name5{u8"プロテウス"s + u8" こんにちわ！"};
+  std::wstring name6{L"プロテウス"s + L" こんにちわ！"};
+  std::u32string name7{U"プロテウス"s + U" こんにちわ！"};
+
+  std::println("{}", raw_str);
+  std::locale::global(std::locale{"en_US.UTF-8"});
+  std::println("{}", utf_to_char(name1).data);
+  std::println("{}", utf_to_char(name2).data);
+  std::println("{}", utf_to_char(name3).data);
+  std::println("{}", utf_to_char(name4).data);
+
+  std::println("{}", utf_to_char(name5).get());
+  std::println("{}", utf_to_char(name6).get());
+  std::println("{}", utf_to_char(name7).get());
 }
 ```
 
 ## Constants in C++
 
-The mutability of const depends on how it stores:
-- String Literal stored in the read-only section of the memory. So modifying will cause segmentation fault.
-- Constant variables may convert to a literal and place the primitive value in assemble in compile stage, while if the code attempt to take the address of constant variable the compiler will let it place in memory.
+The mutability of a constant depends on how it stores:
+- String literal stored in the read-only section of the memory. So modifying will cause segmentation fault.
+- Constant variables may convert to a literal and place the primitive value in assemble at compile-time, while if the code attempt to take the address of constant variable the compiler will let it place in memory.
 
 ### Constant Pointer
 
-```c++
-#include <iostream>
+```cpp
+import std;
 int main() {
-  const int MAX_AGE{90};
+  constexpr int MAX_AGE{90}; // Same with 'int const' but it's value will
+  // evaluate at compile-time
+
   // 1. Pointer to const value
-  const int* a{new int};
+  int const* a{new int};
   std::cout << a << '\n';
   // *a = 2; // I can't change the contents of the pointer
-  a = (int*) &MAX_AGE; // But I can change the pointer itself
+  delete a;
+  a = reinterpret_cast<int const*>(&MAX_AGE); // But I can change the pointer
+  // itself
   std::cout << a << '\n';
+
   // 2. Const pointers
-  int* const b{new int};
+  int* const b{const_cast<int*>(&MAX_AGE)};
   *b = 2; // I can change the contents of the pointer
-  // b = (int*) &MAX_AGE; // But I can't change the pointer's value
+  std::println("{}", MAX_AGE);
+  // b = nullptr; // But I can't change the pointer's value
+
   // 3. Const pointer to a const value
-  const int* const c{&MAX_AGE};
+  int const* const c{&MAX_AGE};
 }
 ```
 
-> `const int*` equals `int const*`. So `const int*& ptr{&a}` is illegal since `a`'s address is a rvalue, `const int* const& ptr{&a}` or `const int*&& ptr{&a}` should work.
+> `const int*` equals `int const*`.
 
 ### Const Method
 
 Const methods cannot change member variables in the class, except for `mutable` and `static` variables.
 
-```c++
-#include <iostream>
+```cpp
+import std;
 class Entity {
 private:
-  int m_x, * m_y;
+  int m_x, *m_y;
   mutable int m_z;
 public:
-  // When a const method return pointer types, it should has 'const' on both side
-  const int* const get_y() const { return m_y; }
-  int get_z() const {
+  int const* get_y() const noexcept { return m_y; } // When a const method return
+  // pointer types, it should also be constant
+  int get_z() const noexcept {
     // m_x = 2; // I can't change member variable
     m_z = 2; // But I can change mutable variable
     return m_z;
   }
 };
 int main() {
-  const Entity& e{Entity{}};
+  Entity const& e{Entity{}};
   // e.set_x(); // A const object can only call its const methods.
-  std::cout << e.get_z() << '\n';
+  std::println("{}", e.get_z());
 }
 ```
 
-## Member Initializer Lists in C++ (Constructor Initializer List)
+## Member Initializer List (Constructor Initializer List)
 
-Use member initializer lists can prevent the use of `=` which may initialize object twice.
-
-```c++
-#include <iostream>
+Member initializer list can prevent the use of `operator=()` which may initialize object twice.
+```cpp
+import std;
 class Example {
 public:
-  Example() { std::cout << "Created Entity!" << '\n'; }
-  Example(int x) { std::cout << "Created Entity with " << x << "!" << '\n'; }
+  Example() noexcept { std::println("Created Entity!"); }
+  Example(int x) { std::println("Created Entity with {}!", x); }
 };
 class Entity {
 private:
-  Example m_example;
+  Example m_ex;
   int x, y, z;
 public:
-  Entity() : m_example{8}, x{}, y{}, z{} { // m_example{8} equals m_example = Example{8}
+  Entity() : m_ex{8}, x{}, y{}, z{} { // m_ex{8} equivalent to m_ex{Example{8}}
   // m_example = Example{8}; // This will initialize twice
   }
-  Entity(int x, int y) { this->x = x, this->y = y; } // `this` is a pointer point to current object,
-  // to avoid ambiguity in member variable and the method's args
+  Entity(int x, int y) { this->x = x, this->y = y; } // 'this' is a pointer point
+  // to current object, use 'this' to avoid ambiguity in member variable and the
+  // method's args
 };
 int main() { Entity e; }
 ```
 
 ## Ternary Operators in C++ (Conditional Assignment)
 
-Ternaay can simplify `if else`
-```c++
-#include <iostream>
-static int s_level{1};
-static int s_speed{2};
+Ternaay simplify `if else` sentences:
+```cpp
+constinit static int s_level{1};
+constinit static int s_speed{2};
 int main() {
   s_speed = s_level > 5 && s_level < 100 ? s_level > 10 ? 15 : 10 : 5;
-  // Above sentence equals to:
+  // equivalent to:
   // if (s_level > 5 && s_level < 100)
   //   if(s_level > 10) s_speed = 15;
   //   else s_speed = 10;
   // else s_speed = 5;
-  std::cout << s_speed;
+  std::println("{}", s_speed);
 }
 ```
 
-## Create/Instantiate Objects
+## Create / Instantiate Objects
 
 There are two main section of memory: stack and heap.
 - Stack objects have an automatic lifespan, their lifetime is actually controlled by the their scope.
-  the stack size is small (usually 1~10M), if you have a big object, you have to store it in the heap.
-- Heap: once you allocated an object in the heap, it's gonna sit there unill you explicit delete it.
 
-```c++
-#include <iostream>
-#include <string_view>
+  The stack size is small (usually 1~10MiB), if you have a big object, you have to store it in the heap.
+
+  Compiler may let objects create on heap when it diagnostics the content of the object goes big (e.g. `std::string`), these objects use a smart pointer to release memory automatically.
+- Heap: once you allocated an object in the heap, it's gonna sit there unill you explicitly delete it.
+
+```cpp
+import std;
 class Entity {
 public:
-  Entity(const std::string_view str) { std::cout<< str << '\n'; }
+  Entity(std::string_view const str) { std::println("{}", str); }
 };
 int main() {
-  // Without `new`, object created on the stack
-  Entity entity{"Cherno"}; // equals Entity entity = Entity{"Cherno"};
-  // With `new`, object created on the heap, new returns the memory address
-  Entity* entity2{new Entity{"Cherno"}};
-  // We need manually release the object on the heap
-  delete entity2;
+  Entity entity{"Cherno"}; // Without 'new', object probably creates on stack
+  Entity* entity2{new Entity{"Cherno"}}; // With 'new', object creates on heap,
+  // 'new' returns the memory address
+  delete entity2; // We need manually release the object on the heap
 }
 ```
 
 > Manual resource release is memory leak prone, use smart pointer is a better idea.
 
-### The New/Delete Keyword
+### The New / Delete Keyword
 
 How the `new` keyword find free space on memory? There is something called *free list* which maintain the addresses that have bytes free. It's obvously written in intelligent but it's stll quite slow.
 - `new` is just an operator, it uses the underlying C function `malloc()`, means that you can overload `new` and change its bahavious. `new` also calls the constructor.
-- `delete` also calls the destructor.
+- `delete` is an operator as well, it calls the destructor of the object.
 
-Three uses of `new` (normal new, array new, placement new)
-```c++
-#include <cstdlib>
-#include <new>
+Three uses of `new` (normal `new`, array `new`, placement `new`)
+```cpp
+import std;
+import std.compat;
 class Entity {};
 int main() {
-  Entity* entity{new Entity}; // Normal `new`
+  Entity* entity{new Entity}; // Normal 'new'
   delete entity; // Remember delete object
 
-  // If we want an array of entries (An array which is stored 50 Objects of Entity)
-  Entity* entity2{new Entity[50]}; // Array `new`
-  delete[]entity2; // Also we need calling delete with square bracket
+  // If we wanna an array of entites (An array which stores 50 objects of Entity)
+  Entity* entity2{new Entity[50]}; // Array 'new'
+  delete[] entity2; // Also, we need calling delete with square bracket
 
-  // Placement `new` is where you actually get to decide where the memory comes from.
-  // You don't really allocating memory with `new`,
-  // but just calling the constructor and initializing object in a specific memory address
+  // Placement 'new' is where you actually get to decide where the memory comes
+  // from. You don't really allocating memory with 'new', but just calling the
+  // constructor and initializing object in a specific memory address
   int* buffer{new int[50]};
-  Entity* entity3{new(buffer) Entity};
-  delete entity3;
-  // delete[] buffer; // This will cause double free
-  // In C there are some kinds of equivalent:
-  Entity* entity4{(Entity*) malloc(sizeof(Entity))};
-  new(entity4) Entity; // malloc() will not call the constructor so I need to call it in manual
+  Entity* entity3{new (buffer) Entity};
+  // delete entity3; // This will cause alloc-dealloc-mismatch
+  delete[] buffer;
+
+  // In C there are some kind of equivalent:
+  Entity* entity4{static_cast<Entity*>(malloc(sizeof(Entity)))};
+  new (entity4) Entity; // malloc() will not call the constructor so we need to
+  // call it manually
   entity4->~Entity(); // free() also not call the destructor automatically
-  free(entity);
+  free(entity4);
 }
 ```
 
 ## Implicit Conversion and the Explicit Keyword in C++
 
-```c++
-#include <iostream>
-#include <string_view>
+```cpp
+import std;
 class Entity {
 private:
   std::string_view m_name;
   int m_age;
 public:
-  Entity(const std::string_view name) : m_name{name}, m_age{-1} {}
-  explicit Entity(int age) : m_name("Unknown"), m_age(age) {} // Use explicit keyword to disable implicit conversion
-  std::string_view get_name() const { return m_name; }
+  Entity(std::string_view const name) noexcept : m_name{name}, m_age{-1} {}
+  explicit Entity(int age) noexcept : m_name("Unknown"), m_age(age) {} // Use
+  // 'explicit' keyword to disable implicit conversion
+  std::string_view get_name() const noexcept { return m_name; }
 };
-void print_entity(const Entity& entity) { std::cout << entity.get_name() << '\n'; }
+void print_entity(Entity const& entity) { std::println("{}", entity.get_name()); }
 int main() {
-  // This is a implicit conversion
-  Entity a = std::string_view{"Cherno"};
-  // It implicit converting std::string_view{"Cherno"} into
-  // Entity's constructor method Entity(const std::string_view& name)
-  // It's weird , you can't do this in other languages (such as C# or Java)
+  Entity a = std::string_view{"Cherno"}; // This is an implicit conversion, it
+  // implicitly converts std::string_view{"Cherno"} into Entity's constructor
+  // method Entity(std::string_view const& name)
+  // It's weird, you can't do this in other languages (such as C# or Java)
 
-  // Entity b = 22; // I can't do implicit conversion with explicit method anymore
-  Entity b{22}; // equals Entity b = Entity{22};
-  // {} is uniform initialization, it is narrowing conversion (high to low precision) prevention
-  
-  // C++ allows only one implicit conversion at same time
-  // "Cherno" is a const char array, C++ needs to do two conversions,
-  // one from const char* to std::string_view, and then call into Entity(const std::string_view& name)
+  Entity b{22}; // Call constructor directly, {} is uniform initialization, it's
+  // narrowing conversion (high to low precision) prevention
+  // Entity b = 22; // I can't do implicit conversion with explicitly qualified
+  // method
+
+  // C++ allows only one implicit conversion at same time, "Cherno" is a constant
+  // char array, C++ needs two conversions, one from const char* to
+  // std::string_view, and then call into Entity(const std::string_view& name)
   // Entity c = "Cherno"; // Fail
   // print_entity("Cherno"); // Fail
   print_entity(std::string_view{"Cherno"});
@@ -739,87 +805,91 @@ int main() {
 }
 ```
 
-## Operators and Operator Overloading in C++
+## Operators and Operator Overloading
 
-In the case of operator overloading you're allowed to define or change the behavior of operator
+In the case of operator overloading, you're allowed to define or change the behavior of operator
 
-- **Operators are just functions**
+> *Operators are just functions*
 
 Here goes some examples:
-```c++
-#include <iostream>
-#include <ostream>
+```cpp
+import std;
 struct Vector2 {
   float x, y;
-  Vector2(float const x, float const y) : x{x}, y{y} {}
+  constexpr Vector2(float const x, float const y) noexcept : x{x}, y{y} {}
   // overload the function "operator+()" equals redefine the behavior of '+' in this Object
-  Vector2 operator+(Vector2 const& other) const { return Vector2(x + other.x, y + other.y); }
-  Vector2 operator*(Vector2 const& other) const { return Vector2(x * other.x, y * other.y); }
-  bool operator==(Vector2 const& other) const { return x == other.x && y == other.y; }
-  bool operator!=(Vector2 const& other) const { return !operator==(other); /*Or return !(*this == other);*/ }
+  constexpr Vector2 operator+(Vector2 const& other) const noexcept { return Vector2{x + other.x, y + other.y}; }
+  constexpr Vector2 operator*(Vector2 const& other) const noexcept { return Vector2{x * other.x, y * other.y}; }
+  constexpr bool operator==(Vector2 const& other) const noexcept { return x == other.x && y == other.y; }
+  constexpr bool operator!=(Vector2 const& other) const noexcept { return !operator==(other); /*Or return !(*this == other);*/ }
 };
-std::ostream& operator<<(std::ostream& stream, Vector2 const& other) {
+std::ostream& operator<<(std::ostream& stream, Vector2 const& other) noexcept {
   return stream << other.x << ", " << other.y;
 }
 int main() {
-  Vector2 pos{4.0f, 4.0f};
-  Vector2 spd{0.5f, 1.5f};
-  Vector2 time{1.1f, 1.1f};
-  Vector2 res{pos + spd * time};
+  // 'constexpr' can improve performance by lettinghe compiler pre-calculate
+  // values at compile-time
+  constexpr Vector2 pos{4.0f, 4.0f};
+  constexpr Vector2 spd{0.5f, 1.5f};
+  constexpr Vector2 time{1.1f, 1.1f};
+  constexpr Vector2 res{pos + spd * time};
   // We cannot output the variables in vector directly,
   // We need overload the function `operator<<`
   std::cout << res << '\n';
   // In programs such as Java we have to use equals() to compare objects,
   // but in C++ we can simply overload the "operator=="
-  if (res == pos) std::cout << "foo" << '\n';
+  if constexpr (res == pos) std::cout << "foo" << '\n';
   else std::cout << "bar" << '\n';
 }
 ```
 
-## Object Lifetime (Stack/Scope Lifetimes)
+## Object Lifetime (Stack / Scope Lifetimes)
 
 - Don't return object stored in stack
 - Use `{}` to create a local scope so that stacked things will be released earlier.
-- Underlying of Unique Pointer
-  ```c++
-  #include <iostream>
+- Underlying of unique pointer
+  ```cpp
+  import std;
   int* CreateArray() {
-    int array[50]; // Don't write code like this
-    return array; // The array gets cleared as soon as we go out of scope
+    int arr[50]; // Don't write code like this
+    return arr; // The array gets cleared as soon as we go out of scope
   }
   class Entity {
   public:
-    void print() { std::cout<< "Print from Entity!" << '\n'; }
-    ~Entity() { std::cout << "Entity released~" << '\n'; }
+    void print() { std::println("Print from Entity!"); }
+    ~Entity() { std::println("Entity released~"); }
   };
-  // We can use `std::unique_pointer` which is a scoped pointer,
-  // but here we write our own to explain how it works
-  template<class T>
+  // 'std::unique_pointer' is a scoped pointer, here we write our own to show
+  // how it works
+  template <class T>
   class ScopedPtr {
   private:
     T* m_ptr;
   public:
-    ScopedPtr(T* ptr) : m_ptr{ptr} {}
+    ScopedPtr(T* ptr) noexcept : m_ptr{ptr} {}
     ~ScopedPtr() { delete m_ptr; }
-    // `->` is special, it's invoked in a loop to call another `->` if
-    // the return value is another object (not a pointer), and will finally
-    // dereference the founded pointer.
-    T* operator->() { return m_ptr; }
-    T operator*() { return *m_ptr; }
+    T* operator->() noexcept { return m_ptr; } // operator->() is special, it's
+    // invoked in a loop to call another operator->() if the return value is
+    // another object (not a pointer), and will finally dereference the founded
+    // pointer.
+    T& operator*() noexcept { return *m_ptr; }
+    T* get() noexcept { return m_ptr; }
     ScopedPtr(ScopedPtr<T>&) = delete; // Inhibit copy constructor
     ScopedPtr<T> operator=(ScopedPtr<T>) = delete; // Inhibit copy assignment
   };
   int main() {
-    { // scope with brace
-      Entity e; // the object created on stack will gets free when out of the scope
-  
+    { // Local scope
+      Entity e; // the object created on stack will gets free when out of the
+      // scope
       ScopedPtr<Entity> ptr = {new Entity};
-      // ScopedPtr<Entity> ptr2{ptr};
+      // ScopedPtr<Entity> ptr2{ptr}; // ScopedPtr is unique and don't allow
+      // copy
       ptr->print();
       (*ptr).print();
+      (*ptr.get()).print();
     }
-    // since the scoped pointer object gets allocated on the stack which means it
-    // will gets deleted when out of the scope and call ~ScopedPtr()
+    // Since the ScopedPtr gets allocated on the stack, which means it will
+    // gets released when out of the scope and calls ~ScopedPtr()
   }
   ```
 
@@ -827,76 +897,76 @@ int main() {
 
 Smart pointers is that when you call `new` , you don't have to call `delete`. Actually in many cases with smart pointers we don't even have to call `new`.
 
-- **Unique pointer**
 - **Shared pointer** & **Weak pointer**
-  Shared pointer use something called reference counting. If create one shread pointer and define another shared pointer and copy the previous one, the reference count is now 2; when the first one dies (out of scope), the reference count goes down 1; when the last one dies. the reference count goes back to zero and free the memory.
+
+  Shared pointer uses something called reference counting. If create one shread pointer and define another shared pointer and copy the previous one, the reference count is now 2; when the first one dies (out of scope), the reference count goes down 1; when the last one dies. the reference count goes back to zero and free the memory.
   Weak pointer will not increase the reference count.
 
-```c++
-#include <iostream>
-#include <memory>
+```cpp
+import std;
 class Entity {
 public:
-  Entity() { std::cout << "Created Entity!" << std::endl; }
-  ~Entity() { std::cout << "Destoryed Entity~" << std::endl; }
-  void print() {}
+  Entity() noexcept { std::println("Created Entity!"); }
+  ~Entity() { std::println("Destoryed Entity~"); }
+  void print() const noexcept {}
 };
 int main() {
-  // All smart pointer are marked as explicit due to exception safety
-  std::unique_ptr<Entity> unique_entity{new Entity};
-  // The preferred way to construct this would be use std::make_unique<T>()
-  auto unique_entity2{std::make_unique<Entity>()};
+  std::unique_ptr<Entity> unique_entity{new Entity}; // All smart pointer are
+  // marked as explicit due to exception safety
+  auto unique_entity2{std::make_unique<Entity>()}; // The preferred way to
+  // construct this would be use std::make_unique<T>()
 
-  // I can access it like I would normally
-  unique_entity2->print();
+  unique_entity2->print(); // Can be accessed normally
 
-  // In the definition of unique pointer, the copy constructor
-  // and copy assignment operator are deleted
-  // std::unique_ptr<Entity> e0{unique_entity2}; // I cannot copy unique pointer
-         
-  // Weak pointer won't increase the reference count
-  std::weak_ptr<Entity> weak_entity;
-  { // For shared pointer use make_shared is very recommand because its more efficient
+  // std::unique_ptr<Entity> e0{unique_entity2}; // I cannot copy unique pointer, because in the definition of unique pointer, the copy constructor and copy assignment operator have been deleted
+
+  std::weak_ptr<Entity> weak_entity; // Weak pointer won't increase the reference
+  // count
+  { // For shared pointer use make_shared is very recommand because its more
+  // efficient
     auto shared_entity{std::make_shared<Entity>()};
-    std::cout << "Current count: " << shared_entity.use_count() << '\n';
+    std::println("Current count: {}", shared_entity.use_count());
     auto shared_entity2{shared_entity};
-    std::cout << "Current count: " << shared_entity.use_count() << '\n';
+    std::println("Current count: {}", shared_entity.use_count());
     weak_entity = shared_entity;
-    std::cout << "Current count: " << shared_entity.use_count() << '\n';
+    std::println("Current count: {}", shared_entity.use_count());
   } // The shared_entity will be free immediately here.
 }
 ```
 
 ## Copying and Copy Constructors
 
-Ues `=` (shallow copy) to copy. An object created on heap without a copy constuctors or an object created on stack but with pointer variables that point objects on heap will lead to unexpected results since shallow copy don't copy them fully but essentially just copy the address in pointer variable. So a copy constructor is required to delimit the behavior of the copy operation.
+`operator=()` does shallow copy. An object created on heap without a copy constuctors or an object created on stack but with pointer variables that point objects on heap will lead to unexpected results since shallow copy don't copy them fully but just the address in pointer variable. So a copy constructor is required to rewrite the behavior of the copy operation.
 
-```c++
-#include <algorithm>
-#include <cstring>
-#include <iostream>
+```cpp
+import std;
+// import std.compat;
 class String {
 private:
   char* m_buffer;
-  size_t m_size;
+  std::size_t m_size;
 public:
-  String(const char* str) : m_size{strlen(str) + 1} {
-    m_buffer = new char[m_size + 1]; // +1 for last null termination char
-    std::copy_n(str, m_size, m_buffer);
-    // memcpy(m_buffer, str, m_size + 1); // C-style way, you can also use strcpy()
-  }
-  String(const String& other) : m_size(other.m_size) { // Copy Consturcor
-    m_buffer = new char[m_size + 1];
-    std::copy_n(other.m_buffer, m_size, m_buffer);
+  template <std::size_t N>
+  String(char const (&str)[N]) noexcept : m_buffer{new char[N]}, m_size(N - 1) { std::copy_n(str, m_size + 1, m_buffer); }
+  // String(char const* str) noexcept : m_size{strlen(str)} { // Or use strlen()
+  // // from the module std.compat
+  //   m_buffer = new char[m_size + 1]; // +1 for last null termination char
+  //   std::copy_n(str, m_size + 1, m_buffer);
+  //   // memcpy(m_buffer, str, m_size + 1); // C-style way, you can also use
+  //   // strcpy()
+  // }
+  String(String const& other) noexcept : m_buffer{new char[other.m_size + 1]}, m_size(other.m_size) { // Copy Consturcor
+    std::copy_n(other.m_buffer, m_size + 1, m_buffer);
     // The shallow copy is like 'memcpy(this, &other, sizeof(String));'
   }
-  // String(const String& other) = delete; // Or you can just prevent this object to do copy operation
+  // String(const String& other) = delete; // Or you can just prevent this object
+  // to do copy operation
   ~String() { delete[] m_buffer; }
-  char& operator[](unsigned int const idx) const { return m_buffer[idx]; }
+  char& operator[](std::size_t idx) const noexcept { return m_buffer[idx]; }
   // make <<() to be a fried so it can access private variables in this object
-  friend std::ostream& operator<<(std::ostream& stream, const String& str);
+  friend std::ostream& operator<<(std::ostream& stream, String const& str) noexcept;
 };
-std::ostream& operator<<(std::ostream& stream, const String& str) { return stream << str.m_buffer; }
+std::ostream& operator<<(std::ostream& stream, const String& str) noexcept { return stream << str.m_buffer; }
 int main() {
   String first_str{"Cherno"};
   String second_str{first_str};
@@ -2001,6 +2071,11 @@ C++'s cast can do anything that C-style casts can do, those casts make you code 
 
 1. Static cast (compile time checking).
 2. Reinterpret cast `reinterpret_cast<>()` (for Type Punning).
+   `reinterpret_case` can only perform conversions for pointers and references. e.g. If you want to reinterpret an `int` as a `double`:
+  ```cpp
+  int x{};
+  double y{reinterpret_case<double&>(x)};
+  ```
 3. Dynamic cast (will return `NULL` if casting is failed)
 4. Const cast `const_cast<>()` (Remove the const-ness from references or pointers that ultimately refer to something not constant)
 
@@ -2458,7 +2533,7 @@ int main() {
 }
 ```
 
-## std::print
+## std::format & std::print
 
 ```c++
 int main() {
@@ -2483,7 +2558,8 @@ int main() {
 
 - `[[likely]]`/`[[unlikely]]` used in if-statements and loops whith logical decision.
 - `volatile` to tell compiler don't optimize.
-- `constexpr` declares that it is possible to evaluate the value of the function or variable at compile-time. Such variables nd functions can then be used where only compile-time.
+- `constexpr` declares that it is possible to evaluate the value of the function or variable at compile-time. Such variables and functions can only utilize resources at compile-time.
+  `constexpr char const*` is equivalent to `char const*const` but you cannot write `char const*constexpr` at current.
 - `consteval` force evaluate expression in compile-time.
 - `noexcpt` for function that never `throw` error. Destructors are implicitly `noexcept`.
   Due to strong exception guarantee, `std::vector` moves its elements (calls `Object(Object&& (calls `Object(Object&&)`))`) at rearrange only if their move constructors are `noexcept`. You cna use `static_assert(std::is_nothrow_move_constructible_v<Object>);` to check.
@@ -2615,6 +2691,17 @@ export void g() { utility(); }
 import hello.cpp;
 main () {
   f(), g();
+}
+```
+
+## Standard library
+
+Locale
+```c++
+import std;
+int main() {
+  std::locale::global(std::locale{"en_US.UTF-8"});
+  std::println("Current currency: {} {}", std::use_facet<std::moneypunct<char, true>>(std::locale{}).curr_symbol(), std::locale{}.name());
 }
 ```
 
