@@ -613,7 +613,7 @@ The mutability of a constant depends on how it stores:
 ```cpp
 import std;
 int main() {
-  constexpr int MAX_AGE{90}; // Same with 'int const' but it's value will
+  constexpr int MAX_AGE{90}; // Same as 'int const' but it's value will
   // evaluate at compile-time
 
   // 1. Pointer to const value
@@ -821,7 +821,7 @@ struct Vector2 {
   constexpr Vector2 operator+(Vector2 const& other) const noexcept { return Vector2{x + other.x, y + other.y}; }
   constexpr Vector2 operator*(Vector2 const& other) const noexcept { return Vector2{x * other.x, y * other.y}; }
   constexpr bool operator==(Vector2 const& other) const noexcept { return x == other.x && y == other.y; }
-  constexpr bool operator!=(Vector2 const& other) const noexcept { return !operator==(other); /*Or return !(*this == other);*/ }
+  constexpr bool operator!=(Vector2 const& other) const noexcept { return !operator==(other); /* Or return !(*this == other); */ }
 };
 std::ostream& operator<<(std::ostream& stream, Vector2 const& other) noexcept {
   return stream << other.x << ", " << other.y;
@@ -840,6 +840,22 @@ int main() {
   // but in C++ we can simply overload the "operator=="
   if constexpr (res == pos) std::cout << "foo" << '\n';
   else std::cout << "bar" << '\n';
+}
+```
+
+In C++23, explicit object member functions make it possible to deduplicate const- and non-const member functions:
+```cpp
+struct S {
+  std::vector<int> m_vec;
+  S(std::initializer_list<int> arr) : m_vec{arr} {}
+  // Before C++23
+  int operator[](std::size_t idx) { return m_vec[idx]; }
+  int operator[](std::size_t idx) const { return m_vec[idx]; }
+  // auto operator[](this auto&& self, std::size_t idx) { return self.m_vec[idx]; }
+};
+int main() {
+  S const s{1, 2, 3};
+  std::println("{}", s[1]);
 }
 ```
 
@@ -1234,7 +1250,7 @@ Templates can improve code reuse rate and reduce duplicate code (e.g. function o
   // exist in compiled file, even if there is a grammatical error in templated
   // function code, it will still compile successfully.
   import std;
-  template <class T> // Exactly same with 'template<typename T>'
+  template <class T> // Exactly same as 'template<typename T>'
   void print(T value) { std::println("{}", value); }
   int main() {
     print(5);      // Auto deducing
@@ -1266,36 +1282,36 @@ Templates can improve code reuse rate and reduce duplicate code (e.g. function o
      std::println("{}", arr.get_size());
    }
    ```
-3. The keyword `typename` TODO: 8/25/24
-   Clearify something is a type.
-   ```c++
-   // C++20 makes `typename` optional on where nothing but a type name can appear
-   template <class T>
-   T::U f(); // Return type
-   template <class T>
-   void f(typename T::U); // Ill-formed in global scope, without `typename`, `T::U` would be
-   // considered a static member
+3. The keyword `typename` clearify something that is a type.
+
+   C++20 makes `typename` optional on where nothing but a dependent type name can appear
+   ```cpp
+   template <class T> T::U f(); // Return type
+   template <class T> void f(typename T::U); // Ill-formed in global scope, without 'typename', 'T::U' would be evaluated right now as 'void'
    template <class T>
    struct S {
-     T::U r; // member type
+     T::U r; // Member type
      T::P f(T::P p) { // But Ok in class scope, argument type of a methods
        return static_cast<T::R>(p); // Type in casts
      }
    };
    ```
 4. Non-type template parameter (C++20)
-   ```c++
+   ```cpp
    template<class T> struct X { constexpr X(T) {} };
    template <X x> struct Y {}; // Non-type template parameter
-   Y<0> y; // OK, Y<X<int>(0)>
+   Y<0> y; // Y<X<int>(0)>
   
-   template <typename T, std::size_t N>
-   struct S2 { T data[N]; /* Array of dependent bound */ };
+   template <typename T, std::size_t N> struct S2 { T data[N];}; // Array of
+    // dependent bound
    {% raw %}S2 s{{1, 2, 3, 4, 5}};{% endraw %}
    ```
-5. User-defined deduction guides
-   Template parameters of a class template could not be deduced from a constructor call until the introduction of deduction guides in C++17
-   ```c++
+5. User-defined deduction guides (C++17)
+
+   **Only works for class (`class`, `struct`, `union`).**
+
+   Sometimes, template parameters of a class template could not be deduced from a constructor call. For example, elements' type in a container.
+   ```cpp
    template <class T>
    struct Container {
      Container(T t) {}
@@ -1305,122 +1321,20 @@ Templates can improve code reuse rate and reduce duplicate code (e.g. function o
    Container(Iter b, Iter e) -> Container<typename std::iterator_traits<Iter>::value_type>;
    
    std::vector<double> v{1, 2};
-   Container d{v.begin(), v.end()}; // Deduces Container<double>
+   Container w{v.begin(), v.end()}; // Deduces Container<double>
    ```
 6. Abbreviated function template (C++20)
-   ```c++
-   void f1(auto); // same as template<class T> void f1(T)
-   void f2(Concept1 auto);
-   template<>
-   f1(int); // Can be specialized like normal
+   ```cpp
+   void f1(auto); // Same as template<class T> void f1(T)
+   void f2(Concept1 auto); // Can be constrained by concept
+   template<> f1(int); // Can be specialized like normal
    ```
-
-### How to Make Base Class Access Derived Class's Methods (CRTP)
-
-Curiously Recurring Template Pattern (CRTP): A derived class derives the base class with itself as a template argument.
-
-```c++
-#include <iostream>
-// Template template parameter can be constrained (Though not necessary)
-template <template <Addable> typename Templ_Derived, typename T>
-// Requires clause also works
-// template <template <typename T> requires Addable<T> typename Templ_Derived, typename T>
-class Base {
-private:
-  Base() {}
-  friend Templ_Derived<T>;
-public:
-  void print_derived_add(T a, T b) {
-    auto& d{static_cast<Templ_Derived<T>&>(*this)};
-    std::cout << d.add(a, b) << '\n';
-  }
-};
-template <Addable T>
-class Derived : public Base<Derived, T> {
-public:
-  T add(T a, T b) { return a + b; }
-};
-int main() {
-  Derived<int>().print_derived_add(1, 2);
-}
-```
-
-### SFINAE
-
-*"Substitution Failure Is Not An Error"*, compiler will continue to find suitable template.
-
-If statement in template using SFINAE
-```c++
-template <bool Cond, typename IfTrue, typename IfFalse>
-struct conditional {
-  using type = IfTrue;
-};
-template <typename IfTrue, typename IfFalse>
-struct conditional<false, IfTrue, IfFalse> { // This will has higher priority
-  using type = IfFalse;
-};
-```
-
-Narrowing conversion check using SFINAE
-```c++
-template <typename From, typename To, typename = void>
-struct is_narrowing : std::true_type {};
-template <typename From, typename To>
-// To{std::declval<From>()} is ill-formed in case of narrowing cast, so will prevents match this template
-struct is_narrowing<From, To, std::void_t<decltype(To{std::declval<From>()})>> : std::false_type {};
-
-static_assert(!is_narrowing<std::int8_t, std::int16_t>::value);
-static_assert(!is_narrowing<std::uint8_t, std::int16_t>::value);
-static_assert(!is_narrowing<float, double>::value);
-static_assert( is_narrowing<double, float>::value);
-static_assert( is_narrowing<int, uint32_t>::value);
-```
-
-A skillfully implementation of custom `std::formatter`. The `parse()` method is a template, since it's `constexpr` specified, any possible cases that result a `throw` will be filtered in a SFINAE way.
-```c++
-struct QuotableString : std::string_view {};
-template <typename CharT>
-struct std::formatter<QuotableString, CharT> {
-  bool quoted{false};
-  template <class ParseContext>
-  constexpr ParseContext::iterator parse(ParseContext& ctx) {
-    auto it{ctx.begin()};
-    if (it == ctx.end()) return it;
-    if (*it == '#') (quoted = true), ++it;
-    if (it != ctx.end() && *it != '}') // How could this pass the compile?
-      throw std::format_error("Invalid format args for QuotableString.");
-    return it;
-  }
-  // template <class FmtContext>
-  // FmtContext::iterator format(QuotableString s, FmtContext& ctx) const {
-  //   std::ostringstream out;
-  //   if (quoted) out << std::quoted(s);
-  //   else out << s;
-
-  //   return std::ranges::copy(std::move(out).str(), ctx.out()).out; // std::move is not necessary in C++20 since it do type deducing
-  // }
-  template <class FmtContext>
-  constexpr FmtContext::iterator format(QuotableString s, FmtContext& ctx) const noexcept { // constexpr version
-    return quoted ? std::format_to(ctx.out(), "{:?}", static_cast<std::string_view>(s)) : std::ranges::copy(s, ctx.out()).out;
-  }
-};
-int main() {
-  QuotableString a("be"), a2(R"( " be " )");
-  QuotableString b("a question");
-  std::cout << std::format("To {0} or not to {0}, that is {1}.\n", a, b);
-  std::cout << std::format("To {0:} or not to {0:}, that is {1:}.\n", a, b);
-  std::cout << std::format("To {0:#} or not to {0:#}, that is {1:#}.\n", a2, b);
-}
-```
 
 ### Ways to Print Type Name
 
-```c++
+```cpp
 #include <cxxabi.h>
-#include <iostream>
-#include <memory>
-#include <source_location>
-#include <string_view>
+import std;
 template <typename T> // One way
 std::string type_name() noexcept {
   using TRR = std::remove_reference<T>::type;
@@ -1445,22 +1359,23 @@ int foo_value();
 int main() {
   int i = 0;
   int const ci = 0;
-  std::cout << "decltype(i) is " << type_name<decltype(i)>() << '\n';
-  std::cout << "decltype((i)) is " << type_name<decltype((i))>() << '\n';
-  std::cout << "decltype(ci) is " << type_name<decltype(ci)>() << '\n';
-  std::cout << "decltype((ci)) is " << type_name<decltype((ci))>() << '\n';
-  std::cout << "decltype(static_cast<int&>(i)) is " << type_name<decltype(static_cast<int&>(i))>() << '\n';
-  std::cout << "decltype(static_cast<int&&>(i)) is " << type_name<decltype(static_cast<int&&>(i))>() << '\n';
-  std::cout << "decltype(static_cast<int>(i)) is " << type_name<decltype(static_cast<int>(i))>() << '\n';
-  std::cout << "decltype(foo_lref()) is " << type_name<decltype(foo_lref())>() << '\n';
-  std::cout << "decltype(foo_rref()) is " << type_name<decltype(foo_rref())>() << '\n';
-  std::cout << "decltype(foo_value()) is " << type_name<decltype(foo_value())>() << '\n';
+  std::println("decltype(i) is {}", type_name<decltype(i)>());
+  std::println("decltype((i)) is {}", type_name<decltype((i))>());
+  std::println("decltype(ci) is {}", type_name<decltype(ci)>());
+  std::println("decltype((ci)) is {}", type_name<decltype((ci))>());
+  std::println("decltype(static_cast<int&>(i)) is {}", type_name<decltype(static_cast<int&>(i))>());
+  std::println("decltype(static_cast<int&&>(i)) {}", type_name<decltype(static_cast<int&&>(i))>());
+  std::println("decltype(static_cast<int>(i)) {}", type_name<decltype(static_cast<int>(i))>());
+  std::println("decltype(foo_lref()) {}", type_name<decltype(foo_lref())>());
+  std::println("decltype(foo_rref()) {}", type_name<decltype(foo_rref())>());
+  std::println("decltype(foo_value()) {}", type_name<decltype(foo_value())>());
 }
 ```
 
 ### Concepts
 
-```c++
+```cpp
+import std;
 template <typename T> concept Addable = requires(T a, T b) { a + b; };
 template <typename T> concept Dividable = requires(T a, T b) { a / b; };
 template <typename T> concept DivAddable = Addable<T> && Dividable<T>;
@@ -1473,45 +1388,168 @@ template <typename T, typename U> concept ExampleReq = requires(T x, U) {
   typename T::value_type;
   typename std::vector<T>;
   // compound requirement: {expression}[noexcept][-> Concept];
-  // {expression} -> Concept<A1, A2, ...> is equivalent to requires Concept<decltype((expression)), A1, A2, ...>
-  { *x } noexcept;                                         // dereference must be noexcept
-  { *x } noexcept -> std::same_as<typename T::value_type>; // dereference must return T::value_type
-  // nested requirement: requires ConceptName<...>;
+  // {expression} -> Concept<A1, A2, ...> is equivalent to requires
+  // Concept<decltype((expression)), A1, A2, ...>
+  { *x } noexcept; // dereference must be noexcept
+  { *x } noexcept -> std::same_as<typename T::value_type>; // dereference must
+  // return T::value_type nested requirement: requires ConceptName<...>;
   requires Addable<T>;
 };
 
 template <typename T> requires Addable<T> // Use requires clause to constrain
-T type_add(T a, T b) { return a + b; }
+T add(T a, T b) { return a + b; }
 template <Addable T> // Directly use concept as template parameter (cleaner way)
-T type_add2(T a, T b) { return a + b; }
+T add2(T a, T b) { return a + b; }
 
-export template <typename T>
-consteval bool type_addable(T x) { // requires-expression render to a bool at compile-time
-  if (Addable<T>) return true;
+template <typename T>
+consteval bool is_addable() { // requires-expression render to a bool at compile-time
+  if (Addable<T>) return true; // Same as
   // if (requires(T a, T b) { a + b; }) return true;
   else return false;
 }
-
-// Some STD concepts
-export template <std::integral T>
-void print_concept() { std::println("Integral matched"); }
-export template <std::integral T> requires std::is_unsigned_v<T> void print_concept() { std::println("Unsigned integral matched"); }
-export template <std::floating_point T>
-void print_concept() { std::println("Floating point matched"); }
-export template <std::floating_point T> requires(sizeof(T) == 8) void print_concept() { std::println("Doubled Floating point matched"); }
 ````
 
-Narrowing/Non-narrowing conversion check:
-```c++
-#include <cstdint>
+Some STD concepts:
+```cpp
+import std;
+// Some STD concepts
+template <std::integral T>
+void print_concept() { std::println("Integral matched"); }
+
+template <std::integral T> requires std::is_unsigned_v<T>
+void print_concept() { std::println("Unsigned integral matched"); }
+
+template <std::floating_point T>
+void print_concept() { std::println("Floating point matched"); }
+
+template <std::floating_point T> requires(sizeof(T) == 8)
+void print_concept() { std::println("Doubled Floating point matched"); }
+```
+
+Narrowing conversion check using Concept:
+```cpp
+import std;
 template <typename From, typename To> concept narrowing = !requires(From f) { To{f}; };
-template <typename From, typename To> concept non_narrowing = requires(From f) { To{f}; }; // !narrowing_conversion<From, To>; // Or simply inverse the narrowing conversion check
 static_assert(!narrowing<std::int8_t, std::int16_t>);
 static_assert(!narrowing<std::uint8_t, std::int16_t>);
 static_assert(!narrowing<float, double>);
 static_assert(narrowing<double, float>);
 static_assert(narrowing<int, uint32_t>);
-int main() {}
+```
+
+### Template Template Parameter & CRTP & Explicit object parameter
+
+Curiously Recurring Template Pattern (CRTP): A derived class derives the base class with itself as a template argument. To make base class use derived class's methods without `virtual`:
+
+```cpp
+import std;
+template <typename T> concept Addable = requires(T a, T b) { a + b; };
+// Template template parameter can be constrained (Though not necessary)
+template <template <Addable> typename Templ_Deri, typename T>
+// Requires clause also works
+// template <template <typename T> requires Addable<T> typename Templ_Derived, typename T>
+class Base {
+  friend Templ_Deri<T>;
+private:
+  constexpr Base() noexcept {}
+public:
+  void print_derived_add(T a, T b) const noexcept { std::println("{}", static_cast<Templ_Deri<T> const&>(*this).add(a, b)); }
+};
+template <Addable T>
+class Derived : public Base<Derived, T> {
+public:
+  constexpr T add(T a, T b) const noexcept { return a + b; }
+};
+
+// Deducing explicit object parameter (deducing 'this', C++23)
+struct Base2 {
+  void name(this auto&& self) noexcept { self.impl(); } // Same as
+  // template <typename Self> void name(this Self&& self) { self.impl(); }
+};
+struct D1 : public Base2 {
+  void impl() const noexcept { std::println("D1::impl()"); }
+};
+struct D2 : public Base2 {
+  void impl() const noexcept { std::println("D2::impl()"); }
+};
+
+int main() {
+  Derived<int>().print_derived_add(1, 2);
+  D1{}.name(), D2{}.name();
+}
+```
+
+### SFINAE
+
+*"Substitution Failure Is Not An Error"*, compiler will continue to find suitable template.
+
+If statement in template using SFINAE
+```cpp
+import std;
+template <bool Cond, typename IfTrue, typename IfFalse>
+struct conditional { using type = IfTrue; };
+
+template <typename IfTrue, typename IfFalse>
+struct conditional<false, IfTrue, IfFalse> { using type = IfFalse; }; // This
+// will has higher priority
+template <bool Cond, class IfTrue, class IfFalse>
+using conditional_t = conditional<Cond, IfTrue, IfFalse>::type;
+
+static_assert(std::same_as<conditional_t<true, int, float>, int>);
+```
+
+Narrowing conversion check using SFINAE
+```cpp
+template <typename From, typename To, typename = void>
+struct is_narrowing : std::true_type {};
+template <typename From, typename To> // A template specification of the above,
+// 'To{std::declval<From>()}' is ill-formed in case of narrowing cast, so will
+// prevent match this template
+struct is_narrowing<From, To, std::void_t<decltype(To{std::declval<From>()})>> : std::false_type {};
+
+static_assert(!is_narrowing<std::int8_t, std::int16_t>::value);
+static_assert(!is_narrowing<std::uint8_t, std::int16_t>::value);
+static_assert(!is_narrowing<float, double>::value);
+static_assert( is_narrowing<double, float>::value);
+static_assert( is_narrowing<int, uint32_t>::value);
+```
+
+A skillfully implementation of custom `std::formatter`. `parse()` is a template method, since it's `constexpr` specified, any possible cases that result a `throw` will be filtered in a SFINAE way.
+```cpp
+import std;
+struct QuotableString : std::string_view {};
+template <typename CharT>
+struct std::formatter<QuotableString, CharT> {
+  bool quoted{false};
+  template <class ParseContext>
+  constexpr ParseContext::iterator parse(ParseContext& ctx) {
+    auto it{ctx.begin()};
+    if (it == ctx.end()) return it;
+    if (*it == '#') (quoted = true), ++it;
+    if (it != ctx.end() && *it != '}') // How could this pass the compile?
+      throw std::format_error("Invalid format args for QuotableString.");
+    return it;
+  }
+  // template <class FmtContext> // Way 1: Using std::ostringstream
+  // FmtContext::iterator format(QuotableString s, FmtContext& ctx) const {
+  //   std::ostringstream out;
+  //   if (quoted) out << std::quoted(s);
+  //   else out << s;
+  //   return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+  //   // std::move is not necessary in C++20 since it'll do type deducing
+  // }
+  template <class FmtContext> // Way 2: Using std::format_to
+  constexpr FmtContext::iterator format(QuotableString s, FmtContext& ctx) const noexcept { // constexpr version
+    return quoted ? std::format_to(ctx.out(), "{:?}", static_cast<std::string_view>(s)) : std::ranges::copy(s, ctx.out()).out;
+  }
+};
+int main() {
+  QuotableString a("be"), a2(R"( " be " )");
+  QuotableString b("a question");
+  std::cout << std::format("To {0} or not to {0}, that is {1}.\n", a, b);
+  std::cout << std::format("To {0:} or not to {0:}, that is {1:}.\n", a, b);
+  std::cout << std::format("To {0:#} or not to {0:#}, that is {1:#}.\n", a2, b);
+}
 ```
 
 ## Stack vs Heap Memory in C++
@@ -1521,7 +1559,7 @@ Ignore...
 ## Macros in C++
 
 Macros do text replace at preprocessor stage
- ```c++
+ ```cpp
  #include <iostream>
  #define WAIT std::cin.get()
  int main() {
@@ -1529,66 +1567,65 @@ Macros do text replace at preprocessor stage
  }
  ```
 
-Macros function and combine with the environment, environment variables can be defined at: Project settings -> C/C++ -> Preprocessor -> Preprocessor Definitions
- ```c++
- #ifdef PR_DEBUG
- #define LOG(x) std::cout << x << '\n'
- #elif defined(PR_RELEASE)
- #define LOG(x) // Do nothing
- #endif
-   int main() {
-   LOG("Hello");
- }
- ```
+Macros function and combine with the environment, environment variables can be defined at: Project settings&rarr;C/C++&rarr;Preprocessor&rarr;Preprocessor Definitions
+```cpp
+import std;
+#ifdef PR_DEBUG
+#define LOG(x) std::println("{}", x)
+#elif defined(PR_RELEASE)
+#define LOG(x) // Do nothing
+#endif
+int main() {
+  LOG("Hello");
+}
+```
 
 Variadic macros
-```c++
-main() {
+```cpp
+import std;
 #define LOG1(...) \
   __VA_OPT__(std::printf(__VA_ARGS__);)
-  LOG1();                 // `__VA_OPT__` allows optional `__VA_ARGS__`
-  LOG1("number is 12\n"); // `__VA_OPT__` allows to omit the trailling comma when `__VA_ARGS__` are empty
-  LOG1("number is %d\n", 12);
+int main() {
+  LOG1(); // '__VA_OPT__' allows optional '__VA_ARGS__'
+  LOG1("number is 12\n"); // '__VA_OPT__' also allows to omit the trailling comma
+  // when '__VA_ARGS__' are empty
+  LOG1("number is %d\n", 13);
 }
 ```
 
-## The "auto" Keyword
+## The `auto` Keyword
 
 Be careful with `auto`:
-```c++
-#include <iostream>
-#include <string>
-std::string get_name() { return "Cherno"; }
-// char* get_name() { return "Cherno"; }
+```cpp
+import std;
+consteval std::string get_name() noexcept { return "Cherno"; }
+// consteval char const* get_name() noexcept { return "Cherno"; }
 int main() {
   auto name{get_name()};
-  // Call a type specific method size(), if the return type of GetName() changed to "char*" , this will be broken
-  int a = name.size();
-  std::cout << a << '\n';
+  std::size_t a{name.size()}; // Call a type specific method size(), if thereturn type of get_name() changed to 'char*' , this will be broken
+  std::println("{}", a);
 }
 ```
 
-`auto`' can reduce type length
-```c++
-#include <string>
-#include <unordered_map>
-#include <vector>
+`auto`, `using` can reduce type length
+```cpp
+import std;
 class Device {};
 class DeviceManager {
   using Device_t = std::unordered_map<std::string, std::vector<Device*>>;
 private:
   Device_t m_devices;
 public:
-  const Device_t& GetDevices() const { return m_devices; }
+  Device_t const& GetDevices() const { return m_devices; }
 };
 int main() {
   DeviceManager dm;
   // The type is too messy
-  const std::unordered_map<std::string, std::vector<Device*>>& devices{dm.GetDevices()};
-  // You can use keyword "using" or "typedef" to make alias
-  using DeviceMap = std::unordered_map<std::string, std::vector<Device*>>;
-  const DeviceMap& devices2{dm.GetDevices()};
-  const auto& devices3{dm.GetDevices()}; // Or auto
+  std::unordered_map<std::string, std::vector<Device*>> const& devices{dm.GetDevices()};
+  using DeviceMap = std::unordered_map<std::string, std::vector<Device*>>; // Use
+  // 'using' or 'typedef' to make alias
+  DeviceMap const& devices2{dm.GetDevices()};
+  auto const& devices3{dm.GetDevices()}; // Or use auto
 }
 ```
 
@@ -1596,29 +1633,36 @@ int main() {
 
 TODO
 
-## Function Pointers in C++
+## Function Pointers
 
-1. 3 ways to definite a Function Pointers
-   ```c++
+1. Ways that define a function pointers:
+   ```cpp
+   import std;
    void hello_world(int a) noexcept { std::println("Hello World! Value: {}", a); }
    int main() {
-     auto const f1{hello_world};                // auto deducing
-     void (*const f2)(int){hello_world};        // C-style function pointer
-     using Balabala = std::function<void(int)>; // Using alias
-     // typedef void (*Balabala)(int);             // Or C-style typedef
+     auto const f1{hello_world}; // auto deducing
+     void (*const f2)(int){hello_world}; // C-style function pointer
+     using Balabala = std::function<void(int)>; // Using alias and std::function
+     // typedef void (*Balabala)(int); // Or C-style typedef
      Balabala const& f3{hello_world};
      f1(1), f2(2), f3(3);
    }
    ```
-2. A simple usage - the ForEach function:
-   ```c++
-   template <typename E> void print_value(E value) { std::println("Value: {}", value); }
+2. A simple usage - the 'for each' function:
+   ```cpp
+   import std;
+   template <typename E>
+   void print_value(E value) noexcept { std::println("Value: {}", value); }
+   
    template <typename Cont, typename Func> requires requires(Func func) { static_cast<std::function<void(typename Cont::value_type)>>(func); }
-   void for_each(Cont const& cont, Func func) { for (typename Cont::value_type v : cont) func(v); }
+   void for_each(Cont const& cont, Func func) noexcept {
+     for (typename Cont::value_type const& v : cont) func(v);
+   }
    int main() {
      std::vector vec{1, 5, 4, 2, 3};
      for_each(vec, print_value<int>);
-     for_each(vec, []<typename E>(E value) { std::println("Value: {}", value); }); // Or use a lambda (with template parameter)
+     // Or use a lambda (with template parameter in C++20)
+     for_each(vec, []<typename E>(E value) { std::println("Value: {}", value); });
    }
    ```
 
@@ -1627,55 +1671,60 @@ TODO
 A lambda is basically a little throwaway function that you can write and assign to a variable quickly.
 
 1. How to put outside variables into lambda function
+
    `[=]`: Pass everything in by value, the pass in variables is independent of the outside.
+
    `[&]`: Pass everything in by reference.
+
    `[a]`: Pass `a` by value
+
    `[&a]`: Pass `a` by reference.
-2. using `mutable` keyword to allow modify pass in variables
-   ```c++
+2. Use `mutable` keyword to allow modify pass-in variables
+   ```cpp
+   import std;
    int main() {
      int a{8};
      auto f{[=]() mutable { a = 5; std::println("Value: {}",a); }};
      f();
-     std::println("Value: {}", a); // x is still 8, because [=] just copy value into this lambda.
+     std::println("Value: {}", a); // x is still 8, because [=] just copy value
+     // into the lambda.
    }
    ```
-3. We need to use `std::function` instand of C-style raw function pointer if lambda has pass in variables (stateful).
-   ```c++
+3. We need to use `std::function` instand of C-style raw function pointer if lambda has pass in variables (stateful lambda).
+   ```cpp
    void for_each(std::vector<int> const& values, std::function<void(int)> const& func) noexcept {
      for (int const i : values) func(i);
    }
    int main() {
      std::vector values{1, 2, 3, 4, 5};
      int state{};
-     // Cannot cast to C-style void(*callback)(int)
+     // This lambda cannot cast to C-style void(*callback)(int)
      auto callback{[&](int value) { std::println("Current state: {}, Value: {}", state, value); }};
      state = 1;
      for_each(values, callback);
    }
    ```
 4. Usage of `std::find_if` (returns an iterator to the first element when callback function returns true)
-   ```c++
+   ```cpp
    int main() {
      std::vector values{1, 5, 4, 2, 3};
      auto iterator{std::find_if(values.begin(), values.end(), [](int value) { return value > 3; })};
      std::println("First element that > 3: {}", *iterator);
    }
    ```
-5. Capturing Parameter Packs in Lambda
-   ```c++
+5. Capturing parameter packs in lambda
+   ```cpp
+   import std;
    constexpr int add(int a, int b) noexcept { return a + b; }
    template <typename F, typename... Args>
-   constexpr auto delay_call(F&& f, Args&&... args) noexcept {
-     // C++20 improved capturing parameter packs in lambda
+   constexpr auto invoke(F&& f, Args&&... args) noexcept { // C++20 improved
+   // capturing parameter packs in lambda
      return [f = std::forward<F>(f), ... f_args = std::forward<Args>(args)]() constexpr noexcept { return f(f_args...); };
-     // "..." is like says "take whatever on the life and unpack it accordingly"
-     // If the parms pack f_args is "<int, int>{1, 2}"
-     // Compiler will expand `f(args...)` to `f(1, 2)`, expand `f(args)...` to `f(arg1), f(arg2)`
+     // '...' is like says "take whatever on the life and unpack it accordingly"
+     // If the parms pack f_args is '[1, 2]', compiler will expand 'f(args...)'
+     // to 'f(1, 2)'; as well as expand 'f(args)...' to 'f(arg1), f(arg2)'
    }
-   int main() {
-     std::println("{}", delay_call(add, 1, 2)());
-   }
+   int main() { std::println("{}", invoke(add, 1, 2)()); }
    ```
 
 ## Namespaces in C++
@@ -1685,23 +1734,27 @@ Use Namespace to
 2. Avoid C library like naming: `GLFW_initialize` to `GLFW::initialize`
 
 We can set to use only specific symbol in a namespace
-```c++
+```cpp
+import std;
 namespace apple {
-static char const* s_text;
-void print(char const* text) { s_text = text, std::println("{}", text); }
-void print_again() { std::println("{}", s_text); }
+static char const* s_txt;
+void print(char const* txt) { s_txt = txt, std::println("{}", txt); }
+void print_again() { std::println("{}", s_txt); }
 }; // namespace apple
+void print() { std::println("print from global"); }
 int main() {
-  using apple::print;
+  using apple::print; // Use namespace in a limited range
   print("Hello");
   apple::print_again(); // We still need 'apple::' to call print_again()
+  ::print(); // If want to call functions in global
 }
 ```
 
 Nested namespaces can be shorten using alias:
-```c++
+```cpp
+import std;
 namespace apple::functions {
-void print(const char* text) { std::println("{}", text); }
+void print(char const* txt) { std::println("{}", txt); }
 } // namespace apple::functions
 int main() {
   namespace a = apple::functions;
@@ -1714,14 +1767,15 @@ int main() {
 Absolutely don't use `using namespace` in header files.
 If you must using `using namespace`, please use it in a small scope as possible.
 
-For example a serious issue of implicit conversion:
-```c++
+For example, a serious issue of implicit conversion:
+```cpp
+import std;
 namespace apple {
-void print(std::string const& text) { std::println("{}", text); }
+void print(std::string const& txt) noexcept { std::println("{}", txt); }
 } // namespace apple
 namespace orange {
-void print(char const* text) {
-  std::string tmp{text};
+void print(char const* txt) noexcept {
+  std::string tmp{txt};
   std::reverse(tmp.begin(), tmp.end());
   std::println("{}", tmp);
 }
@@ -1730,52 +1784,55 @@ using namespace apple;
 using namespace orange;
 int main() {
   print("Hello"); // Which one will get called?
-  // Answer: the orange::print() will be called, because the type of "Hello" is 'char*'
+  // Answer: the orange::print() will be called, because the type of "Hello" is
+  // 'char*'
 }
 ```
 
-## Threads
+## Threads and Coroutines
 
-If we want to do something else when we called functions that will block the current thread, we can use threads (or coroutines in C++20).
+If we want to do something else when we are calling functions that will block the current thread, we can use `std::threads` (or coroutines in C++20).
 
 - A `std::thread` shoud have either `join()` or `detach()` called otherwise it will call `std::terminate()` in its destructor.
 
 Here is an example:
-We created a thread that will do loop on outputting "Working..",
+We create a thread that will do loop on outputting "Working..",
 and simultaneously the main() function is waiting for user input.
-```c++
+```cpp
+import std;
 int main() {
   std::println("[Main] tid={}", std::this_thread::get_id());
-  bool is_finished{false};
-  // In a async operation, there are ways to store the result of a thread's processing':
-  // std::promise' is use by the producer/writer, while 'std::future' is used by the consumer/reader,
-  // the latter don't have ability to set/write.
+  bool is_finish{false};
+  // In a async operation, there are ways to store the result of a thread's
+  // processing: 'std::promise' is used by the producer/writer, while
+  // 'std::future' is used by the consumer/reader, the latter don't have ability
+  // to set or write.
   std::promise<std::string> promise;
   std::future<std::string> future{promise.get_future()};
-  std::thread worker([&is_finished, promise = std::move(promise)]() mutable { // As soon as we create thread instance, it's going to immediately kick off that thread
+  std::thread worker([&is_finish, promise = std::move(promise)]() mutable { // As
+  // soon as we create thread instance, it's going to immediately kick off
     std::println("[thread] Started, tid={}", std::this_thread::get_id());
-    while (!is_finished) {
+    while (!is_finish) {
       std::println("Working...");
       std::this_thread::sleep_for(std::chrono::seconds(1));
-      // using namespace std::literals::chrono_literals; // Or use namespace for convenience
+      // using namespace std::literals::chrono_literals; // Or use alias for
+      // // convenience
       // std::this_thread::sleep_for(1s);
     }
     promise.set_value("From thread: I'm completed!");
-  });
-  // Since the ownership of the 'promise' has 'std::move()'d to the thread 'worker',
+  }); // Since the ownership of the 'promise' has moved to the thread 'worker',
   // we can no longer use it in this function
   std::cin.get();
-  is_finished = true;
+  is_finish = true;
   worker.join(); // Let main thread to wait for this thread (block main thread)
   std::println("Finished. Get values from thread: {}", future.get());
 }
 ```
 
-## Coroutines
+### Coroutines
 
-```c++
-// Promise
-template <typename T>
+```cpp
+template <typename T> // Promise
 struct Co {
   struct promise_type;
   std::coroutine_handle<promise_type> handle;
@@ -1783,12 +1840,18 @@ struct Co {
     int m_count{};
     T m_ret;
     Co get_return_object() { return Co{.handle = std::coroutine_handle<promise_type>::from_promise(*this)}; }
-    auto initial_suspend() { return std::suspend_never{}; } // Called when coroutine object instantiated, can either return `std::suspend_always`, `std::suspend_never`, or construct a custom awaiter struct/class
-    auto final_suspend() const noexcept { return std::suspend_always{}; } // Called when coroutine function completed
+    auto initial_suspend() { return std::suspend_never{}; } // Called when
+    // coroutine object instantiated, can either return 'std::suspend_always',
+    // 'std::suspend_never', or construct a custom awaiter class
+    auto final_suspend() const noexcept { return std::suspend_always{}; } // Called
+    // when coroutine function completed
     void unhandled_exception() const { std::terminate(); }
-    // void return_void() { std::println("[promise_type] return_void"); } // Called by 'co_return'
-    void return_value(T value) { m_ret = value; } // Called by 'co_return <value>', can't coexist with 'return_void()'
-    auto yield_value(int value) { // Called by `co_yield`, normally you should choose either `co_yield` or `co_await`
+    // void return_void() { std::println("[promise_type] return_void"); } // Called
+    // by 'co_return'
+    void return_value(T value) { m_ret = value; } // Called by 'co_return <value>'
+    // , can't coexist with 'return_void()'
+    auto yield_value(int value) { // Called by 'co_yield', normally you should
+    // choose either 'co_yield' or 'co_await'
       m_count = value;
       return std::suspend_always{};
     }
@@ -1796,8 +1859,11 @@ struct Co {
       struct Awaiter {
         std::future<T> m_future;
         std::thread m_thr;
-        bool await_ready() { return false; } // Called by 'co_await', return false to suspend
-        void await_suspend(std::coroutine_handle<>) { std::println("[Awaiter] await_suspend"); } // Called at suspend
+        bool await_ready() { return false; } // Called by 'co_await', return
+        // false to suspend
+
+        // Called at suspend
+        void await_suspend(std::coroutine_handle<>) { std::println("[Awaiter] await_suspend"); }
         T await_resume() { // Called at resume
           std::println("[Awaiter] Thread block? Main thread tid#{}", std::this_thread::get_id());
           return m_future.get();
@@ -1810,7 +1876,8 @@ struct Co {
                       T value{func()};
                       promise.set_value(value); });
       thr.detach();
-      return Awaiter{std::move(future), std::move(thr)}; // Use 'std::move()' so they won't be cleaned up at method completed
+      return Awaiter{std::move(future), std::move(thr)}; // Use 'std::move()' so
+      // they won't be cleaned up at method completed
     }
   };
 };
@@ -1833,13 +1900,13 @@ int main() {
   }
   std::println("[main] get returned value: {}", co.handle.promise().m_ret);
   co.handle.destroy(); // Don't forget to destory, or memory leak could occur.
-{}
+}
 ```
 
 ## Timing
 
-Make a Timer for statistical time-consuming
-```c++
+Make a timer to count time-consuming
+```cpp
 template <class Res = std::chrono::milliseconds>
 class Timer {
   using Clock = std::conditional_t<std::chrono::high_resolution_clock::is_steady,
@@ -1860,17 +1927,18 @@ public:
 };
 int main() {
   []() {
-    Timer timer; // The timer will be auto delete when run out of the scope
-    std::this_thread::sleep_for(std::chrono::milliseconds(1145)); // Sleep for 114514ms
+    Timer timer; // The timer will be deleted automatically when run out of the
+    // scope
+    std::this_thread::sleep_for(std::chrono::milliseconds(1145)); // Sleep for
+    // 114514ms
   }();
 }
 ```
 
 ## Multidimensional Arrays
 
-TODO: C++23 `std::mdspan`
-
-```c++
+```cpp
+import std;
 int main() {
   int** a2d{new int*[20]}; // 2D array, stores type 'int*'
   for (int i{}; i < 20; i++) { // Initiate a 20x30 2D array
@@ -1896,10 +1964,10 @@ int main() {
   }
   // Now print the 3D array by slicing the heights
   std::println("Layer1       Layer2     Layer3      Layer4");
-  for (int i{}; i < 2; i++) {
-    for (int k{}; k < 4; k++) {
-      std::print("{:2}", a3d[i][0][k]);
-      for (int j{1}; j < 3; j++) std::print(" {:2}", a3d[i][j][k]);
+  for (int i{}; i < 2; i++) { // Row
+    for (int k{}; k < 4; k++) { // Height
+      std::print("{:2}", a3d[i][0][k]); // Column 0
+      for (int j{1}; j < 3; j++) std::print(" {:2}", a3d[i][j][k]); // Column 1, 2
       std::print("    ");
     }
     std::println("");
@@ -1917,23 +1985,41 @@ int main() {
 The most issue is that the Multidimensional Arrays will results memory fragmentation. When iterating the array we have to jump to another location to read or write that data, and that results probably a cache miss which means that we're wasting time fetching data from RAM.
 
 One of the most feasible thing you can do is just store them in a single dimensional array:
-```c++
+```cpp
+import std;
 int main() {
-  int* arr{new int[5 * 5]};
-  for (int i{}; i < 5 * 5; i++) arr[i] = i;
-  for (int i{}; i < 5 * 5; i++)
+  int* arr{new int[4 * 5]};
+  for (int i{}; i < 4 * 5; i++) arr[i] = i;
+  for (int i{}; i < 4 * 5; i++)
     switch (i % 5) {
-    case 4: std::println(" {:2}", arr[i]); break;
+    case 4: std::println("{:3}", arr[i]); break; // Start of a row
     default: std::print(" ");
-    case 0: std::print("{:2}", arr[i]);
+    case 0: std::print("{:2}", arr[i]); // End of a row
     }
+  // C++23's std::mdspan can reinterprets a contiguous sequence as a
+  // multidimensional array
+  auto ms4x5{std::mdspan(arr, 4, 5)}; // View data as a 5x5 array
+  auto ms2x10{std::mdspan(arr, 2, 10)};
+  std::println("std::mdspan 4x5");
+  for (std::size_t i{}; i != ms4x5.extent(0); i++) { // extents describe the
+  // length of a specific dimensional rank (depth)
+    std::print("{:2}", ms4x5[i, 0]);
+    for (std::size_t j{1}; j != ms4x5.extent(1); j++) std::print("{:3}", ms4x5[i, j]);
+    std::println("");
+  }
+  std::println("std::mdspan 2x5");
+  for (std::size_t i{}; i != ms2x10.extent(0); i++) {
+    std::print("{:2}", ms2x10[i, 0]);
+    for (std::size_t j{1}; j != ms2x10.extent(1); j++) std::print("{:3}", ms2x10[i, j]);
+    std::println("");
+  }
   delete[] arr;
 }
 ```
 
 ## Sorting in C++
 
-```C++
+```c++
 #include <algorithm>
 
 int main()
@@ -2331,6 +2417,21 @@ In my opinion, any data that is not being attached by a symbol(not being explici
    // const int& a = temp;
    ```
 
+ref-qualifiers
+```cpp
+struct S {
+  void f() & { std::println("called from lvalue object"); }
+  void f() && { std::println("called from rvalue object"); }
+  // void f(this S const& self, int i) &&; // Same as 'void f(int i) const &'
+  // void f(int i) const&;
+};
+int main() {
+  S s;
+  s.f(); // lvalue object
+  S{}.f(); // rvalue object
+}
+```
+
 ## Continuous Integration in C++
 
 ## Static Analysis in C++
@@ -2696,12 +2797,21 @@ main () {
 
 ## Standard library
 
-Locale
-```c++
+`std::locale`
+```cpp
 import std;
 int main() {
   std::locale::global(std::locale{"en_US.UTF-8"});
   std::println("Current currency: {} {}", std::use_facet<std::moneypunct<char, true>>(std::locale{}).curr_symbol(), std::locale{}.name());
+}
+```
+
+`std::invoke`
+```cpp
+import std;
+int main() {
+  auto add{[](int a, int b) constexpr { return a + b; }};
+  std::println("{}", std::invoke(add, 1, 2));
 }
 ```
 
@@ -2715,3 +2825,4 @@ TODO: [std::ranges](https://en.cppreference.com/w/cpp/algorithm/ranges#Constrain
 2. [All C++20 core language features with examples](https://oleksandrkvl.github.io/2021/04/02/cpp-20-overview.html#attr-likely)
 3. [c++20 の coroutine 使ってみる](https://qiita.com/ousttrue/items/0572c7cec966bb33067f)
 4. [Force reinterpret_cast to return nullptr](https://stackoverflow.com/a/66278895/26004653)
+5. [Curiously Recurring Template Pattern](https://en.cppreference.com/w/cpp/language/crtp)
