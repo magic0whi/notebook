@@ -7,10 +7,11 @@ tags:
 
 ## Notice
 
-1. If an object have pointer member inside, write copy constructor, destructor.
-2. Default float type is `double`, use `float a = 5.5f`.
-3. Header or inline?  (the later copys whole function body into the area where the function is called).
-4. `constexpr` and `static` are independent of each other. `static` defines the object's lifetime during execution; `constexpr` specifies the object should be available during compilation.
+- If an object have pointer member inside, write copy constructor, destructor.
+- Default float type is `double`, use `float a = 5.5f`.
+- Header or inline?  (the later copys whole function body into the area where the function is called).
+- `constexpr` and `static` are independent of each other. `static` defines the object's lifetime during execution; `constexpr` specifies the object should be available during compilation.
+- Always make sure that you profile is actually meaningful in a releases because you're not gonna be shipping code in debug anyway
 
 ## Assembly
 
@@ -817,29 +818,47 @@ import std;
 struct Vector2 {
   float x, y;
   constexpr Vector2(float const x, float const y) noexcept : x{x}, y{y} {}
-  // overload the function "operator+()" equals redefine the behavior of '+' in this Object
-  constexpr Vector2 operator+(Vector2 const& other) const noexcept { return Vector2{x + other.x, y + other.y}; }
-  constexpr Vector2 operator*(Vector2 const& other) const noexcept { return Vector2{x * other.x, y * other.y}; }
-  constexpr bool operator==(Vector2 const& other) const noexcept { return x == other.x && y == other.y; }
-  constexpr bool operator!=(Vector2 const& other) const noexcept { return !operator==(other); /* Or return !(*this == other); */ }
+  constexpr Vector2 operator+(Vector2 const& other) const noexcept { // Overload
+  // the 'operator+()' equals redefine the behavior of '+' in this Object
+    return Vector2(x + other.x, y + other.y);
+  }
+  constexpr Vector2 operator*(Vector2 const& other) const noexcept {
+    return Vector2(x * other.x, y * other.y);
+  }
+  constexpr bool operator==(Vector2 const& other) const noexcept {
+    return x == other.x && y == other.y;
+  }
+  constexpr bool operator!=(Vector2 const& other) const noexcept {
+    return !operator==(other); // Or
+    // return !(*this == other);
+  }
 };
 std::ostream& operator<<(std::ostream& stream, Vector2 const& other) noexcept {
-  return stream << other.x << ", " << other.y;
+  return stream << '[' << other.x << ", " << other.y << ']';
 }
+
+template <>
+struct std::formatter<Vector2, char> {
+  template <class ParseContext>
+  constexpr ParseContext::iterator parse(ParseContext const& ctx) const noexcept { return ctx.begin(); }
+  template <class FmtContext>
+  FmtContext::iterator format(Vector2 vec2, FmtContext& ctx) const noexcept {
+    return std::format_to(ctx.out(), "[{}, {}]", vec2.x, vec2.y);
+  }
+};
 int main() {
   // 'constexpr' can improve performance by lettinghe compiler pre-calculate
   // values at compile-time
-  constexpr Vector2 pos{4.0f, 4.0f};
-  constexpr Vector2 spd{0.5f, 1.5f};
-  constexpr Vector2 time{1.1f, 1.1f};
-  constexpr Vector2 res{pos + spd * time};
-  // We cannot output the variables in vector directly,
-  // We need overload the function `operator<<`
+  constexpr Vector2 pos{4.0f, 4.0f}, spd{0.5f, 1.5f}, time{1.1f, 1.1f}, res{pos + spd * time};
+  // We cannot output the variables in vector directly, we need overload the
+  // operator<<()
   std::cout << res << '\n';
-  // In programs such as Java we have to use equals() to compare objects,
-  // but in C++ we can simply overload the "operator=="
-  if constexpr (res == pos) std::cout << "foo" << '\n';
-  else std::cout << "bar" << '\n';
+  std::println("{}", res); // Or overload std::formatter for std::print
+
+  // In programs such as Java we have to use equals() to compare objects, but in
+  // C++ we can simply overload the operator==()
+  if (res == pos) std::println("foo");
+  else std::println("bar");
 }
 ```
 
@@ -2019,179 +2038,137 @@ int main() {
 
 ## Sorting in C++
 
-```c++
-#include <algorithm>
+```cpp
+import std;
+int main() {
+  std::vector values{3, 5, 1, 4, 2};
+  std::sort(values.begin(), values.end()); // Time complexity nlog n
+  for (int value : values) std::print(" {}", value);
+  std::println("");
 
-int main()
-{
-    std::vector<int> values = { 3, 5, 1, 4, 2 };
-    std::sort(values.begin(), values.end());
+  // We can define sorting rule for std::sort(), Such as sorting by big to small
+  std::sort(values.begin(), values.end(), [](int a, int b) noexcept { return a > b; });
+  for (int value : values) std::print(" {}", value);
+  std::println("");
 
-    // Output the results
-    for (int value : values)
-        std::cout << value << std::endl;
-
-    // We can define how the sorting rule the sort() dose
-    // Such like sorting by big to small
-    std::sort(values.begin(), values.end(), [](int a, int b)
-    {
-        return a > b;
-    });
-
-    // Output the results
-    for (int value : values)
-        std::cout << value << std::endl;
-
-    // Or force '1' to the last of array list
-    std::sort(values.begin(), values.end(), [](int a, int b)
-    {
-        // Return true equals do exchange the position of a, b
-        if(a == 1)
-            return false;
-        if(b == 1)
-            return true;
-
-        return b < a;
-    });
+  // Or force '1' to the last of array list
+  std::sort(values.begin(), values.end(), [](int a, int b) {
+    return b == 1 || (a != 1 && a < b); // Return false means swap a, b
+  });
+  for (int value : values) std::print(" {}", value);
+  std::println("");
 }
 ```
 
 ## Type Punning in C++
 
-
-You can Treat an Entity struct as an int array:
-
-```C++
-struct Entity
-{
-    int x, y;
-}
-
-int main()
-{
-    Entity e = { 5, 8 };
-    
-    int* position = (int*)&e;
-    std::cout << position[0] << ", " << position[1] << std::endl;
-
-    // More crazy usage
-    int y = *(int*)((char*)&e + 4);
-    std::cout << y << std::endl;
+```cpp
+import std;
+struct Entity {
+  int x, y;
+};
+int main() {
+  Entity e{5, 8};
+  int* position{reinterpret_cast<int*>(&e)}; // Type punning allows treat this struct as an size 2 int array
+  std::println("{}, {}", position[0], position[1]);
+  // More crazy usage
+  int y{*reinterpret_cast<int*>(reinterpret_cast<char*>(&e) + 4)};
+  std::println("{}", y);
 }
 ```
 
 ## Unions in C++
 
-Defined member in `union` means they all in same memory location, `union` is a common way for "Type Punning".
-
-```c++
-struct Vector2 {
-  float x, y;
-  constexpr Vector2(float const x, float const y) noexcept : x{x}, y{y} {}
-  // overload the function "operator+()" equals redefine the behavior of '+' in this Object
-  constexpr Vector2 operator+(Vector2 const& other) const noexcept { return Vector2(x + other.x, y + other.y); }
-  constexpr Vector2 operator*(Vector2 const& other) const noexcept { return Vector2(x * other.x, y * other.y); }
-  constexpr bool operator==(Vector2 const& other) const noexcept { return x == other.x && y == other.y; }
-  constexpr bool operator!=(Vector2 const& other) const noexcept { return !operator==(other); /*Or return !(*this == other);*/ }
-};
-constexpr std::ostream& operator<<(std::ostream& stream, Vector2 const& other) noexcept { return stream << '[' << other.x << ", " << other.y << ']'; }
-
-template <>
-struct std::formatter<Vector2, char> {
-  template <class ParseContext> constexpr ParseContext::iterator parse(ParseContext const& ctx) noexcept const { return ctx.begin(); }
-  template <class FmtContext>
-  FmtContext::iterator constexpr format(Vector2 vec2, FmtContext& ctx) const noexcept {
-    return std::format_to(ctx.out(), "[{}, {}]", vec2.x, vec2.y);
-  }
+Defined member in `union` means they all in same memory location, `union` is a common way to "Type Punning".
+```cpp
+import std;
+struct Vector2 { float x, y; };
+union Point {
+  struct Vector4 { float x, y, z, w; };
+  struct Vector2x2 { Vector2 xy, zw; };
+  Vector4 vec4;
+  Vector2x2 vec2x2;
 };
 int main() {
-  Vector2 pos{4.0f, 4.0f}, spd{0.5f, 1.5f}, time{1.1f, 1.1f}, res{pos + spd * time};
-  // We cannot output the variables in vector directly, we need overload the function
-  // operator<<()
-  std::cout << res << '\n';
-  std::println("{}", res); // Or use a custom std::formatter for std::print
-
-  // In programs such as Java we have to use equals() to compare objects,
-  // but in C++ we can simply overload the operator==()
-  if (res == pos) std::println("foo");
-  else std::println("bar");
+  Point pt{{1.0f, 2.0f, 3.0f, 4.0f}};
+  std::println("[{}, {}, {}, {}]", pt.vec4.w, pt.vec4.x, pt.vec4.y, pt.vec4.z);
+  std::print("[{}, {}]", pt.vec2x2.xy.x, pt.vec2x2.xy.y),
+    std::println("[{}, {}]", pt.vec2x2.zw.x, pt.vec2x2.zw.y);
+  std::println("{:-<14}", '-');
+  pt.vec4.z = 500.0f;
+  std::println("[{}, {}, {}, {}]", pt.vec4.w, pt.vec4.x, pt.vec4.y, pt.vec4.z);
+  std::print("[{}, {}]", pt.vec2x2.xy.x, pt.vec2x2.xy.y),
+    std::println("[{}, {}]", pt.vec2x2.zw.x, pt.vec2x2.zw.y);
 }
 ```
 
-Type Punning can do as the same result, but using Union makes it more concise.
+> Type punning can do as the same result, but using union makes it more concise.
 
-## Virtual Destructors in C++
+## Virtual Destructors
 
-Virtual Destructors is really important if you are writing a father class,
-otherwise no one's going to be able to safely delete the extend class
-(Because without `virtual` mark you are just adding a new Destructor instead of overload it)
+Virtual Destructors is really important if you are writing a base class, otherwise no one is able to safely delete the derived class. Without `virtual` qualifier, you are just adding a new destructor instead of overloading it.
 
-```C++
-class Base
-{
+```cpp
+import std;
+class Base {
 public:
-    Base() { std::cout << "Base Constructor\n"; }
-    virtual ~Base() { std::cout << "Base Destructor\n"; }
+  Base() noexcept { std::println("Base Constructor"); }
+  virtual ~Base() { std::println("Base Destructor"); }
 };
 
-class Derived : public Base
-{
+class Derived : public Base {
 public:
-    Derived() { std::cout << "Derived Constructor\n"; }
-    ~Derived() { std::cout << "Derived Destructor\n"; }
+  Derived() noexcept { std::println("Derived Constructor"); }
+  ~Derived() override { std::println("Derived Destructor"); }
 };
 
-int main()
-{
-    // Polymorphic kind of type
-    // without `virturl`, the "~Derived()" will not be called
-    Base* poly = new Derived();
-    delete poly;
-}
+int main() { delete new Derived(); } // If the polymorphic type lacks 'virturl',
+// '~Derived()' will not be called
 ```
 
 ## Casting in C++
 
 C++'s cast can do anything that C-style casts can do, those casts make you code more solid and looks better.
 
-1. Static cast (compile time checking).
-2. Reinterpret cast `reinterpret_cast<>()` (for Type Punning).
-   `reinterpret_case` can only perform conversions for pointers and references. e.g. If you want to reinterpret an `int` as a `double`:
-  The `nullptr` or `0` is not guaranteed to yield the null pointer value of the target type, use `static_cast()` as a safer way for this purpose.
+1. Static cast (compile-time checking).
+2. Reinterpret cast (for Type Punning).
+   - `reinterpret_case` can only perform conversions for pointers and references. e.g. If you want to reinterpret an `int` as a `double`:
   ```cpp
   int x{};
   double y{reinterpret_case<double&>(x)};
   ```
-3. Dynamic cast (will return `NULL` if casting is failed)
-4. Const cast `const_cast<>()` (Remove the const-ness from references or pointers that ultimately refer to something not constant)
+  - The `nullptr` or `0` is not guaranteed to yield the null pointer value of the target type, use `static_cast()` as a safer way for this purpose.
+3. Dynamic cast (returns `nullptr` if casting is failed)
+4. Const cast (Removes the const-ness from references or pointers that ultimately refer to something not constant)
 
-```c++
+```cpp
+import std;
 class Base {
 public:
-    Base() {}
-    virtual ~Base() {}
+  Base() noexcept {}
+  virtual ~Base() {}
 };
-class Derived : public Base {
-    // ...
-};
+class Derived : public Base {};
 int main() {
-    // Static cast
-    double value = 5.5;
-    double sc = static_cast<int>(value);
+  double value{5.5};
+  auto lowered{static_cast<double>(static_cast<int>(value))}; // Static cast
+  std::println("{}", lowered);
 
-    Base* p_base = new Base();
-    Derived* ac = dynamic_cast<Derived*>(p_base); // Main class cannot be casted to sub class
-    if (!ac) { std::cout << "Converting failed\n"; }
+  auto p_base{std::make_unique<Base>()};
+  auto p_descend_base{dynamic_cast<Derived*>(p_base.get())}; // Base class cannot
+  // be dynamicaly casted to sub class
+  if (!p_descend_base) std::println("Converting failed");
 }
 ```
 
-## Conditional and Action Breakpoints in C++
+## Debug: Conditional and Action Breakpoints
 
-Condition Breakpoints: If I only want the breakpoint to trigger under a certain condition
-Action Breakpoints: Generally print something to the console when a breakpoint is hit
-They can prevent recompile and save time
+Breakpoints can prevent recompile and save time.
 
-For details. please [watch the video](https://www.youtube.com/watch?v=9ncNA6Co2Nk&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=70)
+- Condition Breakpoints: If only want the breakpoint to trigger under a certain condition.
+- Action Breakpoints: Generally print something to the console when a breakpoint is hit
+
+For details. please [watch this video](https://www.youtube.com/watch?v=9ncNA6Co2Nk&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=70)
 
 ## Safety in modern C++ and how to teach it
 
@@ -2203,117 +2180,93 @@ Look to 7:07
 
 ## Dynamic Casting in C++
 
-If we force type casting a Enemy class to Player and access data(funcions, variables) that is unique to player, the program will probablly crash.
+If we force type casting a `Enemy` class to `Player` and access its data (funcions, variables) that is unique to `Player`, the program will probablly crash.
 
-Dynamic Casting is actually does some validation for us to ensure that cast is valid
-```c++
-class Entity {};
-
-class Player : public Entity
-{
-};
-
-class Enemy : public Entity
-{
-};
-
-int main()
-{
-    Entity* actuallyPlayer = new Player();
-    Entity* actuallyEnemy = new Enemy();
-
-    // How does it know that actuallyPlayer is actually a Player and not an Enemy?
-    // The way it does that is it stores runtime type information(RTTI)
-    // This does add an overhead but it lets you do things like dynamic casting
-    // Be aware that RTTI can be enabled or disabled
-    Player* p0 = dynamic_cast<Player*>(actuallyPlayer);
-    
-    // Will return null
-    Player* p1 = dynamic_cast<Player*>(actuallyEnemy);
-
-    // dynamic_cast<xxx*>(xxx); equal to xxx instanceof xxx
-}
-```
-
-## BENCHMARKING in C++ (how to measure performance)
-
-Always make sure that you profile is actually meaningful in a releases because you're not gonna be shipping code in debug anyway
-
-```C++
-class Timer
-{
-private:
-    std::chrono::time_point<std::chrono::steady_clock> m_StartTime, m_EndTime;
+Dynamic Casting does some validation for us to ensure that cast is valid
+```cpp
+import std;
+class Entity {
 public:
-    Timer()
-    {
-        m_StartTime = std::chrono::high_resolution_clock::now();
-    }
-
-    ~Timer()
-    {
-        m_EndTime = std::chrono::high_resolution_clock::now();
-        auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTime).time_since_epoch().count();
-        auto end = std::chrono::time_point_cast<std::chrono::microseconds>(m_EndTime).time_since_epoch().count();
-
-        auto duration = end - start;
-
-        double ms = duration * 0.001;
-        std::cout << duration << "us (" << ms << "ms)\n" << std::endl;
-    }
+  virtual ~Entity() = default; // At least one virtual method is need to make a class polymorphic
 };
+class Player : public Entity {};
+class Enemy : public Entity {};
+int main() {
+  std::unique_ptr<Entity> actually_player{std::make_unique<Player>()};
+  std::unique_ptr<Entity> actually_enemy{std::make_unique<Entity>()};
 
-int main()
-{
-    struct Vector2
-    {
-        float x, y;
-    };
-
-    std::cout << "Make Shared\n";
-    {
-        std::array<std::shared_ptr<Vector2>, 1000> sharedPtrs;
-        Timer timer;
-        for (int i = 0; i < sharedPtrs.size(); i++)
-            sharedPtrs[i] = std::make_shared<Vector2>();
-    }
-
-    std::cout << "New Shared\n";
-    {
-        std::array<std::shared_ptr<Vector2>, 1000> sharedPtrs;
-        Timer timer;
-        for (int i = 0; i < sharedPtrs.size(); i++)
-            sharedPtrs[i] = std::shared_ptr<Vector2>(new Vector2());
-    }
-
-    std::cout << "Make Unique\n";
-    {
-        std::array<std::shared_ptr<Vector2>, 1000> sharedPtrs;
-        Timer timer;
-        for (int i = 0; i < sharedPtrs.size(); i++)
-            sharedPtrs[i] = std::make_shared<Vector2>();
-    }
+  // How does it know that actually_player is actually a Player and not an Enemy?
+  // The way it does is stores runtime type information (RTTI), this does add an
+  // overhead but it lets you do things like dynamic casting, be aware that RTTI
+  // can be disabled (for clang it's '-fno-rtti')
+  auto p0{dynamic_cast<Player*>(actually_player.get())};
+  auto p1{dynamic_cast<Player*>(actually_enemy.get())}; // This will return null
+  if (p0) std::println("p0 casted successfully");
+  if (p1) std::println("p1 casted successfully");
 }
 ```
 
-## STRUCTURED BINDINGS in C++
+## Benchmarking in C++ (how to measure performance)
 
-Only in C++17 and newer
-a better way compare to How to Deal with Multiple Return Values in C++
-
-```c++
-std::tuple<std::string, int> CreatePerson()
-{
-    return { "Cherno", 24 };
+Here we benchmark the performance of the `std::make_shared`, `new`, `std::make_unique`:
+```cpp
+import std;
+template <class Res = std::chrono::microseconds>
+class Timer {
+  using Clock = std::conditional_t<std::chrono::high_resolution_clock::is_steady,
+                                   std::chrono::high_resolution_clock, std::chrono::steady_clock>;
+private:
+  std::chrono::time_point<Clock> const m_start_time;
+  std::chrono::time_point<Clock> m_last_time;
+public:
+  Timer() noexcept : m_start_time(Clock::now()), m_last_time{Clock::now()} { std::println("Timer start!"); }
+  ~Timer() {
+    std::println("Time destructored, life time {}", std::chrono::duration_cast<Res>(Clock::now() - m_start_time));
+  }
+  inline void count() noexcept {
+    auto dur = std::chrono::duration_cast<Res>(Clock::now() - m_last_time);
+    std::println("Time took: {:.3}ms ({})", dur.count() * 1e-3, dur);
+    m_last_time = Clock::now();
+  }
+  inline void renew() noexcept { m_last_time = Clock::now(); }
+};
+int main() {
+  struct Vector2 { float x, y; };
+  Timer timer;
+  std::println("Make Shared");
+  {
+    timer.renew();
+    std::array<std::shared_ptr<Vector2>, 1000> vertices;
+    for (auto& vertex : vertices) vertex = std::make_shared<Vector2>();
+    timer.count();
+  }
+  std::println("New Shared");
+  {
+    timer.renew();
+    std::array<std::shared_ptr<Vector2>, 1000> vertices;
+    for (auto& vertex : vertices) vertex = std::shared_ptr<Vector2>(new Vector2());
+    timer.count();
+  }
+  std::println("Make Unique");
+  {
+    timer.renew();
+    std::array<std::unique_ptr<Vector2>, 1000> vertices;
+    for (auto& vertex : vertices) vertex = std::make_unique<Vector2>();
+    timer.count();
+  }
 }
+```
 
-int main()
-{
-    // Structured binding
-    auto[name, age] = CreatePerson();
-    std::cout << name;
+## Structured Bindings
 
-// Or std::tie for already defined variables
+```cpp
+import std;
+std::tuple<std::string, int> CreatePerson() { return {"Cherno", 24}; }
+int main() {
+  auto [name, age] = CreatePerson(); // Structured binding (C++17)
+  std::println("{}", name);
+
+  // Or std::tie for already defined variables
   std::string name2;
   int age2;
   std::tie(name2, age2) = std::tuple("", 14);
@@ -2326,76 +2279,39 @@ int main()
 
 ## How to store ANY data in C++
 
-## How to make C++ run FASTER (with std::async)
+## std::async
 
-```C++
-#include <future>
-
-std::vector<std::std::future<void>> m_Futures // void is the return type of the function LoadMesh()
-
-static std::mutex s_MeshesMutex;
-
-// Here we use pointer parameter because reference parameter doesn't work(Cherno not entirely sure why)
-static void LoadMesh(const std::vector<Ref<Mesh>>* meshes, std::string filepath)
-{
-    auto mesh = Mesh::Load(filepath);
-
-    // We need to lock this meshes vector while it been modify
-    // lock the push_back() function
-    std::lock_guard<std::mutex> lock(s_MeshesMutex);
-    meshes->push_back(mesh);
+```cpp
+import std;
+std::mutex m;
+int print(std::string_view const str) noexcept {
+  std::lock_guard<std::mutex> lk(m); // lock_guard lock mutex to assure thread
+  // safety (prevents multiple threads from touch resource at same time)
+  std::println("{}", str);
+  return 1919810;
 }
-
-void EditorLayer::LoadMeshes()
-{
-    // Get file context use c++ file stream
-    std::ifstream stream("src/Models.txt");
-    std::string line;
-    std::vector<std::string> meshFilepaths;
-    while (std::getLine(stream, line))
-        meshFilepaths.push_back(line);
-
-    // m_Meshes is a vector in this class
-#define ASYNC 1
-#if ASYNC
-    // Asynchronous
-    for (const auto& file : meshFilepaths)
-    {
-        // std::async() will return std::future and its really important to handle that std::future or its will be destoryed and peform the destructor to make sure the async is actually finished
-        // that basically means it won't be parallel at all 
-        m_Futures.push_back(std::async(std::launch::async, LoadMesh, &m_Meshes, file));
-    }
-#else
-    // Sequence
-    for (const auto& file : meshFilepaths)
-    {
-        m_Meshes.push_back(Mesh::Load(file));
-    }
-#endif
+int main() {
+  auto a1{std::async(std::launch::deferred, print, "world!")}; // Calls
+  // print("world!"), prints "world!" when a2.get() or a2.wait() is called
+  auto a2{std::async(std::launch::async, print, "hello")}; // Calls print("hello")
+  // with async policy
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+  a1.wait(); // Now wait for a2 to complete
+  std::println("{}", a1.get());
 }
 ```
 
-In VS, you can use DEBUG->Windows->Parrllel Stacks (Ctrl+Shift+D)
-to do window parallel debugs
+> In VS, you can use DEBUG&rarr;Windows&rarr;Parrllel Stacks (`<C-S>-d`) to do window parallel debugs
 
 ## How to make your STRINGS FASTER in C++!
-
-```C++
-```
 
 ## VISUAL BENCHMARKING in C++ (how to measure performance visually)
 
 ## SINGLETONS in C++
 
-```C++
-```
-
 ## Small String Optimization in C++
 
 ## Track MEMORY ALLOCATIONS the Easy Way in C++
-
-```C++
-```
 
 ## lvalues and rvalues in C++
 
@@ -2814,6 +2730,18 @@ int main() {
   std::println("{}", std::invoke(add, 1, 2));
 }
 ```
+
+`std::chrono`
+```cpp
+TODO
+    // For cast time point, you can use std::chrono::time_point_cast<>()
+    // std::chrono::steady_clock::now().time_since_epoch().count();
+```
+
+TODO: Add to chapter Concept
+`std::delay_t<>` get the type as if passing to function arguments (array of `T` gets `T*`; function types gets function pointer type; remove cv-qualifier).
+`std::invoke_result_t<F, Args...>` deduce the return type of an function call.
+`std::is_constructible_v<T, U>`, `is_move_constructible_v<>`, `is_trivially_constructible_v<>`, `std::is_invocable_v<F, Args...>`
 
 ## Constrained algorithms
 
