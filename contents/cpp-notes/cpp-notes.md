@@ -12,6 +12,7 @@ tags:
 - Header or inline?  (the later copys whole function body into the area where the function is called).
 - `constexpr` and `static` are independent of each other. `static` defines the object's lifetime during execution; `constexpr` specifies the object should be available during compilation.
 - Always make sure that you profile is actually meaningful in a releases because you're not gonna be shipping code in debug anyway
+- You should 100% use smart pointers if you are doing serious work.
 
 ## Assembly
 
@@ -75,6 +76,7 @@ ret
   trivial type can be copied and moved with `memcpy`, `memmove` and constructed destructed without doing anything. Can be checked using `std::is_trivial<Type>()`.
 
 Different memory allocation size for C++ Data Type:
+TODO: supplement literal notes
 
 | | | |
 |---| --- | --- |
@@ -2175,14 +2177,6 @@ Breakpoints can prevent recompile and save time.
 
 For details. please [watch this video](https://www.youtube.com/watch?v=9ncNA6Co2Nk&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=70)
 
-## Safety in modern C++ and how to teach it
-
-You should 100% use smart pointers if you are doing serious work
-
-## Precompiled Headers in C++
-
-Look to 7:07
-
 ## Dynamic Casting in C++
 
 If we force type casting a `Enemy` class to `Player` and access its data (funcions, variables) that is unique to `Player`, the program will probablly crash.
@@ -2431,7 +2425,7 @@ private:
   std::size_t m_size;
   char* m_data;
 public:
-  String() = default; // equals with String(){}
+  String() = default; // Same as String(){}
   String(std::string_view const str) : m_size(str.size()), m_data(new char[str.size()]) {
     std::println("Created!");
     std::copy_n(str.cbegin(), m_size, m_data);
@@ -2484,83 +2478,53 @@ int main() {
 
 Move assignment `T& operator=(T&& t)` allows us to do move operation on existing objects
 ```cpp
-class String
-{
-public:
-	String() = default;
-
-	String(const char* string)
-	{
-		printf("Created!\n");
-		m_Size = strlen(string);
-		m_Data = new char[m_Size];
-		memcpy(m_Data, string, m_Size);
-	}
-
-	String(String&& older) noexcept
-	{
-		printf("Moved!\n");
-		m_Size = older.m_Size;
-		m_Data = older.m_Data;
-
-		older.m_Size = 0;
-		older.m_Data = nullptr;
-	}
-
-    // define move assignment
-    String& operator=(String&& older) noexcept
-    {
-        if (this != &older)
-        {
-            // Because use move assignment meaning assure there already existing data in currently class
-            // So clean the current class
-            delete[] m_Data;
-        
-		    printf("Moved!\n");
-		    m_Size = older.m_Size;
-		    m_Data = older.m_Data;
-
-		    older.m_Size = 0;
-		    older.m_Data = nullptr;
-        }
-
-        return *this;
-    }
-
-	~String()
-	{
-		printf("Destroyed!\n");
-		delete m_Data;
-	}
-
-	void Print()
-	{
-		for (uint32_t i = 0; i < m_Size; i++)
-			printf("%c", m_Data[i]);
-
-		printf("\n");
-	}
+import std;
+class String {
 private:
-	char* m_Data;
-	uint32_t m_Size;
+  std::size_t m_size;
+  char* m_data;
+public:
+  String() = default;
+  String(std::string_view const str) : m_size(str.size()), m_data(new char[str.size()]) {
+    std::println("Created!");
+    std::copy_n(str.cbegin(), m_size, m_data);
+  }
+  // Copy constructor
+  String(String const& other) : m_size(other.m_size), m_data(new char[other.m_size]) {
+    std::println("Copied!");
+    std::copy_n(other.m_data, m_size, m_data);
+  }
+  String(String&& older) noexcept : m_size(older.m_size), m_data{older.m_data} {
+    std::println("Moved!");
+    older.m_size = 0, older.m_data = nullptr;
+  }
+  String& operator=(String&& older) noexcept { // define move assignment
+    if (this != &older) {
+      delete[] m_data; // Move assignment assumes that there already exists data
+      // in current class, we shall clean the m_data
+      std::println("Moved!\n");
+      m_size = older.m_size, m_data = older.m_data;
+      older.m_size = 0, older.m_data = nullptr;
+    }
+    return *this;
+  }
+  ~String() { std::println("Destroyed!"), delete[] m_data; }
+  void print() {
+    for (std::size_t i{}; i < m_size; i++) std::cout << m_data[i];
+    std::println("");
+  }
 };
 
-int main()
-{
-    String apple = "Apple";
-    String dest;
+int main() {
+  String apple{"Apple"}, dest;
 
-    std::cout<< "Apple: ";
-    apple.Print();
-    std::cout<< "Dest: ";
-    dest.Print();
+  std::print("Apple: "), apple.print();
+  std::print("Dest: "), dest.print();
 
-    dest = std::move(apple);
+  dest = std::move(apple); // With 'std::move()' invokes move assignment
 
-    std::cout<< "Apple: ";
-    apple.Print();
-    std::cout<< "Dest: ";
-    dest.Print();
+  std::print("Apple: "), apple.print();
+  std::print("Dest: "), dest.print();
 }
 ```
 
@@ -2577,30 +2541,35 @@ template <class T> struct remove_reference<T&&> {
 };
 int main() {
   auto move{[]<class T>(T&& t) -> auto&& { return static_cast<remove_reference<T>::type&&>(t); }};
-
-  int const& d = move(0); // We shall not make references to xvalue
-  std::println("{}", d); // Stack use after scope occur
+  int const& d{move(0)}; // We shall not make references to xvalue
+  std::println("{}", d); // Stack-use-after-scope occurs
 }
 ```
 
-## ARRAY - Making DATA STRUCTURES in C++
+### Perfect forwarding (`std::forward`)
 
-```c++
-template <typename T>
-void f(T&&) { std::println("f(T&&) matched"); }
-template <typename T>
-void f(T const&) { std::println("f(T const&) matched"); }
+```cpp
+import std;
+template <typename T> consteval std::string_view type_name() noexcept {
+  std::string_view capt{std::source_location::current().function_name()};
+  return {capt.cbegin() + capt.find('=') + 2, capt.cend() - 1};
+}
 
-// Perfect forwarding
-template <typename T>
-void wrapper(T&& arg) {
-  f<T>(arg); // Deducing automatically will cast arg to T&&, so we need explicitly specify f<T>.
-  f<T>(std::forward<T>(arg));
+auto f(auto&&) { std::println("f(T&&) matched"); }
+auto f(auto const&) { std::println("f(T const&) matched"); }
+
+template <typename T> void wrapper(T&& arg) {
+  f<T>(arg); // Forwarding reference will let it invokes f(T&&), so we need explicitly specify f<T>.
+  f<T>(std::forward<T>(arg)); // Perfect forwarding
 }
 int main() {
   wrapper(1);
   int a{1};
-  wrapper(a); // Compiler will deducing to `int&`
+  wrapper(a); // Compiler will deduce to 'int&', equivalent to wrapper(auto(a))
+  wrapper(std::move(a));
+  std::println(
+    "{}, {}", type_name<decltype(std::move(a))>(), // std::decay gets the type as if passing to function arguments
+    type_name<std::decay_t<decltype(std::move(a))>>()); // (array of 'T' gets 'T*'; function types gets function pointer type; remove cv-qualifier).
 }
 ```
 
@@ -2628,7 +2597,7 @@ int main() {
 ## Compiler Optimization
 
 - `[[likely]]`/`[[unlikely]]` used in if-statements and loops whith logical decision.
-- `volatile` to tell compiler don't optimize.
+- `volatile` tells compiler don't optimize.
 - `constexpr` declares that it is possible to evaluate the value of the function or variable at compile-time. Such variables and functions can only utilize resources at compile-time.
   `constexpr char const*` is equivalent to `char const*const` but you cannot write `char const*constexpr` at current.
 - `consteval` force evaluate expression in compile-time.
@@ -2793,7 +2762,6 @@ TODO
 ```
 
 TODO: Add to chapter Concept
-`std::delay_t<>` get the type as if passing to function arguments (array of `T` gets `T*`; function types gets function pointer type; remove cv-qualifier).
 `std::invoke_result_t<F, Args...>` deduce the return type of an function call.
 `std::is_constructible_v<T, U>`, `is_move_constructible_v<>`, `is_trivially_constructible_v<>`, `std::is_invocable_v<F, Args...>`
 
@@ -2810,6 +2778,8 @@ TODO: [std::ranges](https://en.cppreference.com/w/cpp/algorithm/ranges#Constrain
 5. [Curiously Recurring Template Pattern](https://en.cppreference.com/w/cpp/language/crtp)
 6. [Value category p95.&sect;7.2.1 \[basic.lval\]](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf)
 7. [Temporary materialization conversion p99.&sect;7.3.5 \[conv.rval\]](Working Draft, Standard for Programming Language C++, N4950)
+
+## ARRAY - Making DATA STRUCTURES in C++
 
 ## How to Deal with OPTIONAL Data in C++
 
@@ -2828,3 +2798,8 @@ TODO: [std::ranges](https://en.cppreference.com/w/cpp/algorithm/ranges#Constrain
 ## Track MEMORY ALLOCATIONS the Easy Way in C++
 
 ## std::range
+
+## Precompiled Headers in C++
+
+Look to 7:07
+
