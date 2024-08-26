@@ -2256,6 +2256,46 @@ int main() {
 }
 ```
 
+Another example that compares custom implementation of cosine function with `std::cos`
+```cpp
+namespace custom {
+constexpr double pow(double x, long n) noexcept {
+  if (n > 0) return x * pow(x, n - 1);
+  else return 1;
+}
+constexpr long fact(long n) noexcept {
+  if (n > 1) return n * fact(n - 1);
+  else return 1;
+}
+constexpr double cos(double x) noexcept {
+  constexpr long precision{16L};
+  double y{};
+  for (auto n{0L}; n < precision; n += 2L) y += pow(x, n) / (n & 2L ? -fact(n) : fact(n));
+  return y;
+}
+} // namespace custom
+double gen_random() noexcept {
+  static std::random_device rd;
+  static std::mt19937 gen(rd());
+  static std::uniform_real_distribution<double> dis(-1.0, 1.0);
+  return dis(gen);
+}
+volatile double sink{}; // ensures a side effect
+int main() {
+  // Check the consistency with std::cos()
+  for (const auto x : {0.125, 0.25, 0.5, 1. / (1 << 26)})
+    std::print("x = {1}\n{2:.{0}}\n{3:.{0}}\nIs equal: {4}\n", 53, x, std::cos(x), custom::cos(x), std::cos(x) == custom::cos(x));
+  auto benchmark = [](auto&& fun, auto rem) {
+    auto const start{std::chrono::high_resolution_clock::now()};
+    for (auto size{1UL}; size != 10'000'000UL; ++size) sink = fun(gen_random());
+    std::chrono::duration<double> const diff{std::chrono::high_resolution_clock::now() - start};
+    std::println("Time: {:f} sec {}", diff.count(), rem);
+  };
+  benchmark(custom::cos, "(custom::cos)");
+  benchmark([](double x) { return std::cos(x); }, "(std::cos)");
+}
+```
+
 ## Structured Bindings
 
 ```cpp
@@ -2575,22 +2615,25 @@ int main() {
 
 ## std::format & std::print
 
-```c++
+```cpp
+import std;
 int main() {
   char a{'a'};
-  // Fill with asterisk. Align `<` left, `>` right, `^` center
+  // Fill with asterisk: Align '<' left, '>' right, '^' center.
   std::println("{0:*<8},{0:*>8},{0:*^8}", a);
-  // Sign `+` show plus explicitly, ` ` (space) add leading space, `-` default.
+  // Sign: '+' show plus explicitly, ' ' (space) add leading space, '-' default.
   std::println("{0:},{0:+},{0: }\n{1:},{1:+},{1: }", 1, -1);
-  // `#` alternate the integer form
-  // `#x` hex, `#b` bin, `#d` dec, `#0x` padding leading zeros (only field witdh)
-  std::println("{0:#010x}", 1);
-  // The precision `.`: for float is precision, for string is the upper bound to be output
-  std::println("{0:#015.2f},{0:#015.2e}", 114514.1919810);   // minimal width 15, precision 2, padding with zeros, `f` std::fixed format, `e` scientific format
-  std::println("{0:.<15.2s}", "114514.1919810"); // minimal width 15, precision 2, align left, padding with dots
-  std::println("{:.<5.5s}", "🐱🐱🐱");           // "🐱🐱.", because emoji has two char wide
-  // Type
-  std::println()
+  // '#' alternate the integer form. '#x' hex, '#b' bin, '#d' dec, '#0x' padding
+  std::println("{0:#010x}", 1); // leading zeros (only field witdh)
+
+  // The precision '.': for float is precision, for string is the upper bound to
+  // be output.
+  std::println( "{0:#015.2f},{0:#015.2e}", 114514.1919810); // minimal width 15,
+  // precision 2, padding with zeros, 'f' std::fixed format, 'e' scientific format
+  std::println("{0:.<15.2s}", "114514.1919810"); // minimal width 15, precision 2,
+  // align left, padding with dots
+  std::println("{:.<5.5s}", "🐱🐱🐱"); // "🐱🐱.", because emoji has two char wide
+  // Type TODO
 }
 ```
 
@@ -2602,50 +2645,12 @@ int main() {
   `constexpr char const*` is equivalent to `char const*const` but you cannot write `char const*constexpr` at current.
 - `consteval` force evaluate expression in compile-time.
 - `noexcpt` for function that never `throw` error. Destructors are implicitly `noexcept`.
-  Due to strong exception guarantee, `std::vector` moves its elements (calls `Object(Object&& (calls `Object(Object&&)`))`) at rearrange only if their move constructors are `noexcept`. You cna use `static_assert(std::is_nothrow_move_constructible_v<Object>);` to check.
+
+  Due to strong exception guarantee, `std::vector` moves its elements on rearrange only if their move constructors are `noexcept`. You cna use `static_assert(std::is_nothrow_move_constructible_v<Object>);` to check.
 - `constinit` enforces variable is initialized at compile-time. Unlike `constexpr`, it allows non-trivial destructors. Therefore it can avoid the problem that the order of initialiation of static variables from different translation units is undefined, by initialize them at compile-time.
-   Another use-case is with non-initializing `thread_local` declarations. In such a case, it tells the compiler that the variable is already initialized, otherwise the compiler usually adds code the check and initialize it if required on each usage.
+   Another use-case is with non-initializing `thread_local` declarations. In such a case, it tells the compiler that the variable is already initialized, otherwise the compiler usually adds code to check and initialize it whether required on each usage.
 
-```c++
-namespace custom {
-constexpr double pow(double x, long n) noexcept {
-  if (n > 0) return x * pow(x, n - 1);
-  else return 1;
-}
-constexpr long fact(long n) noexcept {
-  if (n > 1) return n * fact(n - 1);
-  else return 1;
-}
-constexpr double cos(double x) noexcept {
-  constexpr long precision{16L};
-  double y{};
-  for (auto n{0L}; n < precision; n += 2L) y += pow(x, n) / (n & 2L ? -fact(n) : fact(n));
-  return y;
-}
-} // namespace custom
-double gen_random() noexcept {
-  static std::random_device rd;
-  static std::mt19937 gen(rd());
-  static std::uniform_real_distribution<double> dis(-1.0, 1.0);
-  return dis(gen);
-}
-volatile double sink{}; // ensures a side effect
-int main() {
-  // Check the consistency with std::cos()
-  for (const auto x : {0.125, 0.25, 0.5, 1. / (1 << 26)})
-    std::print("x = {1}\n{2:.{0}}\n{3:.{0}}\nIs equal: {4}\n", 53, x, std::cos(x), custom::cos(x), std::cos(x) == custom::cos(x));
-  auto benchmark = [](auto&& fun, auto rem) {
-    auto const start{std::chrono::high_resolution_clock::now()};
-    for (auto size{1UL}; size != 10'000'000UL; ++size) sink = fun(gen_random());
-    std::chrono::duration<double> const diff{std::chrono::high_resolution_clock::now() - start};
-    std::println("Time: {:f} sec {}", diff.count(), rem);
-  };
-  benchmark(custom::cos, "(custom::cos)");
-  benchmark([](double x) { return std::cos(x); }, "(std::cos)");
-}
-```
-
-```c++
+```cpp
 struct S {
   constexpr S() {}
   ~S() {} // Without constexpr makes it non-trivial
@@ -2668,34 +2673,35 @@ int get_tls2() { return tls2; } // has implicit TLS initialization code
 
 ## Three-way comparison
 
-Comparison categories (The `operator<=>()`'s return types)
+Comparison categories (Return types of the `operator<=>()`)
 - `strong_ordering`: exactly one if `a < b`, `a == b`, `a > b` must be true and if `a == b` then `f(a) == f(b)`.
 - `weak_ordering`: exactly one if `a < b`, `a == b`, `a > b` must be true and if `a == b` then `f(a)` not neccessary equal to `f(b)`.
 - `partial_ordering`: none of `a < b`, `a == b`, `a > b` might be true (may be incomparable) and if `a == b` then `f(a)` not neccessarily equal to `f(b)`. e.g. In `float`/`double` the `NaN` is not comparable
 
-```c++
-template <typename T1, typename T2> requires requires(T1 a, T2 b) { a<b, a <= b, a> b, a >= b, a == b, a != b; }
-void f() {}
+```cpp
+import std;
+template <typename T1, typename T2> requires requires(T1 a, T2 b) { a < b, a <= b, a > b, a >= b, a == b, a != b; }
+consteval void f() {}
 
 struct S2 {
   int a, b;
 };
-// Compiler can replace calls to <, <=, >, >= to operator<=>(), and calls to ==, != to
+// Compiler can replace calls with <, <=, >, >= to operator<=>(), and calls to ==, != with
 // operator==(). For example:
 // a < b to a <=>b < 0
 // a!= b to !(a <=> b == 0)
 struct S1 {
   int a, b;
   constexpr auto operator<=>(S1 const&) const = default; // Homogeneous comparisons
-  constexpr bool operator==(S1 const&) const = default; // Note: Defaulted operator<=>() also declares
-  // defaulted operator==(), but here the operator==(S2 const&) prevents implicit default
-  constexpr std::strong_ordering operator<=>(S2 const& other) const { // Heterogeneous comparisons
+  constexpr bool operator==(S1 const&) const = default; // Note: Defaulted
+  // operator<=>() also declares defaulted operator==(), but here the
+  // operator==(S2 const&) prevents the implicitly default one.
+  // Heterogeneous comparisons:
+  constexpr std::strong_ordering operator<=>(S2 const& other) const {
     if (auto cmp = a <=> other.a; cmp != 0) return cmp;
     return b <=> other.b;
   }
-  constexpr auto operator==(S2 const& other) const {
-    return (*this <=> other) == 0;
-  }
+  constexpr auto operator==(S2 const& other) const { return (*this <=> other) == 0; }
 };
 int main() {
   f<S1, S1>();
@@ -2707,27 +2713,28 @@ int main() {
 
 Module units whose declaration has `export` are termed *module interface units*; all other module units are termed `module implementation units`.
 
-```c++ hello.cpp
+```cpp
+// hello.cppm
 export module hello.cpp; // dots are four readability purpose
 export imort :helpers; // re-export heplers partition (see below)
 import :impl;
 export void f() { utility(); }
 ```
-
-```c++ hello.impl.cpp
-module; // Global module fragment (include classical header files)
+```cpp
+// hello.impl.cppm
+module; // Global module fragment (allows include classical header files)
 #include <vector>
 module hello.cpp:impl; // Module implementation partition unit
 void utility() {};
 ```
-
-```c++ hello.helpers.cpp
+```cpp
+//hello.helpers.cppm
 export module hello:helpers; // Module interface partition unit
 import :internals;
 export void g() { utility(); }
 ```
-
-```c++ main.cpp
+```cpp
+// main.cpp
 import hello.cpp;
 main () {
   f(), g();
@@ -2762,8 +2769,8 @@ TODO
 ```
 
 TODO: Add to chapter Concept
-`std::invoke_result_t<F, Args...>` deduce the return type of an function call.
-`std::is_constructible_v<T, U>`, `is_move_constructible_v<>`, `is_trivially_constructible_v<>`, `std::is_invocable_v<F, Args...>`
+- `std::invoke_result_t<F, Args...>` deduce the return type of an function call.
+- `std::is_constructible_v<T, U>`, `is_move_constructible_v<>`, `is_trivially_constructible_v<>`, `std::is_invocable_v<F, Args...>`
 
 ## Constrained algorithms
 
