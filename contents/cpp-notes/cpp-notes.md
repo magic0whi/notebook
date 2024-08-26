@@ -1443,6 +1443,9 @@ void print_concept() { std::println("Floating point matched"); }
 
 template <std::floating_point T> requires(sizeof(T) == 8)
 void print_concept() { std::println("Doubled Floating point matched"); }
+
+template <std::integral_constant T>
+void print_concept() { std::println("Integral constant matched"); }
 ```
 
 Narrowing conversion check using Concept:
@@ -1895,8 +1898,10 @@ struct Co {
                       T value{func()};
                       promise.set_value(value); });
       thr.detach();
-      return Awaiter{std::move(future), std::move(thr)}; // Use 'std::move()' so
-      // they won't be cleaned up at method completed
+      return Awaiter{std::move(future), std::move(thr)}; // 'std::move()' cast to
+      // rvalue reference so we call the move constructor of std::future and
+      // std::thread, otherwise copy constructor will create duplicate thread
+      // and access the same promise object
     }
   };
 };
@@ -2273,12 +2278,6 @@ int main() {
 }
 ```
 
-## How to Deal with OPTIONAL Data in C++
-
-## Multiple TYPES of Data in a SINGLE VARIABLE in C++?
-
-## How to store ANY data in C++
-
 ## std::async
 
 ```cpp
@@ -2303,48 +2302,113 @@ int main() {
 
 > In VS, you can use DEBUG&rarr;Windows&rarr;Parrllel Stacks (`<C-S>-d`) to do window parallel debugs
 
-## How to make your STRINGS FASTER in C++!
-
-## VISUAL BENCHMARKING in C++ (how to measure performance visually)
-
-## SINGLETONS in C++
-
-## Small String Optimization in C++
-
-## Track MEMORY ALLOCATIONS the Easy Way in C++
-
 ## lvalues and rvalues in C++
 
-In my opinion, any data that is not being attached by a symbol(not being explicitly assigned an address) is an R-value, otherwise it's an L-value.
+Each **expression** belongs to exactly one of the three primary value categories: `prvalue`, `xvalue`, and `lvalue`.
+- A `lvalue` ("generalized" lvalue) is an **expression** that its memory address can be take of.
+- A `prvalue` ("pure" rvalue) is an **expression** that we can't take of its memory address.
+- A `xvalue` is ("expiring" value) is `prvalue` alike, but it's lifetime will not extend by a constant lvalue reference.
+- A `rvalue` is either `prvalue` or `xvalue`.
 
-1. L-value reference and R-value reference
-   ```C++
-   int i = 10;
-   // L-value reference can accept L-value and R-value
-   int& = i;
-   // R-value reference can only accept R-value
-   int&& = 10;
-   ```
-2. `const type&` is a special rule, realistically what happens is the compiler will probably create like a temporary variable.
-   there are not to kind of avoid creating an L-value but rather to just kind of support both support both L-value and R-values
-   ```C++
-   const int& a = 10;
-   // int temp = 10;
-   // const int& a = temp;
-   ```
+> `template<class T> void f(T&&)`, here the `T&&` does not mean rvalue reference but something called forwarding reference (also `void f(auto&&)`). Invoke these functions is like `f(auto(t))`.
 
-ref-qualifiers
 ```cpp
+import std;
+template <class T> struct is_prvalue : std::true_type {};
+template <class T> struct is_prvalue<T&> : std::false_type {};
+template <class T> struct is_prvalue<T&&> : std::false_type {};
+
+template <class T> struct is_lvalue : std::false_type {};
+template <class T> struct is_lvalue<T&> : std::true_type {};
+template <class T> struct is_lvalue<T&&> : std::false_type {};
+
+template <class T> struct is_xvalue : std::false_type {};
+template <class T> struct is_xvalue<T&> : std::false_type {};
+template <class T> struct is_xvalue<T&&> : std::true_type {};
+
+void f() {}
+struct S {
+  int a;
+  enum e { A, B, C };
+  S() { std::println("Instantiated"); }
+  S(int a) : a(a) {}
+  void f() {}
+  static void g() {}
+};
+int main() {
+  int a{42};
+  int const& b{a};
+  int&& c{std::move(a)};
+  S s;
+  // '(T)' treat T as an expression, otherwise decltype() gets its type
+  static_assert(is_lvalue<decltype((a))>::value && // variable names are lvalues
+                is_lvalue<decltype((b))>::value && //
+                is_lvalue<decltype((c))>::value);
+  static_assert(is_lvalue<decltype((f))>::value); // a function is a lvalue
+
+  static_assert(std::is_lvalue_reference_v<decltype(b)> && // Types and value
+  // categories are not correspondent
+                std::is_rvalue_reference_v<decltype(c)>);
+
+  static_assert(is_prvalue<decltype((42))>::value && //
+                is_prvalue<decltype((a + b))>::value && //
+                is_prvalue<decltype((S{}))>::value && // Here no temporary objects created
+                is_prvalue<decltype((s.A))>::value); // Member enumerators are
+                // rvalue
+
+  static_assert(is_prvalue<decltype((f()))>::value && // function's return value may be
+    // prvalue
+                is_lvalue<decltype(([&a]() -> int& { return a; }()))>::value && // Or lvalue
+    // if returns a lvalue reference
+    // Or xvalue if returns a xvalue reference:
+                is_xvalue<decltype(([&a]() -> int&& { return std::move(a); }()))>::value);
+
+  std::println("{}", (S{} = S{42}).a); // rvalue can be in left, also
+  // f = []() {}; // Ill-formed, lvalue don't mean it's assignable
+
+  // Some xvalues
+  static_assert(is_xvalue<decltype((S{}.a))>::value && // The member of object
+  // expression is a xvalue. Here S{} is converted to xvalue, this process is
+  // named temporary materialization conversion
+                is_xvalue<decltype((std::move(a)))>::value); // std::move() cast
+                // lvalue or prvalue to xvalue
+  using A = int[3];
+  static_assert(is_xvalue<decltype((A{1, 2, 3}[0]))>::value); // subscript of an
+  // array prvalue is xvalue
+
+  int const& d{std::move(0)}; // We shall not make references to xvalue
+  std::println("{}", d); // Stack-use-after-scope occurs
+}
+```
+
+### Lvalue reference and rvalue reference
+
+```cpp
+int main() {
+  int a{10};
+  int& b{a}; // lvalue reference can accept lvalue
+  int const& c{10}; // constant lvalue reference can accept rvalue
+  int&& d{10}; // rvalue reference can only accept rvalue
+}
+```
+
+### Ref-qualifiers
+
+```cpp
+import std;
 struct S {
   void f() & { std::println("called from lvalue object"); }
   void f() && { std::println("called from rvalue object"); }
-  // void f(this S const& self, int i) &&; // Same as 'void f(int i) const &'
-  // void f(int i) const&;
+  void f2(this S const& self, int i) { std::println("{}", i); } // Explicit
+  // object function (C++23), same as
+  // void f2(int i) const&;
 };
 int main() {
   S s;
   s.f(); // lvalue object
   S{}.f(); // rvalue object
+  s.f2(42);
+  std::invoke(&S::f2, s, 42);
 }
 ```
 
@@ -2352,103 +2416,74 @@ int main() {
 
 ## Static Analysis in C++
 
-Static Analysis is a very important thing that even for an experienced programmer there is still going to be stuff what you miss.
-It can find logic errors in your code and gives you some tips to fix it
+Static Analysis is a very important thing even for an experienced programmer. It can find logic errors in code and gives some tips to fix it.
 
-`clang-tidy` is a free tool to do static analysis
+`clang-tidy` is a free tool to do static analysis.
 
 ## Argument Evaluation Order in C++
 
 ## Move Semantics in C++
 
-```C++
-class String
-{
-public:
-	String() = default; // equals with String(){}
-
-	String(const char* string)
-	{
-		printf("Created!\n");
-		m_Size = strlen(string);
-		m_Data = new char[m_Size];
-		memcpy(m_Data, string, m_Size);
-	}
-
-	String(const String& other)
-	{
-		printf("Copied!\n");
-		m_Size = other.m_Size;
-		m_Data = new char[m_Size];
-		memcpy(m_Data, other.m_Data, m_Size);
-	}
-
-	String(String&& older) noexcept // use noexcept to get rid of compiler warning
-	{
-		printf("Moved!\n");
-		m_Size = older.m_Size;
-		// This immediately presents a problem
-		// because when the old one gets deleted
-		// it's going to delete the m_Data with us
-		m_Data = older.m_Data;
-		// so this is the major thing that we need to do
-		older.m_Size = 0;
-		older.m_Data = nullptr;
-	}
-
-	~String()
-	{
-		printf("Destroyed!\n");
-		delete m_Data;
-	}
-
-	void Print()
-	{
-		for (uint32_t i = 0; i < m_Size; i++)
-			printf("%c", m_Data[i]);
-
-		printf("\n");
-	}
+```cpp
+import std;
+class String {
 private:
-	char* m_Data;
-	uint32_t m_Size;
-};
-
-class Entity
-{
+  std::size_t m_size;
+  char* m_data;
 public:
-	Entity(const String& name)
-		: m_Name(name)
-	{
-	}
-
-	Entity(String&& name)
-		: m_Name(std::move(name)) // equals to m_Name((String&&) name)
-	{
-	}
-
-	void PrintName()
-	{
-		m_Name.Print();
-	}
-private:
-	String m_Name;
+  String() = default; // equals with String(){}
+  String(std::string_view const str) : m_size(str.size()), m_data(new char[str.size()]) {
+    std::println("Created!");
+    std::copy_n(str.cbegin(), m_size, m_data);
+  }
+  // Copy constructor
+  String(String const& other) : m_size(other.m_size), m_data(new char[other.m_size]) {
+    std::println("Copied!");
+    std::copy_n(other.m_data, m_size, m_data);
+  }
+  String(String&& older) noexcept
+      : m_size(older.m_size), m_data{older.m_data} { // Move constructor should
+    // 'noexcept' qualified. Standard expects all non-trivial types has exception
+    // guarantee. Which says when an exception is thrown, the involved objects are
+    // still valid. So apparently this guarantee doesn't apply to move constructor.
+    std::println("Moved!");
+    // There presents a problem: when the old one gets deleted, it's going to
+    // delete the m_data here as well. So the major thing that we need to do is to
+    // make the old one point to nothing.
+    older.m_size = 0, older.m_data = nullptr;
+  }
+  ~String() { std::println("Destroyed!"), delete[] m_data; }
+  void print() {
+    for (std::size_t i{}; i < m_size; i++) std::cout << m_data[i];
+    std::println("");
+  }
 };
+class Entity {
+private:
+  String m_name;
+public:
+  Entity(String const& name) : m_name(name) {}
+  Entity(String&& name) noexcept : m_name(std::move(name)) {}
+  void print_name() { m_name.print(); }
+};
+int main() {
+  std::println("Use copy constructor");
+  String str{"Proteus"};
+  Entity e1{str};
 
-int main()
-{
-	Entity entity("Cherno");
-	entity.PrintName();
+  std::println("Use move constructor");
+  Entity e2{String{"Cherno"}};
+
+  e1.print_name(), e2.print_name();
 }
 ```
 
-## std::move and the Move Assignment Operator in C++
+### std::move and the Move Assignment Operator
 
-`std::move` actually do force casting but can make your program more search friendly
+`std::move` actually do force casting but can make your code more human friendly
 
-Move Assignment will allow us do move operation on existing objects
-
-```C++
+Move assignment `T& operator=(T&& t)` allows us to do move operation on existing objects
+```cpp
 class String
 {
 public:
@@ -2526,6 +2561,25 @@ int main()
     apple.Print();
     std::cout<< "Dest: ";
     dest.Print();
+}
+```
+
+A example implementation of `std::move()`
+```cpp
+template <class T> struct remove_reference {
+  using type = T;
+};
+template <class T> struct remove_reference<T&> {
+  using type = T;
+};
+template <class T> struct remove_reference<T&&> {
+  using type = T;
+};
+int main() {
+  auto move{[]<class T>(T&& t) -> auto&& { return static_cast<remove_reference<T>::type&&>(t); }};
+
+  int const& d = move(0); // We shall not make references to xvalue
+  std::println("{}", d); // Stack use after scope occur
 }
 ```
 
@@ -2754,3 +2808,23 @@ TODO: [std::ranges](https://en.cppreference.com/w/cpp/algorithm/ranges#Constrain
 3. [c++20 の coroutine 使ってみる](https://qiita.com/ousttrue/items/0572c7cec966bb33067f)
 4. [Force reinterpret_cast to return nullptr](https://stackoverflow.com/a/66278895/26004653)
 5. [Curiously Recurring Template Pattern](https://en.cppreference.com/w/cpp/language/crtp)
+6. [Value category p95.&sect;7.2.1 \[basic.lval\]](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf)
+7. [Temporary materialization conversion p99.&sect;7.3.5 \[conv.rval\]](Working Draft, Standard for Programming Language C++, N4950)
+
+## How to Deal with OPTIONAL Data in C++
+
+## Multiple TYPES of Data in a SINGLE VARIABLE in C++?
+
+## How to store ANY data in C++
+
+## How to make your STRINGS FASTER in C++!
+
+## VISUAL BENCHMARKING in C++ (how to measure performance visually)
+
+## SINGLETONS in C++
+
+## Small String Optimization in C++
+
+## Track MEMORY ALLOCATIONS the Easy Way in C++
+
+## std::range
