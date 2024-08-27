@@ -1,4 +1,4 @@
-## 3-D Transformations
+## Affine Transformations (3-D)
 
 ### Rotation
 
