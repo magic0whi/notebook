@@ -76,12 +76,11 @@ ret
   trivial type can be copied and moved with `memcpy`, `memmove` and constructed destructed without doing anything. Can be checked using `std::is_trivial<Type>()`.
 
 Different memory allocation size for C++ Data Type:
-TODO: supplement literal notes
 
-| | | |
-|---| --- | --- |
-| `char` | 1 byte | `'a'` |
-| `short` | 2 bytes | 
+| | |
+|---| --- |
+| `char` | 1 byte |
+| `short` | 2 bytes |
 | `int` | 4 bytes |
 | `long` | 8 bytes (`c++20`), >= 4 bytes |
 | `long long` | 8 bytes |
@@ -1369,7 +1368,7 @@ std::string type_name() noexcept {
   return ret;
 }
 template <typename T> // Another way using function name with signature
-constexpr std::string_view type_name2() noexcept {
+consteval std::string_view type_name2() noexcept {
   std::string_view capt{std::source_location::current().function_name()}; // Or "__PRETTY_FUNCTION__" for < c++20
   // e.g. "static_string type_name2() [T = const int &]"
   return {capt.cbegin() + capt.find('=') + 2, capt.cend() - 1};
