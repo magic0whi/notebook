@@ -133,7 +133,7 @@ Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` include
   }
   ```
   In memory, it may like this:
-  ```plaitext
+  ```plaintext
   0x00B6FED4 &buf:           00 D0 FF F0
   0x00D0FFF0 *(new char[8]): 00 00 00 00 00 00 00 00
   0x???????? &ptr_to_ptr:    00 B6 FE D4
@@ -361,6 +361,40 @@ int main() {
 
 > `virtual` has its own overhead, it needs extra Vtable space, in order to dispatch the correct method it includes a member pointer in the base class that points to the vtable. And every time we call virtual method, we go through that table to decision which method to map.
 > Through the extra overhead it's still recommand to use as much as possible.
+
+### Access Specifier & Inheritance Types
+
+| Access Specifier |  Same Class | Derived Class | Outside Class |
+| ---------------- | ----------- | ------------- | ------------- |
+| `public`         | Yes         | Yes           | Yes           |
+| `protected`      | Yes         | Yes           | No            |
+| `private`        | Yes         | No            | No            |
+
+<table><thead>
+  <tr>
+    <th>Inheritance Type</th>
+    <th>: public base</th>
+    <th>: protected base</th>
+    <th>: private base</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td>public member</td>
+    <td>public</td>
+    <td>protected</td>
+    <td>private</td>
+  </tr>
+  <tr>
+    <td>protected member</td>
+    <td colspan="2">protected</td>
+    <td>private</td>
+  </tr>
+  <tr>
+    <td>private member</td>
+    <td colspan="3">N.A.</td>
+  </tr>
+</tbody>
+</table>
 
 ### Interface (Pure Virtual Method)
 
@@ -1946,6 +1980,8 @@ public:
   }
   inline void count() noexcept {
     std::println("Time took: {}", std::chrono::duration_cast<Res>(Clock::now() - m_last_time));
+    // To cast time point, you can use std::chrono::time_point_cast<>()
+    // To get the count from UNIX Epoch: Clock::now().time_since_epoch().count()
     m_last_time = Clock::now();
   }
   inline void renew() noexcept { m_last_time = Clock::now(); }
@@ -2385,7 +2421,8 @@ int main() {
 
   static_assert(is_prvalue<decltype((42))>::value && //
                 is_prvalue<decltype((a + b))>::value && //
-                is_prvalue<decltype((S{}))>::value && // Here no temporary objects created
+                is_prvalue<decltype((S{}))>::value && // Here no temporary objects
+                // created
                 is_prvalue<decltype((s.A))>::value); // Member enumerators are
                 // rvalue
 
@@ -2444,16 +2481,6 @@ int main() {
   std::invoke(&S::f2, s, 42);
 }
 ```
-
-## Continuous Integration in C++
-
-## Static Analysis in C++
-
-Static Analysis is a very important thing even for an experienced programmer. It can find logic errors in code and gives some tips to fix it.
-
-`clang-tidy` is a free tool to do static analysis.
-
-## Argument Evaluation Order in C++
 
 ## Move Semantics in C++
 
@@ -2742,34 +2769,33 @@ main () {
 
 ## Standard library
 
-`std::locale`
+Diagnostics Tools:
+```cpp
+std::is_move_constructible_v<T, ...Args>
+std::is_trivially_constructible_v<T,...Args>
+```
+
 ```cpp
 import std;
-int main() {
+int main(int argc, char const* argv[]) {
+  if (argc < 2) {
+    std::println("Please add some parameters");
+    return -1;
+  }
+  // std::stof, std::stod
+  // Converts literal string to floating point
+  double arg1{std::stod(argv[1])};
+  std::println("Arg1: {}", arg1);
+
+  // std::locale
   std::locale::global(std::locale{"en_US.UTF-8"});
-  std::println("Current currency: {} {}", std::use_facet<std::moneypunct<char, true>>(std::locale{}).curr_symbol(), std::locale{}.name());
-}
-```
-
-`std::invoke`
-```cpp
-import std;
-int main() {
+  std::println("Current currency: {} {}",
+               std::use_facet<std::moneypunct<char, true>>(std::locale{}).curr_symbol(), std::locale{}.name());
+  // std::invoke
   auto add{[](int a, int b) constexpr { return a + b; }};
-  std::println("{}", std::invoke(add, 1, 2));
+  std::println("Invokes add(1, 2): {}", std::invoke(add, 1, 2));
 }
 ```
-
-`std::chrono`
-```cpp
-TODO
-    // For cast time point, you can use std::chrono::time_point_cast<>()
-    // std::chrono::steady_clock::now().time_since_epoch().count();
-```
-
-TODO: Add to chapter Concept
-- `std::invoke_result_t<F, Args...>` deduce the return type of an function call.
-- `std::is_constructible_v<T, U>`, `is_move_constructible_v<>`, `is_trivially_constructible_v<>`, `std::is_invocable_v<F, Args...>`
 
 ## Constrained algorithms
 
@@ -2784,6 +2810,17 @@ TODO: [std::ranges](https://en.cppreference.com/w/cpp/algorithm/ranges#Constrain
 5. [Curiously Recurring Template Pattern](https://en.cppreference.com/w/cpp/language/crtp)
 6. [Value category p95.&sect;7.2.1 \[basic.lval\]](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf)
 7. [Temporary materialization conversion p99.&sect;7.3.5 \[conv.rval\]](Working Draft, Standard for Programming Language C++, N4950)
+8. [CMake: Public VS Private VS Interface](https://leimao.github.io/blog/CMake-Public-Private-Interface/)
+
+## Continuous Integration in C++
+
+## Static Analysis in C++
+
+Static Analysis is a very important thing even for an experienced programmer. It can find logic errors in code and gives some tips to fix it.
+
+`clang-tidy` is a free tool to do static analysis.
+
+## Argument Evaluation Order in C++
 
 ## ARRAY - Making DATA STRUCTURES in C++
 
