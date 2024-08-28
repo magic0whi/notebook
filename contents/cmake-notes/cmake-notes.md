@@ -60,7 +60,7 @@ configure_file(TutorialConfig.h.in TutorialConfig.h)
 #define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@
 ```
 
-## Add a Library (And Add an OPTION to Disable It)
+## Add a Library / Module (And Add an OPTION to Switch)
 
 ```cmake
 # CMakeLists.txt
