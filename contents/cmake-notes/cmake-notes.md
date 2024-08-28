@@ -1,11 +1,5 @@
 # CMake Notes
 
-Set include directories
-```cmake
-# The header file will be written into the build dir
-target_include_directories(Tutorial PUBLIC "${PROJECT_BINARY_DIR}")
-```
-
 ## Configure Clangd
 
 ```yaml
