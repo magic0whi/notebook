@@ -14,9 +14,9 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=YES ...
 
 | Link Type | Description |
 | --------- | ----------- |
-| `PUBLIC`  | Everyone who depends on me is going to get this property. |
-| `PRIVATE` | This property is just for me. Whoever depends on me is not going to get this. |
-| `INTERFACE` | I do not need this for myself. But anyone who depends on me will get this property. | 
+| `PUBLIC`  | Everyone who depends on me is going to get this property (Transitive Dependency). |
+| `PRIVATE` | This property is just for me. Whoever depends on me is not going to get this (Non-Transitive Dependency). |
+| `INTERFACE` | I do not need this for myself. But anyone who depends on me will get this property (Transitive Dependency). | 
 
 Some target properties
 - `SOURCES`, `INTERFACE_SOURCES`;
