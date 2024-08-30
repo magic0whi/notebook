@@ -13,7 +13,7 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock')}}
     - name: Install and build
       run: |
-        yarn install && yarn link --cwd honkit-plugin-katex
+        yarn install && yarn link --cwd honkit-plugin-katex && yarn link honkit-plugin-katex
         yarn run honkit build
     # - name: Deploy
       # uses: magic0whi/git
