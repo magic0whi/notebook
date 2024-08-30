@@ -10,7 +10,8 @@ jobs:
     - name: Cache
       uses: actions/cache@v4.0.2
       with:
-        path: node_moduleskey: ${{ runner.os }}-node-${{ hashFiles('**/')}}
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock')}}
     - name: Install and build
       run: |
         yarn install && yarn link --cwd honkit-plugin-katex
