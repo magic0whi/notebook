@@ -1,11 +1,18 @@
-## Rational numbers
+## Rational Numbers
 
 ```python
 Rational(1, 2)
 Rational('1/2')
 ```
 
-## Filter results in range for non-linear equations
+## Constants
+
+```python
+from sympy.physics.units.quantities import Quantity
+Q = Quantity('Q')
+```
+
+## Filter Results in Range for Non-linear Equations
 
 ```python
 x, y, z = symbols('x y z', real=True)
@@ -40,7 +47,7 @@ display(Markdown('`float` values:'))
 for i in filtered_sols: display([N(j) for j in i])
 ```
 
-## Analyze a function using Sympy & Matplotlib
+## Analyze a Function Using Sympy & Matplotlib
 
 ```python
 from sympy import init_session
@@ -55,8 +62,7 @@ pprint(f) # Pretty print (for console)
 display(Math(f'f={latex(f)}')) # Display in LaTeX form (for JupyterLab)
 display(Math(f'f^\\prime={latex(simplify(f.diff()))}')) 
 display(Math(f'f^{{\\prime\\prime}}={latex(simplify(f.diff(x, 2)))}')) # or f.diff(x, x)
-
-display([N(i) for i in solve(f.diff())]) # Solve f'=0, N() gets numeric value
+display([N(i) for i in solveset(f.diff(), x).args]) # Solve f'=0, N() gets numeric value
 display(Math(f'f^\\prime(80)={latex(f.diff().evalf(subs={x:80}))}')) # Display f'(80) using f.evalf() (numeric value)
 display(Math(f'f^\\prime(80)={latex(f.diff().subs(x, 80))}')) # Or using f.subs()
 display(Math(f'\\lim_{{x\\to 0}}f(x)={latex(limit(f,x, 0))}')) # Display limit f(x) as x approaches 0
