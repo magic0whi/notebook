@@ -21,7 +21,11 @@ module.exports = {
       process: function(blk) {
         var tex = blk.body;
         var isInline = !(tex[0] == "\n");
-        const macros = { "\\abs": "\\@ifstar{\\left\\lvert#1\\right\\rvert}{\\lvert#1\\rvert}" };
+        const macros = {
+          "\\abs": "\\@ifstar\\abs@star\\abs@",
+          "\\abs@star": "\\left\\lvert#1\\right\\rvert",
+          "\\abs@": "\\lvert#1\\rvert"
+        };
         var output = katex.renderToString(tex, { displayMode: !isInline, macros });
         return output;
       }
