@@ -4,6 +4,7 @@
   },
   "dependencies": {
     "api-language-selector": "https://github.com/algorithm-archivists/gitbook-plugin-api-language-selector.git",
+    "gitbook-plugin-intopic-toc": "^1.1.1",
     "honkit-plugin-prism": "^2.5.3",
     "katex": "^0.16.11"
   },
