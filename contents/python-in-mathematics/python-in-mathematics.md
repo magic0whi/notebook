@@ -47,7 +47,7 @@ display(Markdown('`float` values:'))
 for i in filtered_sols: display([N(j) for j in i])
 ```
 
-## Analyze a Function Using Sympy & Matplotlib
+## Analyze a Function Using SymPy & Matplotlib
 
 ```python
 from sympy import init_session
@@ -89,7 +89,7 @@ ax.legend()
 plt.show()
 ```
 
-## Implicit Differentiation in Sympy
+## Implicit Differentiation in SymPy
 
 ```python
 a, b = symbols('a b')

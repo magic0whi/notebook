@@ -7,4 +7,5 @@
 - [CMake Notes](/contents/cmake-notes/cmake-notes.md)
 - [Python in Mathematics](/contents/python-in-mathematics/python-in-mathematics.md)
 - [Elision Pronunciation in English](/contents/elision-pronunciation-in-english/elision-pronunciation-in-english.md)
-- [Common Used Shell Commands](/contents/common-used-shell-commands/common-used-shell-commands.md)
+- [Commonly Used Shell Commands](/contents/commonly-used-shell-commands/commonly-used-shell-commands.md)
+- [Inkscape](/contents/inkscape/inkscape.md)

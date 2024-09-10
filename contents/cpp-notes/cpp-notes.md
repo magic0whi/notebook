@@ -9,9 +9,9 @@ tags:
 
 - If an object have pointer member inside, write copy constructor, destructor.
 - Default float type is `double`, use `float a = 5.5f`.
-- Header or inline?  (the later copys whole function body into the area where the function is called).
+- Header or inline?  (the latter copies whole function body into the area where the function is called).
 - `constexpr` and `static` are independent of each other. `static` defines the object's lifetime during execution; `constexpr` specifies the object should be available during compilation.
-- Always make sure that you profile is actually meaningful in a releases because you're not gonna be shipping code in debug anyway
+- Always make sure that you profile is actually meaningful in a release because you're not going to be shipping code in debug anyway
 - You should 100% use smart pointers if you are doing serious work.
 
 ## Assembly
@@ -40,7 +40,7 @@ ret
    Compiler parses all the macros (such as `#include`) in source file.
    - Clang: `clang -x c++ -E hello.cpp -o hello.i`
    - GCC: `cpp hello.cpp > hello.i`
-   - VS2015: `Project Settings`->`Preprocessor`->`Preprocess to a File`
+   - VS2015: `Project Settings`&rarr;`Preprocessor`&rarr;`Preprocess to a File`
 2. Compile & Assembly
    - Clang: `clang++ -x c++-cpp-output -S hello.i -o hello.o`
    - GCC: `g++ -S hello.i && as hello.s -o main.o`
@@ -56,7 +56,7 @@ ret
    # # For GCC:
    $ g++ -v -c hello.cpp -o hello.o
    ```
-   Ld may looks messy, but you can significantly shorten that link line by removing some arguments. Here's the minimal set I came up after some experimentations:
+   `ld` may look messy, but you can significantly shorten that link line by removing some arguments. Here's the minimal set I came up after some experimentation:
    ```bash
    $ ld -I/lib64/ld-linux-x86-64.so.2 \
    -o hello \
@@ -73,12 +73,13 @@ ret
 - The difference between C++ data types are simply different allocated memory size.
 - You can use `sizeof()` to see the data type size.
 - Trivial type: either a primitive type or a type composed of only trivial types.
-  trivial type can be copied and moved with `memcpy`, `memmove` and constructed destructed without doing anything. Can be checked using `std::is_trivial<Type>()`.
+
+  Trivial type can be copied and moved with `memcpy`, `memmove` and constructed destructed without doing anything. Can be checked using `std::is_trivial<Type>()`.
 
 Different memory allocation size for C++ Data Type:
 
-| | |
-|---| --- |
+| Primitive Type | Length |
+| -------------- | ------ |
 | `char` | 1 byte |
 | `short` | 2 bytes |
 | `int` | 4 bytes |
@@ -91,13 +92,13 @@ Different memory allocation size for C++ Data Type:
 ## Functions
 
 - Write formal parameters with `const` if possible.
-- *Function* is a function **not** in a class. whereas *method* is a function in a class.
+- *Function* is a function **not** in a class. Whereas *method* is a function in a class.
 - Don't frequently divide your code into functions, calling a function requires creating an entire stack frame. This means we have to push parameters and so on into the stack, and also pull something called the return address from the stack, so that after the function executed the `PC` (Program counter) register could return to the address before the function call.
-  Conclusion: Jumping around in memory to execute function instructions comsumes additional time.
+  Conclusion: Jumping around in memory to execute function instructions consumes additional time.
 
 ## Header Files
 
-Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` includes another header file `c.h`, while you have already include `c.h` before in `a.cpp`)
+Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` includes another header file `c.h`, while you have already included `c.h` before in `a.cpp`.
 
 - Way one: `#pragma once`
 - Way two:
@@ -112,8 +113,8 @@ Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` include
 ## Visual Studio Setup & Debug
 
 - Use `Show All Files` view under `Solution Explorer`.
-- By default VS2015 put intermediate files in debug directory
-- It's recommand to set `Output Directory` into `$(SolutionDir)bin\$(Platform)\$(Configuration)\`
+- By default, VS2015 put intermediate files in debug directory
+- It's recommend to set `Output Directory` into `$(SolutionDir)bin\$(Platform)\$(Configuration)\`
   and set `Intermediate Directory` into `$(SolutionDir)bin\intermediate\$(Platform)\$(Configuration)\`
 - The `watch view` in VS2015 allows you to specify the variables to be monitored,
   In `memory window` you can search by keyword `&a` to show the address of variable `a`
@@ -138,7 +139,7 @@ Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` include
   0x00D0FFF0 *(new char[8]): 00 00 00 00 00 00 00 00
   0x???????? &ptr_to_ptr:    00 B6 FE D4
   ```
-  > Due to x86's little endian design, what we see from `Memory View` is start from lower bits to higer bits, which is reversed from human's convient that write the most significant digit first. e.g.:
+  > Due to x86's little-endian design, what we see from `Memory View` is start from lower bits to higher bits, which is reversed from human's convenient that write the most significant digit first. e.g.:
   > ```plaintext
   >                    0x0 0x1 0x2 0x3
   > 0x00B6FED4 (&buf):  F0  FF  D0  00
@@ -146,16 +147,16 @@ Duplicate inclusion: You include header file `b.h` in `a.cpp`, but `b.h` include
 
 ## Reference
 
-- Variables are convert to memory address in assembly by compiler. Reference let compiler just substitute memory address as is (like a macro) using it's copy operator (`=()`), so it is different to `const void*` with creates a memory area to store a memory address (Can be `NULL`).
+- Variables are convert to memory address in assembly by compiler. Reference let compiler just substitute memory address as is (like a macro) using its copy operator (`=()`), so it is different to `const void*` with creates a memory area to store a memory address (Can be `NULL`).
 - Copy operator `=()` copies value of a variable. Send the actual parameters to a function implicitly calls copy operator.
 - Dereference operator (aka. indirection operator) `*()` get the value from a memory address.
 - Address-of operator `&()` obtain the memory address of a variable. Since directly send variable name to `=()` only get its stored values.
 
 ## Classes vs Structs, and Enums
 
-They are no different in low level, so a `class` can inherit a `struct` (Not recommand).
+They are no different in low level, so a `class` can inherit a `struct` (Not recommend).
 
-`sturct` is more suitable for store multiple variables, its variables are default have attribute `public`, therefore it's convient to express a data structure. While `class` is more suitable for express object, which has both member variables and methods.
+`sturct` is more suitable for store multiple variables, its variables are default have attributed `public`, therefore it's convenient to express a data structure. While `class` is more suitable for express object, which has both member variables and methods.
 
 
 ### Struct Bit-fields
@@ -207,12 +208,12 @@ int main() {
 }
 ```
 
-> In C++20 you can use `using enum` to create alias for enums
+> In C++20 you can use `using enum` to create alias for enums.
 
 ## Static
 
 - Static functions and variables outside of class has the scope limit in its translation unit (like `private` in a class). But define static functions or variables that share a same name in different translation unit will cause duplicate definition error in linking stage.
-- Static variable inside a class or struct means that variable is going to share memory with all of the instances of the class, in other words there's only one instance of that static variable. Static methods cannot access non-static members its class, hence it don't have instance of the class.
+- Static variable inside a class or struct means that variable is going to share memory with all the instances of the class, in other words there's only one instance of that static variable. Static methods cannot access non-static members its class, hence it doesn't have instance of the class.
 - Define `static` variables in header files if possible.
 - Local Static
   ```cpp
@@ -264,9 +265,9 @@ Singleton are classes that allow only one instance.
 
 ## Constructors & Destructors
 
-Corstructor provides a way to initialize primitive types when creating instance. Otherwise you have to do it manually or they will be keep whatever is left over in that memory.
+Constructor provides a way to initialize primitive types when creating instance. Otherwise, you have to do it manually, or they will be keep whatever is left over in that memory.
 
-To prevent creating instance, you can set constructor as priavate, or delete it.
+To prevent creating instance, you can set constructor as private, or delete it.
 ```cpp
 class Log {
 private:
@@ -286,7 +287,7 @@ It can be called directly: `SomeClass.~SomeClass();`
 
 ## Inheritance & Virtual Functions
 
-- Size of derived class (aka. sub class): `(base class) + (defined variables)`.
+- Size of derived class (aka. subclass): `(base class) + (defined variables)`.
 - Derived class implicitly call base class's constructor.
 
 Why we need virtual function:
@@ -320,7 +321,7 @@ Outputs:
 Entity
 Entity
 ```
-The problem occurs that the second output should be "Cherno". When the pointer type is the main class `Entity`, the method `get_name()` uses it's main class' version even it's actually an instance of `Player`, this definitely a problem.
+The problem occurs that the second output should be `"Cherno"`. When the pointer type is the main class `Entity`, the method `get_name()` uses its main class' version even it's actually an instance of `Player`, this definitely a problem.
 
 If you want to override a method you have to mark the method in the base class as `virtual`. Correct version:
 ```cpp
@@ -359,8 +360,8 @@ int main() {
 
 > `virtual` could reduce "dynamic dispatch" (change object's vtable in runtime).
 
-> `virtual` has its own overhead, it needs extra Vtable space, in order to dispatch the correct method it includes a member pointer in the base class that points to the vtable. And every time we call virtual method, we go through that table to decision which method to map.
-> Through the extra overhead it's still recommand to use as much as possible.
+> `virtual` has its own overhead, it needs extra vtable space, in order to dispatch the correct method it includes a member pointer in the base class that points to the vtable. And every time we call virtual method, we go through that table to decision which method to map.
+> Through the extra overhead it's still recommended to use as much as possible.
 
 ### Access Specifier & Inheritance Types
 
@@ -427,7 +428,7 @@ int main() {
 ## Visibility in C++
 
 - The default visibility of a Class would be `private`. If it's a `struct` then it would be `public` by default.
-- `private` things only visiable in it's own class, nor in derived class, except for `friend` classes.
+- `private` things only visible in its own class, nor in derived class, except for `friend` classes.
 - `protected` things can be seen by derived class.
 
 ## Literal Arrays & C++11 Standard Arrays
@@ -467,7 +468,7 @@ int main() {
   }
   ```
 - Standard Arrays
-  It's more safe, but has little bit more overhead.
+  It's more safe, but has a little bit more overhead.
   ```cpp
   import std;
   int main() {
@@ -491,9 +492,9 @@ int main() {
 }
 ```
 
-> Each strings at end has `\0` (named "null termination character") to prevent out of index in iterating. e.g. `char str[7] = {'C', 'h', 'e', 'r', 'n', 'o', '\0'};`
+> Each strings at end have `\0` (named "null termination character") to prevent out of index in iterating. e.g. `char str[7] = {'C', 'h', 'e', 'r', 'n', 'o', '\0'};`
 
-> Terminal character will actuall break the behavior of string in many cases, use `std::string_view` can prevent this problem.
+> Terminal character will actually break the behavior of string in many cases, use `std::string_view` can prevent this problem.
 > ```cpp
 > import std;
 > import std.compat;
@@ -727,7 +728,7 @@ int main() { Entity e; }
 
 ## Ternary Operators in C++ (Conditional Assignment)
 
-Ternaay simplify `if else` sentences:
+Ternary simplify `if else` sentences:
 ```cpp
 constinit static int s_level{1};
 constinit static int s_speed{2};
@@ -744,13 +745,13 @@ int main() {
 
 ## Create / Instantiate Objects
 
-There are two main section of memory: stack and heap.
-- Stack objects have an automatic lifespan, their lifetime is actually controlled by the their scope.
+There are two main sections of memory: stack and heap.
+- Stack objects have an automatic lifespan, their lifetime is actually controlled by their scope.
 
-  The stack size is small (usually 1~10MiB), if you have a big object, you have to store it in the heap.
+  The stack size is small (usually 1~10 MiB), if you have a big object, you have to store it in the heap.
 
   Compiler may let objects create on heap when it diagnostics the content of the object goes big (e.g. `std::string`), these objects use a smart pointer to release memory automatically.
-- Heap: once you allocated an object in the heap, it's gonna sit there unill you explicitly delete it.
+- Heap: once you allocated an object in the heap, it's going to sit there until you explicitly delete it.
 
 ```cpp
 import std;
@@ -770,8 +771,8 @@ int main() {
 
 ### The New / Delete Keyword
 
-How the `new` keyword find free space on memory? There is something called *free list* which maintain the addresses that have bytes free. It's obvously written in intelligent but it's stll quite slow.
-- `new` is just an operator, it uses the underlying C function `malloc()`, means that you can overload `new` and change its bahavious. `new` also calls the constructor.
+How the `new` keyword find free space on memory? There is something called *free list* which maintain the addresses that have bytes free. It's obviously written in intelligent, but it's still quite slow.
+- `new` is just an operator, it uses the underlying C function `malloc()`, means that you can overload `new` and change its behaviors. `new` also calls the constructor.
 - `delete` is an operator as well, it calls the destructor of the object.
 
 Three uses of `new` (normal `new`, array `new`, placement `new`)
@@ -983,13 +984,13 @@ int main() {
   }
   ```
 
-## Smart Pointers (std::unique_ptr, std::shared_ptr, std::weak_ptr)
+## Smart Pointers (`std::unique_ptr`, `std::shared_ptr`, `std::weak_ptr`)
 
-Smart pointers is that when you call `new` , you don't have to call `delete`. Actually in many cases with smart pointers we don't even have to call `new`.
+Smart pointers are that when you call `new`, you don't have to call `delete`. Actually in many cases with smart pointers we don't even have to call `new`.
 
 - **Shared pointer** & **Weak pointer**
 
-  Shared pointer uses something called reference counting. If create one shread pointer and define another shared pointer and copy the previous one, the reference count is now 2; when the first one dies (out of scope), the reference count goes down 1; when the last one dies. the reference count goes back to zero and free the memory.
+  Shared pointer uses something called reference counting. If create one shared pointer and define another shared pointer and copy the previous one, the reference count is now 2; when the first one dies (out of scope), the reference count goes down 1; when the last one dies. The reference count goes back to zero and free the memory.
   Weak pointer will not increase the reference count.
 
 ```cpp
@@ -1026,7 +1027,7 @@ int main() {
 
 ## Copying and Copy Constructors
 
-`operator=()` does shallow copy. An object created on heap without a copy constuctors or an object created on stack but with pointer variables that point objects on heap will lead to unexpected results since shallow copy don't copy them fully but just the address in pointer variable. So a copy constructor is required to rewrite the behavior of the copy operation.
+`operator=()` does shallow copy. An object created on heap without a copy constructor or an object created on stack but with pointer variables that point objects on heap will lead to unexpected results since shallow copy don't copy them fully but just the address in pointer variable. So a copy constructor is required to rewrite the behavior of the copy operation.
 
 ```cpp
 import std;
@@ -1148,17 +1149,17 @@ Using GLFW as example.
          glfw3.dll.lib
       ```
    2. Open project settings:
-      -> Configuration: All Configuration
-      -> C/C++ -> Additional Include Directories: `$(SolutionDir)\Dependencies\GLFW\include`
-      -> Linker -> General -> Additional Library Directories: `$(SolutionDir)\Dependencies\GLFW\lib-vc2015`
+      &rarr;Configuration: All Configuration
+      &rarr;C/C++&rarr;Additional Include Directories: `$(SolutionDir)\Dependencies\GLFW\include`
+      &rarr;Linker&rarr;General&rarr;Additional Library Directories: `$(SolutionDir)\Dependencies\GLFW\lib-vc2015`
 
 ### Static linking
 
-Static linking happens at compile time, the lib intergrate into executable or a dynamic library
+Static linking happens at compile time, the lib integrates into executable or a dynamic library
 
 Visual Studio
 1. Open project setting
-   -> Linker -> Input -> Additional Dependencies: `glfw3.lib;xxxxxx;balabala;...`
+   &rarr;Linker&rarr;Input&rarr;Additional Dependencies: `glfw3.lib;xxxxxx;balabala;...`
 2. Static Link
    ```cpp
    // Main.cpp
@@ -1176,13 +1177,13 @@ Visual Studio
 
 Dynamic linking happens at runtime
 
-- Some librarys like GLFW supports both static and dynamic linking in a single header file.
+- Some libraries like GLFW supports both static and dynamic linking in a single header file.
 - `glfw3.dll.lib` is basically a series of pointers to `glwfw3.dll`
 - Code is basically as same as static linking.
 
 Visual Studio
 1. Open project settings:
-   -> Linker -> Input -> Additional Dependencies: `glfw3.dll.lib;xxxxxx;balabala;...`
+   &rarr;Linker&rarr;Input&rarr;Additional Dependencies: `glfw3.dll.lib;xxxxxx;balabala;...`
 2. Put `glfw3.dll` to the same folder as your executable file (i.e: `$(SolutionDir)\Debug`)
 3. In fact, to call a function in dynamic library, it needs a prefix called `__declspec(dllimport)`
    If you explore `glfw3.h` you will see there is a prefix `GLFWAPI` in every function's definition:
@@ -1192,9 +1193,9 @@ Visual Studio
    ```
    So **you need to define a Macro** in VS:
    Open your project setting:
-   -> C/C++ -> Preprocessor -> Preprocessor Definitions: `GLFW_DLL;xxxxx;bababa...`
+   &rarr;C/C++&rarr;Preprocessor&rarr;Preprocessor Definitions: `GLFW_DLL;xxxxx;bababa...`
    
-   But why it seems stll work properly without the `dllimport` prefix?
+   But why it seems still work properly without the `dllimport` prefix?
    In modern windows, `dllimport` is not needed for functions, but `dllimport` is still needed for C++ classes and global variables.
 
 ## Making and Working with Libraries in C++ (Multiple Projects in Visual Studio)
@@ -1202,11 +1203,11 @@ Visual Studio
 1. Visual Studio Setup:
    1. Create one solution with 2 projects: "Game" and "Engine",
    2. Project "Game":
-      Ceneral->Project Defaults->Configuration Type: Application (.exe)
-      -> C/C++ -> General -> Additional include Directories: `$(SolutionDir)\Engine\src;`
+      General&rarr;Project Defaults&rarr;Configuration Type: Application (.exe)
+      &rarr;C/C++&rarr;General&rarr;Additional include Directories: `$(SolutionDir)\Engine\src;`
    3. Project "Engine":
-      Ceneral->Project Defaults->Configuration Type: Static library (.lib)
-   4. Right click on projects "Game" -> Add -> Reference -> Select project "Engine"
+      General&rarr;Project Defaults&rarr;Configuration Type: Static library (.lib)
+   4. Right click on projects "Game" &rarr;Add&rarr;Reference&rarr;Select project "Engine"
 2. Code for project "Engine":
    ```cpp
    // Your_Project_Directory\src\Engine.h
@@ -1245,7 +1246,7 @@ Example scenario: We have a function called `parse_shader()`, it needs to return
     return {vs, fs};
   }
   ```
-- Use reference paremeter (Probably one of the most optimal way)
+- Use reference parameter (Probably one of the most optimal ways)
    ```cpp
    import std;
    void parse_shader(std::string& out_vertex_source, std::string& out_fragment_source) {
@@ -1267,7 +1268,7 @@ Example scenario: We have a function called `parse_shader()`, it needs to return
    ```
 - Return a `std::array` or `std::vector`
 
-  The different is primarly that the arrays can be create on stack whereas vectors gonna store its underlying storage on heap.
+  The different is primarily that the arrays can be created on stack whereas vectors gonna store its underlying storage on heap.
   So technically returning a standard array would be faster.
   ```cpp
   import std;
@@ -1297,7 +1298,7 @@ Example scenario: We have a function called `parse_shader()`, it needs to return
 
 Templates can improve code reuse rate and reduce duplicate code (e.g. function overload), the essence of template is similar to macros.
 
-1. template type
+1. Template type
   ```cpp
   // How templates specificalize to create methods is based on the usage of
   // them. That is, if nobody calls the templated function, it's code will not
@@ -1336,7 +1337,7 @@ Templates can improve code reuse rate and reduce duplicate code (e.g. function o
      std::println("{}", arr.get_size());
    }
    ```
-3. The keyword `typename` clearify something that is a type.
+3. The keyword `typename` clarify something that is a type.
 
    C++20 makes `typename` optional on where nothing but a dependent type name can appear
    ```cpp
@@ -1571,7 +1572,7 @@ static_assert( is_narrowing<double, float>::value);
 static_assert( is_narrowing<int, uint32_t>::value);
 ```
 
-A skillfully implementation of custom `std::formatter`. `parse()` is a template method, since it's `constexpr` specified, any possible cases that result a `throw` will be filtered in a SFINAE way.
+A skillful implementation of custom `std::formatter`. `parse()` is a template method, since it's `constexpr` specified, any possible cases that result a `throw` will be filtered in a SFINAE way.
 ```cpp
 import std;
 struct QuotableString : std::string_view {};
@@ -1692,7 +1693,7 @@ TODO
 
 ## Function Pointers
 
-1. Ways that define a function pointers:
+1. Ways that define a function pointer:
    ```cpp
    import std;
    void hello_world(int a) noexcept { std::println("Hello World! Value: {}", a); }
@@ -1736,7 +1737,7 @@ A lambda is basically a little throwaway function that you can write and assign 
    `[a]`: Pass `a` by value
 
    `[&a]`: Pass `a` by reference.
-2. Use `mutable` keyword to allow modify pass-in variables
+2. Use `mutable` keyword to allow modifying pass-in variables
    ```cpp
    import std;
    int main() {
@@ -1747,7 +1748,7 @@ A lambda is basically a little throwaway function that you can write and assign 
      // into the lambda.
    }
    ```
-3. We need to use `std::function` instand of C-style raw function pointer if lambda has pass in variables (stateful lambda).
+3. We need to use `std::function` instead of C-style raw function pointer if lambda has pass in variables (stateful lambda).
    ```cpp
    void for_each(std::vector<int> const& values, std::function<void(int)> const& func) noexcept {
      for (int const i : values) func(i);
@@ -1807,7 +1808,7 @@ int main() {
 }
 ```
 
-Nested namespaces can be shorten using alias:
+Nested namespaces can be shortened using alias:
 ```cpp
 import std;
 namespace apple::functions {
@@ -1822,7 +1823,7 @@ int main() {
 ### Why don't "using namespace std"
 
 Absolutely don't use `using namespace` in header files.
-If you must using `using namespace`, please use it in a small scope as possible.
+If you must use `using namespace`, please use it in a small scope as possible.
 
 For example, a serious issue of implicit conversion:
 ```cpp
@@ -1850,10 +1851,10 @@ int main() {
 
 If we want to do something else when we are calling functions that will block the current thread, we can use `std::threads` (or coroutines in C++20).
 
-- A `std::thread` shoud have either `join()` or `detach()` called otherwise it will call `std::terminate()` in its destructor.
+- A `std::thread` should have either `join()` or `detach()` called otherwise it will call `std::terminate()` in its destructor.
 
 Here is an example:
-We create a thread that will do loop on outputting "Working..",
+We create a thread that will do loop on outputting "Working...",
 and simultaneously the main() function is waiting for user input.
 ```cpp
 import std;
@@ -2043,7 +2044,7 @@ int main() {
 }
 ```
 
-The most issue is that the Multidimensional Arrays will results memory fragmentation. When iterating the array we have to jump to another location to read or write that data, and that results probably a cache miss which means that we're wasting time fetching data from RAM.
+The most issue is that the Multidimensional Arrays will result memory fragmentation. When iterating the array we have to jump to another location to read or write that data, and that results probably a cache miss which means that we're wasting time fetching data from RAM.
 
 One of the most feasible thing you can do is just store them in a single dimensional array:
 ```cpp
@@ -2210,11 +2211,11 @@ Breakpoints can prevent recompile and save time.
 - Condition Breakpoints: If only want the breakpoint to trigger under a certain condition.
 - Action Breakpoints: Generally print something to the console when a breakpoint is hit
 
-For details. please [watch this video](https://www.youtube.com/watch?v=9ncNA6Co2Nk&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=70)
+For details. Please [watch this video](https://www.youtube.com/watch?v=9ncNA6Co2Nk&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=70)
 
 ## Dynamic Casting in C++
 
-If we force type casting a `Enemy` class to `Player` and access its data (funcions, variables) that is unique to `Player`, the program will probablly crash.
+If we force type casting a `Enemy` class to `Player` and access its data (functions, variables) that is unique to `Player`, the program will probably crash.
 
 Dynamic Casting does some validation for us to ensure that cast is valid
 ```cpp
@@ -2347,7 +2348,7 @@ int main() {
 }
 ```
 
-## std::async
+## `std::async`
 
 ```cpp
 import std;
@@ -2369,17 +2370,17 @@ int main() {
 }
 ```
 
-> In VS, you can use DEBUG&rarr;Windows&rarr;Parrllel Stacks (`<C-S>-d`) to do window parallel debugs
+> In VS, you can use DEBUG&rarr;Windows&rarr;Parallel Stacks (`<C-S>-d`) to do window parallel debugs
 
 ## lvalues and rvalues in C++
 
 Each **expression** belongs to exactly one of the three primary value categories: `prvalue`, `xvalue`, and `lvalue`.
-- A `lvalue` ("generalized" lvalue) is an **expression** that its memory address can be take of.
+- A `lvalue` ("generalized" lvalue) is an **expression** that its memory address can be taken of.
 - A `prvalue` ("pure" rvalue) is an **expression** that we can't take of its memory address.
 - A `xvalue` is ("expiring" value) is `prvalue` alike, but it's lifetime will not extend by a constant lvalue reference.
 - A `rvalue` is either `prvalue` or `xvalue`.
 
-> `template<class T> void f(T&&)`, here the `T&&` does not mean rvalue reference but something called forwarding reference (also `void f(auto&&)`). Invoke these functions is like `f(auto(t))`.
+> `template<class T> void f(T&&)`, here the `T&&` does not mean rvalue reference, but something called forwarding reference (also `void f(auto&&)`). Invoke these functions is like `f(auto(t))`.
 
 ```cpp
 import std;
@@ -2594,7 +2595,7 @@ int main() {
 }
 ```
 
-A example implementation of `std::move()`
+An example implementation of `std::move()`
 ```cpp
 template <class T> struct remove_reference {
   using type = T;
@@ -2665,15 +2666,15 @@ int main() {
 
 ## Compiler Optimization
 
-- `[[likely]]`/`[[unlikely]]` used in if-statements and loops whith logical decision.
+- `[[likely]]`/`[[unlikely]]` used in if-statements and loops with logical decision.
 - `volatile` tells compiler don't optimize.
 - `constexpr` declares that it is possible to evaluate the value of the function or variable at compile-time. Such variables and functions can only utilize resources at compile-time.
-  `constexpr char const*` is equivalent to `char const*const` but you cannot write `char const*constexpr` at current.
+  `constexpr char const*` is equivalent to `char const*const`, but you cannot write `char const*constexpr` at current.
 - `consteval` force evaluate expression in compile-time.
 - `noexcpt` for function that never `throw` error. Destructors are implicitly `noexcept`.
 
-  Due to strong exception guarantee, `std::vector` moves its elements on rearrange only if their move constructors are `noexcept`. You cna use `static_assert(std::is_nothrow_move_constructible_v<Object>);` to check.
-- `constinit` enforces variable is initialized at compile-time. Unlike `constexpr`, it allows non-trivial destructors. Therefore it can avoid the problem that the order of initialiation of static variables from different translation units is undefined, by initialize them at compile-time.
+  Due to strong exception guarantee, `std::vector` moves its elements on rearrange only if their move constructors are `noexcept`. You can use `static_assert(std::is_nothrow_move_constructible_v<Object>);` to check.
+- `constinit` enforces variable is initialized at compile-time. Unlike `constexpr`, it allows non-trivial destructors. Therefore, it can avoid the problem that the order of initialization of static variables from different translation units is undefined, by initialize them at compile-time.
    Another use-case is with non-initializing `thread_local` declarations. In such a case, it tells the compiler that the variable is already initialized, otherwise the compiler usually adds code to check and initialize it whether required on each usage.
 
 ```cpp
@@ -2701,8 +2702,8 @@ int get_tls2() { return tls2; } // has implicit TLS initialization code
 
 Comparison categories (Return types of the `operator<=>()`)
 - `strong_ordering`: exactly one if `a < b`, `a == b`, `a > b` must be true and if `a == b` then `f(a) == f(b)`.
-- `weak_ordering`: exactly one if `a < b`, `a == b`, `a > b` must be true and if `a == b` then `f(a)` not neccessary equal to `f(b)`.
-- `partial_ordering`: none of `a < b`, `a == b`, `a > b` might be true (may be incomparable) and if `a == b` then `f(a)` not neccessarily equal to `f(b)`. e.g. In `float`/`double` the `NaN` is not comparable
+- `weak_ordering`: exactly one if `a < b`, `a == b`, `a > b` must be true and if `a == b` then `f(a)` not necessary equal to `f(b)`.
+- `partial_ordering`: none of `a < b`, `a == b`, `a > b` might be true (maybe incomparable) and if `a == b` then `f(a)` not necessarily equal to `f(b)`. e.g. In `float`/`double` the `NaN` is not comparable
 
 ```cpp
 import std;

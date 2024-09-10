@@ -2,7 +2,7 @@
 
 ### Rotation
 
-- Pitch (Rotate around x-asis):
+- Pitch (Rotate around x-axis):
   $$
   \begin{equation}
   \mathbf R_x=
