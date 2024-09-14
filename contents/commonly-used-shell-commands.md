@@ -123,6 +123,20 @@ Shell Variables
   EOF
   ```
 
+## Glob Extension
+
+Exclusive Delete
+- Bash
+  ```shell-session
+  $ shopt -s extglob
+  $ rm -r !(file1|file2|dir)
+  ```
+- Zsh
+  ```shell-session
+   $ setopt extendedglob
+   $ rm -r ^(file1|file2|dir)
+   ```
+
 ### Trap
 
 Reset signal `TERM`'s action to the default: `trap - TERM`
@@ -643,22 +657,7 @@ Recursively give files read privileges:
 # find /path/to/dir -type f -exec chmod 644 {} \+
 ```
 
-## Exclusive Delete
-
-Enable glob extension
-
-- Bash
-  ```shell-session
-  $ shopt -s extglob
-  $ rm -r !(file1|file2|dir)
-  ```
-- Zsh
-  ```shell-session
-   $ setopt extendedglob
-   $ rm -r ^(file1|file2|dir)
-   ```
-
-### Bluetooth Dual Boot Pairing
+## Bluetooth Dual Boot Pairing
 
 Extracting on Linux
 
@@ -684,23 +683,6 @@ Useful python snippets
 >>> EDIV=int(''.join(list(reversed('<hex-of-EDIV>'.strip().split()))), 16)
 >>> IRK=list(reversed('<hex-of-IRK>'.strip().split()))
 >>> print('LTK: ', LTK, '\n', 'ERand: ', ERand, '\n', 'EDIV: ', EDIV, '\n', 'IRK: ', ''.join(IRK))
-```
-
-### ssh-keygen
-
-Show the fingerprint of a keyfile:
-```shell-session
-$ ssh-keygen -l -f </path/to/key>
-$ ssh-keygen -l -E md5 -f </path/to/key>
-```
-
-Modify the comment of a keyfile:
- ```shell-session
- $ ssh-keygen -c -C <Your comment> -f </path/to/key>
- ```
-Show the information of a keyfile:
-```shell-session
-$ ssh-keygen -y -f <Your key>
 ```
 
 ### Kernel interface
@@ -758,6 +740,30 @@ $ busctl --user call org.clight.clight /org/clight/clight org.clight.clight Paus
 Check property `Suspended`:
 ```shell-session
 $ busctl --user get-property org.clight.clight /org/clight/clight org.clight.clight Suspended
+```
+
+## SSH
+
+Stop a remote control connection:
+```shell-session
+$ ssh -O stop proteus@proteusdesktop
+```
+
+### ssh-keygen
+
+Show the fingerprint of a keyfile:
+```shell-session
+$ ssh-keygen -l -f </path/to/key>
+$ ssh-keygen -l -E md5 -f </path/to/key>
+```
+
+Modify the comment of a keyfile:
+ ```shell-session
+ $ ssh-keygen -c -C <Your comment> -f </path/to/key>
+ ```
+Show the information of a keyfile:
+```shell-session
+$ ssh-keygen -y -f <Your key>
 ```
 
 ## SSH Tunnel

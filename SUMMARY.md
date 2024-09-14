@@ -10,3 +10,6 @@
 - [Commonly Used Shell Commands](/contents/commonly-used-shell-commands.md)
 - [Inkscape](/contents/inkscape.md)
 - [Concepts in Linux](/contents/concepts-in-linux.md)
+- [NixOS](/contents/nixos.md)
+- [systemd-nspawn](/contents/systemd-nspawn.md)
+- [Proteus Journals](/contents/proteus_journals.md)
