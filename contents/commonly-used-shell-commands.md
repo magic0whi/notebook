@@ -621,14 +621,14 @@ List sockets statistics: `ss -s`
 
 See which process was using specific UDP port:
 ```shell-session
-# ss -lntu | grep $PORT_NUMBER
+# ss -lnptu | grep $PORT_NUMBER
 ```
 
 Arguments explanation:
 - `-l`, `--listening`: Display only listening sockets (these are omitted by default).
 - `-n`, `--numeric`: Do not try to resolve service names.
 - `-p`, `--processes`: Show process using socket.
-- `-t`, `--threads`: Show thread using socket. Implies `-p`.
+- `-t`, `--tcp`: Display TCP sockets
 - `-u`, `--udp`: Display UDP sockets.
 
 ## `chmod` directories only (exclude files)

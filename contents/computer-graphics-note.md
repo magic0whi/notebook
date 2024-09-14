@@ -75,7 +75,7 @@ x^\prime\\y^\prime
 \end{gathered}
 $$
 
-<img class="center" src="res/1.svg" alt="Rotate Transformation" style="width:100%">
+<img class="center" src="figures/computer-graphics-note-1.svg" alt="Rotate Transformation" style="width:100%">
 
 ## Scaling
 
