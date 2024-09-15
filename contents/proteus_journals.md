@@ -20,3 +20,14 @@ Morning
 - `mkinitcpio-dsdt-hook` to `mkinitcpio`'s built-in hook `acpi_override`.
 - Continue to check my music library.
 - I finally realized that the malfunction of sing-box may due to firewall rules. After read [NixOS Manual - Firewall](https://nixos.org/manual/nixos/unstable/index.html#sec-firewall), I put `networking.firewall.enable = false;` in the `/etc/nixos/configuration.nix`, and it now works as normal.
+
+### 09-15-24
+
+Afternoon
+- I managed to configure a systemd-nspawn container running NixOS on my laptop. For network concerns, firstly I tried to assign it with a IPVLAN device, but soon encountered difficulties. The `ipvlan0` interface was unable to receive a DHCPv4 from my router. After googling I found that the wireless adapter has difficulty with network bridge-like functions (Wi-Fi auth only allows a single MAC address for a client), whereas the IPVLAN is completely a different situation since it shares the same MAC address.
+- Sooner I realized that I don't really need a standalone IP within the LAN for the container, since it supposed to be a test environment to get started with NixOS and I should not run any public services in it.
+- Went through another period of struggling and researching to get peace with nftables and systemd-nspawn, the container finally got its internet connection.
+
+Night
+- The first run of `nixos-rebuild switch` was not smoothly as well, the nix sandbox doesn't work initially, `nixos-rebuild switch --option sandbox false` resolves this. Since I use systemd-resolved, the default name server is set to `127.0.0.53`, manually edit `/etc/resolv.conf` and put `services.resolved.enabe = true;` in `configuration.nix`. Next the systemd-resolved module complains it cannot be companies with `networking.useHostResolvConf = true;`, ok let me set it to `false` explicitly.
+- There is a stronger and stronger feeling that I definitely should set a quota for each target everyday I want to complete, so a single blockage would have a time limit and don't consume the whole day. This may also filter things that eventually proved to be useless or out-dated as the time beings. Probably one day I happened to hear someone says hey there is a better alternate for something, but unfortunately it requires learning from zero since it's an overall completely new well-formed designed (i.e. OpenGL to Vulcan).

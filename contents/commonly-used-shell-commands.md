@@ -420,6 +420,7 @@ $ rg --no-ignore -. -L -g \!node_modules -g \!_book -g \!yarn.lock -g \!.git "aw
 
 Arguments explanation:
 - `-.`, `--hidden` Search hidden files and directories.
+- `-L`, `--follow` Follow symbolic links.
 - `--no-ignore` Ignore files such as `.gitignore` will not be respected.
 
 ## Sort
