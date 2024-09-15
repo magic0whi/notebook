@@ -558,7 +558,7 @@ $ find ./kernel | cpio -o -H newc > SSDT14
   $ sudo mount --mkdir -t btrfs -o loop,sync,compress=zstd \
   /tmp/aur_chroot/ramdisk /tmp/aur_chroot/overlay
   $ sudo chown proteus: /tmp/aur_chroot/overlay
-  $ CHROOT=/mnt/chroots/arch
+  $ CHROOT=/tmp/aur_chroot/overlay
   ```
 - Use `paru`
   ```shell-session
@@ -566,7 +566,7 @@ $ find ./kernel | cpio -o -H newc > SSDT14
   ```
 - Manual Way
   ```shell-session
-  $ mkarchroot $CHROOT/root base-devel
+  # mkarchroot $CHROOT/root base-devel
   $ makechrootpkg -c -r $CHROOT [-I ../Build_Deps/Build_Deps.pkg.tar.zst]
   ```
 - Unmount
