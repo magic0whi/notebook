@@ -832,6 +832,41 @@ git -P log \
 --graph --all --color=always | less
 ```
 
+## BIND
+
+### rndc
+
+Generate a key
+```shell-session
+$ tsig-keygen -a hmac-sha384 custom
+key "custom" {
+  algorithm hmac-sha384;
+  secret "oGJ8/z7ynKx2nzEf7DQxnBypbsIDivrp4qzcUT9EkEE=";
+};
+```
+
+```shell-session
+rndc reconfig
+rndc status
+rndc dnssec -status tailba6c3f.ts.net
+```
+
+### DNSSEC
+
+The new `dnssec-policy` let the keys under `named`s control. In principle the keys become more like dynamic zone data than static configuration.
+
+Get DS record from the key
+```shell-session
+$ dnssec-dsfromkey Ktailba6c3f.ts.net.+015+50543.key
+tailba6c3f.ts.net. IN DS 50543 15 2 80F61B4AF40FCFF8A61852F5479C299BD31676F5F65765AE3AEDA08C9B3C78A0
+```
+In this example, 15 represents ED25519, and 2 represents the digest type SHA-256, the key ID is 50543.
+
+Print key's metadata:
+```shell-session
+$ dnssec-settime -p all Ktailba6c3f.ts.net.+015+50543
+```
+
 ## Obsoleted
 
 ### `pwgen`
@@ -894,4 +929,5 @@ Type=Application
 ## References
 
 - [How to recursively chmod all directories except files?](https://superuser.com/a/91938)
-
+- [2024-05-08 – Introducing BIND9 dnssec-policy](https://dotat.at/@/2024-05-08-dnssec-policy.html)
+- [2024-05-11 – Migrating to BIND9 dnssec-policy](https://dotat.at/@/2024-05-11-dnssec-policy.html#risks-to-avoid)
