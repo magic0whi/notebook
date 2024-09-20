@@ -31,3 +31,9 @@ Afternoon
 Night
 - The first run of `nixos-rebuild switch` was not smoothly as well, the nix sandbox doesn't work initially, `nixos-rebuild switch --option sandbox false` resolves this. Since I use systemd-resolved, the default name server is set to `127.0.0.53`, manually edit `/etc/resolv.conf` and put `services.resolved.enabe = true;` in `configuration.nix`. Next the systemd-resolved module complains it cannot be companies with `networking.useHostResolvConf = true;`, ok let me set it to `false` explicitly.
 - There is a stronger and stronger feeling that I definitely should set a quota for each target everyday I want to complete, so a single blockage would have a time limit and don't consume the whole day. This may also filter things that eventually proved to be useless or out-dated as the time beings. Probably one day I happened to hear someone says hey there is a better alternate for something, but unfortunately it requires learning from zero since it's an overall completely new well-formed designed (i.e. OpenGL to Vulcan).
+
+### 09-16-24
+
+Morning & Afternoon
+- lighttpd: vhost
+- bind: DNSSEC (failed).

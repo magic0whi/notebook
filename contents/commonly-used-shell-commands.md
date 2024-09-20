@@ -714,6 +714,11 @@ Show current module's parameters:
 # cat /sys/module/nvidia_drm/parameters/modeset
 ```
 
+Inform the OS of partition table changes
+```shell-session
+# partprobe
+```
+
 ## D-Bus
 
 Manually inhibit / pause [clighti<sup>AUR<sup>](https://aur.archlinux.org/packages/clight).
@@ -865,6 +870,57 @@ In this example, 15 represents ED25519, and 2 represents the digest type SHA-256
 Print key's metadata:
 ```shell-session
 $ dnssec-settime -p all Ktailba6c3f.ts.net.+015+50543
+```
+
+The CDS and CDNSKEY are identical to the DS and DNSKEY records, but they automate the process to pass the records to the parent zone.
+
+## yt-dlp
+
+List all available formats for a video:
+```shell-session
+$ yt-dlp --cookies-from-browser firefox -F 'https://www.youtube.com/watch?v=S5bfdUTrKLM&t=3s'
+```
+
+Download with specific format code
+```shell-session
+$ yt-dlp --cookies-from-browser firefox -f 'bestvideo*+bestaudio/best'
+```
+
+- `-f`, `--format` Use `-f -` for interactive selector (implies `-F`);
+- `-F`, `--list-formats` List available formats of each video;
+- `--audio-multistreams` Allow multiple audio streams to be merged into a single file;
+- `--video-multistreams` Allow multiple video streams to be merged into a single file.
+
+> Format Selection:
+> - `b*`, `best*`: Select the best quality format that **contains either** a video or an audio or both (i.e.; `vcodec!=none` or `acodec!=none`). 
+> - `b`, `best`: Select the best quality format that **contains both** video and audio. Equivalent to `best*[vcodec!=none][acodec!=none]`.
+> - `/`: Or logic.
+
+## mdadm FakeRAID
+
+Erase the metadata:
+```shell-session
+# mdadm --zero-superblock /dev/nvme0n1p2
+```
+
+Stop the array:
+```shell-session
+# mdadm --stop /dev/md127
+```
+
+## nvmecli
+
+Get LBA format:
+```shell-session
+# sudo nvme id-ns /dev/nvme0n1 -H | grep 'LBA Format'
+```
+> Warning: Most SSDs use a 4096 byte physical sector size, even though some report 512.
+
+## keepassxc-cli
+
+Generate a password that has 14 length, upper and lowercases, numeric, specials:
+```shell-session
+keepassxc-cli generate -L14 -lUns
 ```
 
 ## Obsoleted

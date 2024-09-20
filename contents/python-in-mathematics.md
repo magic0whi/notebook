@@ -5,11 +5,17 @@ Rational(1, 2)
 Rational('1/2')
 ```
 
-## Constants
+## Constants & Physical Units
 
 ```python
 from sympy.physics.units.quantities import Quantity
 Q = Quantity('Q')
+
+from sympy.physics.units import convert_to, speed_of_light, meters, seconds, liters, hours, centimeters
+display(convert_to(speed_of_light, [meter, second]))
+
+from sympy.physics.units.util import quantity_simplify
+display((meter/kilometer).simplify())
 ```
 
 ## Filter Results in Range for Non-linear Equations
