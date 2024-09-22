@@ -37,3 +37,7 @@ Night
 Morning & Afternoon
 - lighttpd: vhost
 - bind: DNSSEC (failed).
+
+### 09-22-24
+
+- Go to Shanghai by railway transit.

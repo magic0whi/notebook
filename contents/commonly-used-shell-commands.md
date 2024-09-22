@@ -721,7 +721,7 @@ Inform the OS of partition table changes
 
 ## D-Bus
 
-Manually inhibit / pause [clighti<sup>AUR<sup>](https://aur.archlinux.org/packages/clight).
+Manually inhibit / pause `clight`<sup>[AUR](https://aur.archlinux.org/packages/clight)</sup>.
 
 Show all properties:
 ```shell-session
