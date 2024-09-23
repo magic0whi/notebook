@@ -40,4 +40,9 @@ Morning & Afternoon
 
 ### 09-22-24
 
-- Go to Shanghai by railway transit.
+- Go to Shanghai totally relies on railway transit.
+
+### 09-23-24
+
+- Unregistered the Standard Chartered Bank since it has bad exchange rates and its system doesn't allow the real name of the tied phone number to be different with the bank account owner even this phone line is owned by my father and I carried a valid kinship certificate with. (I mentioned that any other banks in China were accepted in such situation but the SCB's teller only says sorry), I can't tell if branches other than Suzhou can have this simple work done.
+- Round and round in 蘇州中心 and 星悅匯, the latter now bracing the subculture of <ruby>二次元<rt>にじげん</rt></ruby>.
