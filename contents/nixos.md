@@ -45,3 +45,50 @@ Some of *zpoolconcepts*(7)
   A file system can have a mount point set in the `mountpoint` property. `mountpoint=none` prevents the file system from being mounted.
 
   The `mountpoint` property can be inherited, i.e. if `pool/home` has a mount point of `/export/stuff`, then `pool/home/user` automatically inherits a mount point of `/export/stuff/user`.
+
+Create datasets:
+```shell-session
+# zfs create -o mountpoint=none zroot/ROOT
+# zfs create -o mountpoint=/ -o canmount=noauto zroot/ROOT/default
+# zfs create -o mountpoint=none zroot/data
+# zfs create -o mountpoint=/home zroot/data/home
+# zfs create -o mountpoint=/root zroot/data/home/root
+# zfs create -o mountpoint=/var/log -o canmount=off zroot/data/log
+# zfs create -o acltype=posixacl zroot/data/log/journal
+# zfs create -o mountpoint=/var/lib -o canmount=off zroot/data/lib
+# zfs create zroot/data/lib/docker
+```
+
+Export/Import pools:
+```shell-session
+# zpool export zroot
+# zpool import -d /dev/disk/by-id -R /mnt zroot -N
+# zfs load-key zroot # If use native encryption
+```
+
+Manually mount rootfs dataset because it uses `canmount=noauto`, then mount all others datasets:
+```shell-session
+# zfs mount zroot/ROOT/default
+# zfs mount -a
+```
+
+Configure the root filesystem:
+```shell-session
+# zpool set bootfs=zroot/ROOT/default zroot
+# zpool set cachefile=/etc/zfs/zpool.cache zroot # Create zpool.cache
+```
+
+```shell-session
+# mount -o umask=077 /dev/disk/by-label/boot /mnt/boot/
+# swapon /dev/disk/by-label/swap
+# nixos-generate-config --root /mnt
+```
+
+Generate a hostId:
+```shell-session
+# head -c4 /dev/urandom | od -A none -t x4
+```
+
+```shell-session
+# nixos-install --option substituters "https://mirrors.cernet.edu.cn/nix-channels/store"
+```

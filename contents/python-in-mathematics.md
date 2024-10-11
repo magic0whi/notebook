@@ -76,11 +76,14 @@ display(Math(f'\\lim_{{x\\to 0}}f(x)={latex(limit(f,x, 0))}')) # Display limit f
 # Print the limit at x approaches plus/minus infinity
 pprint("Limit: {}".format(limit(f, x, -oo)))
 pprint("Limit: {}".format(limit(f, x, oo)))
+```
 
+```python
 # Plot the function
-p = plot((f, (x, -100, 100)), legend=True, show=False)
+p = plot((f, (x, -100, 100), ylim=[-10,10]), legend=True, show=False)
 for i, n in enumerate(p): p[i].label = p[i].get_label(use_latex=True) # Use LaTeX form
 p.show()
+
 # Or use matplotlib
 xs, ys = p[0].get_points()
 fig, ax = plt.subplots()
@@ -104,6 +107,12 @@ f = sqrt(x**2+y**2)+sqrt((a-x)**2+(b-y)**2)
 display(f)
 display(diff(f, x))
 idiff(f, y, x) # Or if you want to resolve dy/dx totally
+```
+
+## Integral
+
+```python
+display(sympify(integrate(x**2, x)))
 ```
 
 ## Reference
