@@ -7,7 +7,7 @@
 - [CMake Notes](/contents/cmake-notes.md)
 - [Python in Mathematics](/contents/python-in-mathematics.md)
 - [Elision Pronunciation in English](/contents/language/elision-pronunciation-in-english.md)
-- [カタカナ追加](/contents/language/katakana-addition.md)
+- [日本語の手札](/contents/language/nihongo-notes.md)
 - [Commonly Used Shell Commands](/contents/commonly-used-shell-commands.md)
 - [Inkscape](/contents/inkscape.md)
 - [Concepts in Linux](/contents/concepts-in-linux.md)
