@@ -258,7 +258,7 @@ $ cat TIAS2781RCA4.bin.txt | xxd -r > TIAS2781RCA4_mod.bin
 
 PDF Extracting:
 ```shell-session
-$ pdfimages --all in.pdf out_dir/
+$ pdfimages -all in.pdf out_dir/
 ```
 
 PDF Regenerate:
@@ -664,13 +664,26 @@ Extracting on Linux
 
 ```shell-session
 # cryptsetup open --type=bitlk /dev/nvme0n1p3 win11 <<<XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX
-# mount /dev/mapper/win11 /mnt/win11
-$ cd /mnt/Windows/System32/config
-$ chntpw -e SYSTEM
+# mount -t ntfs3 /dev/mapper/win11 /mnt/win11
+$ cd /mnt/win11/Windows/System32/config
+# chntpw -e SYSTEM
 > cd ControlSet001\Services\BTHPORT\Parameters\Keys
+> ls
+Node has 1 subkeys and 0 values
+  key name
+  <xxxxxxxxxxxx>
 > cd xxxxxxxxxxxx
-> hex xxxxxxxxxxxx # For < Bluetooth 5.1 devices
-> cd xxxxxxxxxxxx # For Bluetooth 5.1 devices
+> ls
+Node has 1 subkeys and 4 values
+  key name
+  <d1350d003eee>
+  size     type              value name             [value if type DWORD]
+    16  3 REG_BINARY         <CentralIRK>
+    16  3 REG_BINARY         <aaaaaaaaaaaa>
+    16  3 REG_BINARY         <bbbbbbbbbbbb>
+    16  3 REG_BINARY         <cccccccccccc>
+> hex aaaaaaaaaaaa # For < Bluetooth 5.1 devices
+> cd aaaaaaaaaaaa # For Bluetooth 5.1 devices
 > hex LTK
 > hex ERand
 > hex EDIV

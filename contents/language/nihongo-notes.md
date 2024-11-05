@@ -1,6 +1,7 @@
 ## <ruby>文法<rt>ぶんぽう</rt></ruby>/Grammar
 
-"に, へ, で" can be combined with "は, も" to set the target or context as topic, here's Tae Kim's explanation. Note that "を" cannot be combined with these particles, so "魚をも食べた" is wrong. You'd simply say: "魚も食べた".
+- "に, へ, で" can be combined with "は, も" to set the target or context as topic, here's Tae Kim's explanation. Note that "を" cannot be combined with these particles, so "魚をも食べた" is wrong. You'd simply say: "魚も食べた".
+- Instead of "と" you can also use "や" for an incomplete list of nouns. It is more vague than "と". It's not used so often, so I don't have a good example sentence yet. I'll add one later.
 
 ## カタカナ<ruby>追加<rt>ついか</rt></ruby>
 
