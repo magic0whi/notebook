@@ -1,4 +1,4 @@
-## Main
+# Windows 11 Configurations
 
 - Install Microsoft Store
   ```powershell

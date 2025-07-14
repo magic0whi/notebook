@@ -1,7 +1,4 @@
----
-date: 2022-03-10 14:45:53
-tags:
----
+# systemd-nspawn
 
 ## Container bringup
 

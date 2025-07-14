@@ -1,3 +1,5 @@
+# Computer Graphics Notes
+
 ## Affine Transformations (3-D)
 
 ### Rotation
@@ -75,9 +77,9 @@ x^\prime\\y^\prime
 \end{gathered}
 $$
 
-<img class="center" src="figures/computer-graphics-note-1.svg" alt="Rotate Transformation" style="width:100%">
+<img class="center" src="figures/computer_graphics_1.svg" alt="Rotate Transformation" style="width:100%">
 
-## Scaling
+### Scaling
 
 $$
 \begin{gathered}

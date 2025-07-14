@@ -1,6 +1,6 @@
-## Daily Journals プロテウスの日記
+# Daily Journals プロテウスの日記
 
-### 09-13-24
+## 09-13-24
 
 Morning
 - Waked up around 9:30, today's sleep quality is awful, Since I was got into sleeping around 3:00 (I'm now hard to falling sleep even with the helps of 5 mg Zolpidem).
@@ -32,27 +32,27 @@ Night
 - The first run of `nixos-rebuild switch` was not smoothly as well, the nix sandbox doesn't work initially, `nixos-rebuild switch --option sandbox false` resolves this. Since I use systemd-resolved, the default name server is set to `127.0.0.53`, manually edit `/etc/resolv.conf` and put `services.resolved.enabe = true;` in `configuration.nix`. Next the systemd-resolved module complains it cannot be companies with `networking.useHostResolvConf = true;`, ok let me set it to `false` explicitly.
 - There is a stronger and stronger feeling that I definitely should set a quota for each target everyday I want to complete, so a single blockage would have a time limit and don't consume the whole day. This may also filter things that eventually proved to be useless or out-dated as the time beings. Probably one day I happened to hear someone says hey there is a better alternate for something, but unfortunately it requires learning from zero since it's an overall completely new well-formed designed (i.e. OpenGL to Vulcan).
 
-### 09-16-24
+## 09-16-24
 
 Morning & Afternoon
 - lighttpd: vhost
 - bind: DNSSEC (failed).
 
-### 09-22-24
+## 09-22-24
 
 - Go to Shanghai totally relies on railway transit.
 
-### 09-23-24
+## 09-23-24
 
 - Unregistered the Standard Chartered Bank since it has bad exchange rates and its system doesn't allow the real name of the tied phone number to be different with the bank account owner, even this phone line is owned by my father and I carried a valid kinship certificate with. (I mentioned that any other banks in China were accepted in such situation but the SCB's teller only says sorry), I can't tell if branches other than Suzhou can have this simple work done.
 - Round and round in 蘇州中心 and 星悅匯, the latter now bracing the subculture of <ruby>二次元<rt>にじげん</rt></ruby>.
 
-### 09-27-24
+## 09-27-24
 
 - Daily small task changes: Purchasing foreign currency twice/day (from once/day);
 - Testing Cloudflare's Wrap (Zero Trust) on Windows with sing-box for traffic routing;
 
-### 09-28-24
+## 09-28-24
 
 - Scanned some documents left in the drawer. (Yet to be renamed and properly store)
 - Completed Calculus 1A: Differentiation

@@ -1,4 +1,4 @@
-# Some notes on NixOS
+# NixOS
 
 ## Installation
 

@@ -1,8 +1,4 @@
----
-category: computer
-date: 2022-05-02 18:08:14
-tags:
----
+# Git
 
 ## Difference between `^` and `~`
 

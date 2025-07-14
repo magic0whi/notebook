@@ -1,4 +1,4 @@
-Math typesetting using KaTex
+Math typesetting using KaTeX
 ==============
 
 Use it for your book, by adding to your book.json:
