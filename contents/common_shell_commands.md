@@ -782,6 +782,12 @@ Show the information of a keyfile:
 $ ssh-keygen -y -f <Your key>
 ```
 
+Regenerate host keys:
+```shell-session
+# rm /etc/ssh/ssh_host_*
+# ssh-keygen -A
+```
+
 ## SSH Tunnel
 
 X11vnc startup with SDDM and SSH Tunnel:
