@@ -1,7 +1,7 @@
 # Summary
 
 - [Introduction](/README.md)
-- [Win11 Configuration](/contents/win11_configuration.md)
+- [Windows OS](/contents/windows_os.md)
 - [Computer Graphics](/contents/computer_graphics.md)
 - [C++](/contents/cpp.md)
 - [CMake](/contents/cmake.md)
@@ -17,3 +17,4 @@
 - [Git](/contents/git.md)
 - [Zhuyin Input Method](/contents/zhuyin.md)
 - [FFmpeg](/contents/ffmpeg.md)
+- [KVM and GVT-g Configuration Notes](/contents/virtualization.md)
