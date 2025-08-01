@@ -18,3 +18,5 @@
 - [Zhuyin Input Method](/contents/zhuyin.md)
 - [FFmpeg](/contents/ffmpeg.md)
 - [KVM and GVT-g Configuration Notes](/contents/virtualization.md)
+- [Excerpts from Nineteen Eighty-Four](/contents/nineteen_eighty-four.md)
+- [Literatures](/contents/literatures.md)
