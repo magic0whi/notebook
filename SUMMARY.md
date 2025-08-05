@@ -20,3 +20,4 @@
 - [KVM and GVT-g Configuration Notes](/contents/virtualization.md)
 - [Excerpts from Nineteen Eighty-Four](/contents/nineteen_eighty-four.md)
 - [Literatures](/contents/literatures.md)
+- [Options](/contents/options.md)
