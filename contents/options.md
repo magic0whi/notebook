@@ -60,6 +60,10 @@ $$
 
 **Practical Use**: Gamma indicates the stability of an option’s delta. High gamma means delta changes rapidly, increasing risk or opportunity for traders, especially in delta-hedging strategies.
 
+### Theta
+
+TODO
+
 ## Tests
 
 1. An option’s premium is $1.50 and has a delta of 0.40, with the underlying future at $100. If the underlying future moves to $102, what is the option’s new premium based on delta?
