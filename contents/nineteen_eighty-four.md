@@ -120,3 +120,27 @@ He sat back in his chair, slightly ashamed of himself, and laid down the pen. Th
 Already! He sat as still as a mouse, in the futile hope that whoever it was might go away after a single attempt. But no, the knocking was repeated. The worst thing of all would be to delay. His heart was thumping like a drum, but his face, from long habit, was probably expressionless. He got up and moved heavily towards the door.
 
 ### Chapter Two
+
+As he put his hand to the door-knob Winston saw that he had left the diary open on the table. DOWN WITH BIG BROTHER was written all over it, in letters almost big enough to be legible across the room. It was an inconceivably stupid thing to have done. But, he realized, even in his panic he had not wanted to smudge the creamy paper by shutting the book while the ink was wet.
+
+He drew in his breath and opened the door. Instantly a warm wave of relief flowed through him. A colourless, crushed-looking woman, with wispy hair and a lined face, was standing outside.
+
+"Oh, comrade," she began in a dreary, whining sort of voice, "I thought I heard you come in. Do you think you could come across and have a look at our kitchen sink? It's got blocked up and&mdash;"
+
+It was Mrs. Parsons, the wife of a neighbour on the same floor. ("Mrs." was a word somewhat discountenanced by the Party&mdash;you were supposed to call everyone "comrade"&mdash;but with some women one used it instinctively.) She was a woman of about thirty, but looking much older. One had the impression that there was dust in the creases of her face. Winston followed her down the passage. These amateur repair jobs were an almost daily irritation. Victory Mansions were old flats, built in 1930 or thereabouts, and were falling to pieces. The plaster flaked constantly from ceilings and walls, the pipes burst in every hard frost, the roof leaked whenever there was snow, the heating system was usually running at half steam when it was not closed down altogether from motives of economy. Repairs, except what you could do for yourself, had to be sanctioned by remote committees which were liable to hold up even the mending of a window-pane for two years.
+
+"Of course it's only because Tom isn't home," said Mrs. Parsons vaguely.
+
+The parsons' flat was bigger than Winston's, and dingy in a different way. Everything had a battered, trampled&mdash;on look, as though the place had just been visited by some large violent animal. Games impedimenta&mdash;hockey&mdash;hockey&mdash;sticks, boxing&mdash;gloves, a burst football, a pair of sweaty shorts turned inside out&mdash;lay all over the floor, and on the table there was a litter of dirty dishes and dog-eared exercise-books. On the walls were scarlet banners of the Youth League and the Spies, and a full-sized poster of Big Brother. There was the usual boiled-cabbage smell, common to the whole building, but it was shot through by a sharper reek of sweat, which&mdash;one knew this at the first sniff, though it was hard to say how was the sweat of some person not present at the moment. In another room someone with a comb and a piece of toilet paper was trying to keep tune with the military music which was still issuing from the telescreen.
+
+## Volume Three
+
+### Chapter Six
+
+TODO: ...
+
+The voice from the telescreen was still pouring forth its tale of prisoners and booty and slaughter, but the shouting outside had died down a little. The waiters were turning back to their work. One of them approached with the gin bottle. Winston, sitting in a blissful dream, paid no attention as his glass was filled up. He was not running or cheering any longer. He was back in the Ministry of Love, with everything forgiven, his soul white as snow. He was in the public dock, confessing everything, implicating everybody. He was walking down the white-tiled corridor, with the feeling of walking in sunlight, and an armed guard at his back. The longhoped&mdash;for bullet was entering his brain.
+
+He gazed up at the enormous face. Forty years it had taken him to learn what kind of smile was hidden beneath the dark moustache. O cruel, needless misunderstanding! O stubborn, self-willed exile from the loving breast! Two gin-scented tears trickled down the sides of his nose. But it was all right, every thing was all right, the struggle was finished. He had won the victory over himself. He loved Big Brother.
+
+"Oh, comrade," she began in a dreary, whining sort of voice, "I thought I heard you come in. Do you think you could come across and have a look at our kitchen sink? It's got blocked up and&mdash;"

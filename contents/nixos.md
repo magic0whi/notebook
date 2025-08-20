@@ -45,7 +45,7 @@ Partition Layout:
 # (parted) set 1 esp on
 # (parted) mkpart 'swap partition' linux-swap 513MiB 41473MiB # 40GiB
 # (parted) mkpart 'ZFS zroot partition 1' 41473MiB 529858MiB # Same size as /dev/nvme0n1p1
-# (parted) type 1 6A85CF4D-1DD2-11B2-99A6-080020736631
+# (parted) type 3 6A85CF4D-1DD2-11B2-99A6-080020736631
 # (parted) mkpart 'Windows 11 partition' ntfs 529858MiB 100% # Reserve for Windows
 # (parted) quit
 ```
@@ -81,9 +81,6 @@ Encrypt partition for zpool:
 ### Concepts
 
 - **Datasets**: Fundamental units of resources in a zpool, there are 4 types of datasets, e.g. file systems or volumes.
-
-Reference: `zfsconcepts(7)`
-
 - *`raidz`*: A vdev type that provides redundancy using parity, where `raidz1` offers single-parity (like RAID5. `raidz` is an alias for `raid1`), `raidz2` offers double-parity (like RAID6), and `raidz3` offers triple-parity for increased fault tolerance.
 - **Mount Points**:
 
@@ -91,13 +88,13 @@ Reference: `zfsconcepts(7)`
 
   The `mountpoint` property can be inherited; i.e. if `pool/home` has a mount point of `/export/stuff`, then `pool/home/user` automatically inherits `/export/stuff/user` as its mount point unless overridden.
 
-Reference: `zpoolconcepts(7)`
+> Reference: `zfsconcepts(7)` and `zpoolconcepts(7)`
 
 ### Create
 
 To create a zpool with a RAID0-like configuration, we need each device being added as a separate vdev:
 ```shell-session
-$ zpool create -m <mountpoint> <poolname> <vdevs>
+$ zpool create -R <relative_mountpoint> <poolname> <vdevs>
 ```
 
 > Each `vdev` is either a device or has the format:
@@ -106,7 +103,7 @@ $ zpool create -m <mountpoint> <poolname> <vdevs>
 > ```
 > You can alter it as your pleasure if you need a RAID1+0-like zpool:
 > ```shell-session
-> zpool create -m <mountpoint> <poolname> \
+> zpool create -R <relative_mountpoint> <poolname> \
 >   mirror /dev/disk/by-id/1 /dev/disk/by-id/2 \
 >   mirror /dev/disk/by-id/3 /dev/disk/by-id/4
 > ```
@@ -171,8 +168,9 @@ Configure the root file system:
 
 ```shell-session
 # mount -m -o umask=077 /dev/disk/by-partlabel/EFI\\x20system\\x20partition /mnt/boot/
-# nixos-generate-config --root /mnt --show-hardware-config
+# nixos-generate-config --root /mnt --show-hardware-config # Generate hardware-configuration.nix
 ```
+> Note we NEED to modify the `hardware-configuration.nix`.
 
 Generate a `hostId`:
 ```shell-session
@@ -194,3 +192,28 @@ $ git clone --depth=1 https://github.com/magic0whi/nixos_configs_flake.git && cd
 > ```shell-session
 > # systemd-cryptenroll --wipe-slot=tpm2 /dev/disk/by-partlabel/swap\\x20partition
 > ```
+
+## Troubleshooting
+
+### Failed to import zpool
+
+The log shows:
+```plaintext
+cannot import 'zroot': pool was previously in use from another system.
+Last accessed by NixOS (hostid=01919810) at Thu Jan  1 04:05:14 1970
+The pool can be imported, use 'zpool import -f' to import the pool.
+```
+
+Try `zpool export -a` to safely unmount the zpool before reboot you NixOS installation medium, or
+`boot.zfs.forceImportRoot = true;` to force import.
+
+Ref: https://www.reddit.com/r/zfs/comments/oywb30/comment/h8cvvii/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+
+### Boot into rescus mode with disabled root account
+
+When the machine boots, interrupt the bootloader and add this to the bootloader command-line:
+```bash
+[...] rescue systemd.setenv=SYSTEMD_SULOGIN_FORCE=1
+```
+
+Ref: https://discourse.nixos.org/t/boot-into-rescue-mode-with-disabled-root-account/13801
