@@ -131,7 +131,41 @@ It was Mrs. Parsons, the wife of a neighbour on the same floor. ("Mrs." was a wo
 
 "Of course it's only because Tom isn't home," said Mrs. Parsons vaguely.
 
-The parsons' flat was bigger than Winston's, and dingy in a different way. Everything had a battered, trampled&mdash;on look, as though the place had just been visited by some large violent animal. Games impedimenta&mdash;hockey&mdash;hockey&mdash;sticks, boxing&mdash;gloves, a burst football, a pair of sweaty shorts turned inside out&mdash;lay all over the floor, and on the table there was a litter of dirty dishes and dog-eared exercise-books. On the walls were scarlet banners of the Youth League and the Spies, and a full-sized poster of Big Brother. There was the usual boiled-cabbage smell, common to the whole building, but it was shot through by a sharper reek of sweat, which&mdash;one knew this at the first sniff, though it was hard to say how was the sweat of some person not present at the moment. In another room someone with a comb and a piece of toilet paper was trying to keep tune with the military music which was still issuing from the telescreen.
+The parsons' flat was bigger than Winston's, and dingy in a different way. Everything had a battered, trampled&mdash;on look, as though the place had just been visited by some large violent animal. Games impedimenta&mdash;hockey-sticks, boxing-gloves, a burst football, a pair of sweaty shorts turned inside out&mdash;lay all over the floor, and on the table there was a litter of dirty dishes and dog-eared exercise-books. On the walls were scarlet banners of the Youth League and the Spies, and a full-sized poster of Big Brother. There was the usual boiled-cabbage smell, common to the whole building, but it was shot through by a sharper reek of sweat, which&mdash;one knew this at the first sniff, though it was hard to say how was the sweat of some person not present at the moment. In another room someone with a comb and a piece of toilet paper was trying to keep tune with the military music which was still issuing from the telescreen.
+
+"It's the children," said Mrs. Parsons, casting a half-apprehensive glance at the door. "They haven't been out today. And of course&mdash;"
+
+She had a habit of breaking off her sentences in the middle. The kitchen sink was full nearly to the brim with filthy greenish water which smelt worse than even of cabbage. Winston knelt down and examined the angle-joint of the pipe. He hated using his hands. and he hated bending down, which was always liable to start him coughing. Mrs. Parsons looked on helplessly.
+
+"Of course if Tom was home he'd put it right in a moment," she said. "He loves anything like that. He's ever so good with his hands. Tom is."
+
+Parsons was Winston's fellow-employee at the Ministry of Truth. He was a fattish but active man of paralyzing stupidity, a mass of imbecile enthusiasms&mdash;one of those completely unquestioning, devoted drudges on whom, more even than on the Thought Police, the stability of the Party depended. At thirty-five he had just been unwillingly evicted from the Youth League, and before graduating into the Youth League he had managed to stay on in the Spies for a year beyond the statutory age. At the Ministry he was employed in some subordinate post for which intelligence was not required, but on the other hand he was a leading figure on the Sports Committee and all the other committees engaged in organizing community hikes, spontaneous demonstrations, savings campaigns, and voluntary activities generally. He would inform you with quiet pride, between whiffs of his pipe, that he had put in an appearance at the Community Centre every evening for the past four years. An overpowering smell of sweat, a sort of unconscious testimony to the strenuousness of his life, followed him about wherever he went, and even remained behind him after he had gone.
+
+"Have you got a spanner?" said Winston, fiddling with the nut on the angle-joint.
+
+"A spanner," said Mrs. Parsons, immediately becoming invertebrate. "I don't know, I'm sure. Perhaps the children&mdash" There was a trampling of boots and another blast on the comb as the children charged into the living-room. Mrs. Parsons brought the spanner. Winston let out the water and disgustedly removed the clot of human hair that had blocked up the pipe. He cleaned his fingers as best he could in the cold water from the tap and went back into the other room.
+
+"Up with your hands!" yelled a savage voice.
+
+A handsome, tough-looking boy of nine had popped up from behind the table and was menacing him with a toy automatic pistol, while his small sister, about two years younger, made the same gesture with a fragment of wood. Both of them were dressed in the blue shorts, grey shirts, and red neckerchiefs which were uniform of the Spies. Winston raised his hands above his head, but with an uneasy feeling, so vicious was the boy's demeanor, that it was not altogether a game.
+
+"You're a traitor!" yelled the boy. "You're a thought-criminal! You're a Eurasian spy! I'll shoot you, I'll vaporize you, I'll send you to the salt mines!"
+
+Suddenly they were both leaping round him, shouting "Traitor!" and "Thought-criminal!" the little girl imitating her brother in every movement. It was somehow slightly frightening, like the gamboling of tiger cubs which will soon grow up into man-eaters. There was a sort of calculating ferocity in the boy's eye, a quite evident desire to hit or kick Winston and a consciousness of being very nearly big enough to do so. It was a good job it was not a real pistol he was holding, Winston thought.
+
+Mrs. Parsons' eyes flitted nervously from Winston to the children, and back again. In the better light of the living-room he noticed with interest that there actually was dust in the creases of her face.
+
+"They do get so noisy," she said. "They're disappointed because they couldn't go to see the hanging, that's what it is. I'm too busy to take them. and Tom won't be back from work in time."
+
+"Why can't we go and see the hanging?" roared the boy in his huge voice.
+
+"Want to see the hanging! Want to see the hanging!" chanted the little girl, still capering round.
+
+Some Eurasian prisoners, guilty of war crimes, were to be hanged in the Park that evening, Winston remembered. This happened about once a month, and was a popular spectacle. Children always clamoured to be taken to see it. He took his leave of Mrs. Parsons and made for the door. But he had not gone six steps down the passage when something hit the back of his neck an agonizingly painful blow. It was as though a red-hot wire had been jabbed into him. He spun round just in time to see Mrs. Parsons dragging her son back into the doorway while the boy pocketed a catapult.
+
+"Goldstein!" bellowed the boy as the door closed on him. But what most struck Winston was the look of helpless fright on the woman's greyish face.
+
+Back in the flat he stepped quickly past the telescreen and sat down at the table again, still rubbing his neck. The music from the telescreen had stopped. Instead, a clipped military voice was reading out, with a sort of brutal relish, a description of the armaments of the new Floating Fortress which had just been anchored between Iceland and the Faroe islands. With those children, he thought, that wretched woman must lead a life of terror. Another year, two years, and they would be watching her night and day for symptoms of unorthodoxy.
 
 ## Volume Three
 
