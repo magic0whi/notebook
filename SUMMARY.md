@@ -6,7 +6,6 @@
 - [C++](/contents/cpp.md)
 - [CMake](/contents/cmake.md)
 - [Python in Mathematics](/contents/python_in_mathematics.md)
-- [English Elision](/contents/language/english_elision.md)
 - [Japanese](/contents/language/japanese.md)
 - [Common Shell Commands](/contents/common_shell_commands.md)
 - [Inkscape](/contents/inkscape.md)

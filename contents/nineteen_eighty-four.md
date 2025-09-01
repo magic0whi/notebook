@@ -103,6 +103,7 @@ DOWN WITH BIG BROTHER<br>
 DOWN WITH BIG BROTHER<br>
 DOWN WITH BIG BROTHER
 </p>
+
 over and over again, filling half a page. He could not help feeling a twinge of panic. It was absurd, since the writing of those particular words was not more dangerous than the initial act of opening the diary, but for a moment he was tempted to tear out the spoiled pages and abandon the enterprise altogether.
 
 He did not do so, however, because he knew that it was useless. Whether he wrote *DOWN WITH BIG BROTHER*, or whether he refrained from writing it, made no difference. Whether he went on with the diary, or whether he did not go on with it, made no difference. The Thought Police would get him just the same. He had committed&mdash;would still have committed, even if he had never set pen to paper&mdash;the essential crime that contained all others in itself. Thoughtcrime, they called it.
@@ -167,6 +168,50 @@ Some Eurasian prisoners, guilty of war crimes, were to be hanged in the Park tha
 
 Back in the flat he stepped quickly past the telescreen and sat down at the table again, still rubbing his neck. The music from the telescreen had stopped. Instead, a clipped military voice was reading out, with a sort of brutal relish, a description of the armaments of the new Floating Fortress which had just been anchored between Iceland and the Faroe islands. With those children, he thought, that wretched woman must lead a life of terror. Another year, two years, and they would be watching her night and day for symptoms of unorthodoxy.
 
+Nearly all children nowadays were horrible. What was worst of all was that by means of such organizations as the Spies they were systematically turned into ungovernable little savages, and yet this produced in them no tendency whatever to rebel against the discipline of the Party. On the contrary, they adored the Party and everything connected with it. The songs, the processions, the banners, the hiking, the drilling with dummy rifles, the yelling of slogans, the worship of Big Brother&mdash;it was all a sort of glorious game to them. All their ferocity was turned outwards, against the enemies of the State, against foreigners, traitors, saboteurs, thought-criminals. It was almost normal for people over thirty to be frightened of their own children. And with good reason, for hardly a week passed in which *The Times* did not carry a paragraph describing how some eavesdropping little sneak&mdash;"child hero" was the phrase generally used&mdash;had overheard some compromising remark and denounced its parents to the Thought Police.
+
+The sting of the catapult bullet had worn off. He picked up his pen half-heartedly, wondering whether he could find something more to write in the diary. Suddenly he began thinking of O'Brien again.
+
+Years ago&mdash;how long was it? Seven years it must be&mdash;he had dreamed that he was walking through a pitch-dark room. And someone sitting to one side of him had said as he passed: "We shall meet in the place where there is no darkness." It was said very quietly, almost casually&mdash;a statement, not a command. He had walked on without pausing. What was curious was that at the time, in the dream, words had not made much impression on him. It was only later and by degrees that they had seemed to take on significance. He could not now remember whether it was before or after having the dream that he had seen O'Brien for the first time, nor could he remember when he had first identified the voice as O'Brien's. But at any rate the identification existed. It was O'Brien who had spoken to him out of the dark.
+
+Winston had never been able to feel sure&mdash;even after this morning's flash of the eyes it was still impossible to be sure whether O'Brien was a friend or an enemy. Nor did it even seem to matter greatly. There was a link of understanding between them, more important than affection or partisanship.
+
+"We shall meet in the place where there is no darkness," he had said. Winston did not know what it meant, only that in some way or another it would come true.
+
+The voice from the telescreen paused. A trumpet call, clear and beautiful, floated into the stagnant air. The voice continued raspingly:
+
+"Attention! Your attention, please! A newsflash has this moment arrived from the Malabar front. Our forces in South India have won a glorious victory. I am authorized to say that the action we are now reporting may well bring the war within measurable distance of its end. Here is the newsflash&mdash;" Bad news coming, thought Winston. And sure enough, following on a gory description of the annihilation of a Eurasian army, with stupendous figures of killed and prisoners, came the announcement that, as from next week, the chocolate ration would be reduced from thirty grammes to twenty.
+
+Winston belched again. The gin was wearing off, leaving a deflated feeling. The telescreen&mdash;perhaps to celebrate the victory, perhaps to drown the memory of the lost chocolate&mdash;crashed into "Oceania, 'tis for thee." You were supposed to stand to attention. However, in his present position he was invisible.
+
+"Oceania, 'tis for thee" gave way to lighter music. Winston walked over to the window, keeping his back to the telescreen. The day was still cold and clear. Somewhere far away a rocket bomb exploded with a dull, reverberating roar. About twenty or thirty of them a week were falling on London at present.
+
+Down in the street the wind flapped the torn poster to and fro, and the word INGSOC fitfully appeared and vanished. Ingsoc. The sacred principles of Ingsoc. Newspeak, doublethink, the mutability of the past. He felt as though he were wandering in the forests of the sea bottom, lost in a monstrous world where he himself was the monster. He was alone. The past was dead, the future was unimaginable. What certainty had he that a single human creature now living was on his side? And what way of knowing that the dominion of the Party would not endure for ever? Like an answer, the three slogans on the white face of the Ministry of Truth came back to him:
+
+<p style="text-align:center;font-style:italic">
+WAR IS PEACE<br>
+FREEDOM IS SLAVERY<br>
+IGNORANCE IS STRENGTH
+</p>
+
+He took a twenty-five cent piece out of his pocket. There, too, in tiny clear lettering, the same slogans were inscribed, and on the other face of the coin the head of Big Brother. Even from the coin the eyes pursued you. On coins, on stamps, on the covers of books, on banners, on posters, and on the wrappings of a cigarette packet&mdash;everywhere. Always the eyes watching you and the voice enveloping you. Asleep or awake, working or eating, indoors or out of doors, in the bath or in bed&mdash;no escape. Nothing was your own except the few cubic centimetres inside your skull.
+
+The sun had shifted round, and the myriad windows of the Ministry of Truth, with the light no longer shinning on them, looked grim as the loopholes of a fortress. His heart quailed before the enormous pyramidal shape. It was too strong, it could not be stormed. A thousand rocket bombs would not batter it down. He wondered again for whom he was writing the diary. For the future, for the past&mdash;for an age that might be imaginary. And in front of him there lay not death but annihilation. The diary would be reduced to ashes and himself to vapour. Only the Thought Police would read what he had written, before they wiped it out of existence and out of memory. How could you make appeal to the future when not a trace of you, not even an anonymous word scribbled on a piece of paper, could physically survive?
+
+The telescreen struck fourteen. He must leave in ten minutes. He had to be back at work by fourteen-thirty. Curiously, the chiming of the hour seemed to have put new heart into him. He was a lonely ghost uttering a truth that nobody would ever hear. But so long as he uttered it, in some obscure way the continuity was not broken. It was not by making yourself heard but by staying sane that you carried on the human heritage. He went back to the table, dipped his pen, and wrote:
+
+*To the future or the the past, to a timer when thought is free, when men are different from one another and do not live alone&mdash;to a time when truth exists and what is done cannot be undone:*
+
+*From the age of uniformity, from the age of solitude, from the age of Big Brother, from the age of doublethink&mdash;greetings!*
+
+He was already dead, he reflected. It seemed to him that it was only now, when he had begun to be able to formulate his thoughts, that he had taken the decisive step. The consequences of every act are included in the act itself. He wrote:
+
+*Thoughtcrime does not entail death: thoughtcrime IS death.*
+
+Now he had recognized himself as a dead man it became important to stay alive as long as possible. Two fingers of his right hand were inkstained. It was exactly the kind of detail that might betray you. Some nosing zealot in the Ministry (a woman, probably: someone like the little sandy-haired woman or the dark-haired girl from the Fiction Department) might start wondering why he had been writing during the lunch interval, why he had used an old-fashioned pen, what he had been writing&mdash;and then drop a hint in the appropriate quarter. He went to the bathroom and carefully scrubbed the ink away with the gritty dark-brown soap which rasped your skin like sandpaper and was therefore well adapted for this purpose. He put the diary away in the drawer. It was quite useless to think of hiding it, but he could at least make sure whether or not its existence had been discovered. A hair laid across the page-end was too obvious. With the tip of his finger he picked up an identifiable grain of whitish dust and deposited it on the corner of the cover, where it was bound to be shaken off if the book was moved.
+
+### Chapter Three
+
 ## Volume Three
 
 ### Chapter Six
@@ -176,5 +221,3 @@ TODO: ...
 The voice from the telescreen was still pouring forth its tale of prisoners and booty and slaughter, but the shouting outside had died down a little. The waiters were turning back to their work. One of them approached with the gin bottle. Winston, sitting in a blissful dream, paid no attention as his glass was filled up. He was not running or cheering any longer. He was back in the Ministry of Love, with everything forgiven, his soul white as snow. He was in the public dock, confessing everything, implicating everybody. He was walking down the white-tiled corridor, with the feeling of walking in sunlight, and an armed guard at his back. The longhoped&mdash;for bullet was entering his brain.
 
 He gazed up at the enormous face. Forty years it had taken him to learn what kind of smile was hidden beneath the dark moustache. O cruel, needless misunderstanding! O stubborn, self-willed exile from the loving breast! Two gin-scented tears trickled down the sides of his nose. But it was all right, every thing was all right, the struggle was finished. He had won the victory over himself. He loved Big Brother.
-
-"Oh, comrade," she began in a dreary, whining sort of voice, "I thought I heard you come in. Do you think you could come across and have a look at our kitchen sink? It's got blocked up and&mdash;"
