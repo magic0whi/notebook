@@ -270,6 +270,16 @@ With the deep, unconscious sigh which not even the nearness of the telescreen co
 
 In the walls of the cubicle there were three orifices. To the right of the speakwrite, a small pneumatic tube for written messages, to the left, a larger one for newspapers; and in the side wall, within easy reach of Winston's arm, a large oblong slit protected by a wire grating. This last was for the disposal of waste paper. Similar slits existed in thousands or tens of thousands throughout the building, not only in every room but at short intervals in every corridor. For some reason they were nicknamed memory holes. When one knew that any document was due for destruction, or even when one saw a scrap of waste paper lying about, it was an automatic action to lift the flap of the nearest memory hold and drop it in, whereupon it would be whirled away on a current of warm air to the enormous furnaces which were hidden somewhere in the recesses of the building.
 
+Winston examined the four slips of paper which he had unrolled. Each contained a message of only one or two lines, in the abbreviated jargon&mdash;not actually Newspeak, but consisting largely of Newspeak words&mdash;which was used in the Ministry for internal purposes. They ran:
+
+*Times 17.3.84 bb speech malreported Africa rectify*
+
+*Times 19.12.83 forecasts 3 yp 4th quarter 83 misprints verify current issue*
+
+*Times 14.2.84 miniplenty malquoted chocolate rectify*
+
+*Times 3.12.83 reporting bb dayorder doubleplusungood refs unpersons rewrite fullwise upsub antefiling*
+
 ## Volume Three
 
 ### Chapter Six

@@ -4,27 +4,6 @@
 
 Author: G. Lowes Dickinson
 
----
-title: literature
-toc: true
-lang: en
-category: dataset
-date: 2024-08-03 22:12:31
-tags:
----
-
-English Literatures
-
-<!-- more -->
-
-<style>
-article.article .content {
-    font-family: KaTeX_Main, FZYaSongS-R-GB, serif;
-    font-size: 18px;
-    word-spacing: 2px;
-}
-</style>
-
 ## The Greek View of Woman
 
 Author: G. Lowes Dickinson
@@ -49,9 +28,9 @@ The conception thus indicated in burlesque of the proper place of woman is expre
 
 Nevertheless, there are not wanting indications, both in theory and practice, of a protest against it. In Sparta, as we have already noticed, girls, instead of being confined to the house, were brought up in the open air among the boys, trained in gymnastics and accustomed to run and wrestle naked. And Plato, modelling his view upon this experience, makes no distinction of the sexes in his ideal republic. Women, he admits, are generally inferior to men, but they have similar, if lower, capacities and powers. There is no occupation or art for which they may not be fitted by nature and education; and he would therefore have them take their share in government and war, as well as in the various mechanical trades. 'None of the occupations,' he says, 'which comprehend the ordering of a state, belong to woman as woman, nor yet to man as man; but natural gifts are to be found here and there, in both sexes alike; and, so far as her nature is concerned, the woman is admissible to all pursuits as well as the man; though in all of them the woman is weaker than the man.'
 
-In adopting this attitude Plato stands alone not only among the Greeks, but one might almost say, among mankind, till we come to the latest views of the nineteenth century. But there is another Greek, the poet Euripides[^8], who, without advancing any theory about the proper position of women, yet displays so intimate an understanding of their difficulties, and so warm and close a sympathy with their griefs, that some of his utterances may stand to all time as documents of the dumb and age-long protest of the weaker against the stronger sex. In illustration we may cite the following lines from the *Medea*[^9], applicable, *mutatis mutandis*, to how many generations of suffering wives?
+In adopting this attitude Plato stands alone not only among the Greeks, but one might almost say, among mankind, till we come to the latest views of the nineteenth century. But there is another Greek, the poet Euripides[^8], who, without advancing any theory about the proper position of women, yet displays so intimate an understanding of their difficulties, and so warm and close a sympathy with their griefs, that some of his utterances may stand to all time as documents of the dumb and age-long protest of the weaker against the stronger sex. In illustration we may cite the following lines from the *Medea*[^9], applicable, *mutatis mutandis*[^10], to how many generations of suffering wives?
 
-'Of all things that have life and sense we women are most wretched. For we are compelled to buy with gold a husband who is also&ndash;worst of all! &mdash; the master of our person. And on his character, good or bad, our whole fate depends. For divorce is regarded as a disgrace to a woman and she cannot repudiate her husband. Then coming as she does into the midst of manners and customs strange to her, she would need the gift of divination&ndash;unless she has been taught at home&ndash;to know how best to treat her bed-fellow. And if we manage so well that our husband remains faithful to us, and does not break away, we may think ourselves fortunate; if not, there is nothing for it but death. A man when he is vexed at home can go out and find relief among his friends or acquaintances; but we women have none to look to but him. They tell us we live a sheltered life at home while they go to the wars; but that is nonsense. For I would rather go into battle thrice than bear a child once.'
+'Of all things that have life and sense we women are most wretched. For we are compelled to buy with gold a husband who is also&mdash;worst of all!&mdash;the master of our person. And on his character, good or bad, our whole fate depends. For divorce is regarded as a disgrace to a woman and she cannot repudiate her husband. Then coming as she does into the midst of manners and customs strange to her, she would need the gift of divination&mdash;unless she has been taught at home&mdash;to know how best to treat her bed-fellow. And if we manage so well that our husband remains faithful to us, and does not break away, we may think ourselves fortunate; if not, there is nothing for it but death. A man when he is vexed at home can go out and find relief among his friends or acquaintances; but we women have none to look to but him. They tell us we live a sheltered life at home while they go to the wars; but that is nonsense. For I would rather go into battle thrice than bear a child once.'
 
 [^1]: The period from the 8th to 4th centuries B.C..
 [^2]: Abandonment of unwanted infant.
@@ -62,3 +41,4 @@ In adopting this attitude Plato stands alone not only among the Greeks, but one 
 [^7]: Home economics
 [^8]: Euripides (480-406 BC) is one of the three great tragedians of ancient Greece, with nearly 20 of his tragedies surviving to this day. Among the most famous of his works are *"The Trojan Women"* and *"Medea"*.
 [^9]: The heroine, upon discovering that her husband Jason is ungrateful and has taken another lover, becomes consumed by grief and hatred, kills the other woman and her father, and then kills her own two children.
+[^10]: In Latin, it means "after the necessary changes and modifications have been made," and it is used as an adverbial phrase. The author’s meaning is that although the world keeps changing and is very different from ancient Greece, with some proper adjustments Medea’s words can still apply to later generations of suffering women.
