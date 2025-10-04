@@ -246,3 +246,129 @@
 - 請記得記錄您的進度
 
 > 您的床墊和枕頭對睡眠非常重要，如果您的床墊和枕頭已經使用多年，可能已經不再舒適，也許您應考慮更換。花點時間試用各種產品，選擇能好好支撐您的生體並攘您感到舒適的產品。
+
+### 放棄快餐
+
+您知道漢堡包、熱狗、烤肉串和薯條等快餐食物裡有什麼東西嗎？快餐雖然便宜，卻是高熱量又低營養的高度加工食品。接下來，我們來了解如何明智地選擇食物吧。
+
+- 告別快餐、選擇更好更健康的食物。
+- 請記得記錄您的進度
+
+> 我們進食的方式很重要。相較使用餐具，用手進餐往往會在短時間內攝取更多熱量。
+
+### 及早規劃退休生活
+
+1. 以下哪個國家獲評為最佳退休國家？
+  - 新西蘭
+  - 澳大利亞
+  - 瑞士 (&check;)
+  
+  > 答案正確。（資訊來源：《美國新聞》2021 最佳國家評選）
+2. 千禧世代（俗稱 “80 後” 和 “90 後”）平均會從幾歲開始為退休存（ㄘㄨㄣˊ）錢？
+  - A) 26 歲 (&check;)
+  - B) 36 歲
+  - C) 46 歲
+
+  > 答案正確。（資訊來源：匯豐《未來的退休生活&#x2E3A;趨勢的變革》調查報告）
+3. 您的退休預算應包括什麼開支？
+  - A) 住屋
+  - B) 醫療
+  - C) 娛樂
+  - D) 旅遊
+  - E) 家人的保障
+  - F) 以上全部 (&check;)
+
+  > 答案正確，退休後您也需要面對各種財務負擔，還可能要應付不少退休開支。
+4. 計算退休需要的儲備金額時，您應考慮什麼因素？
+  - A) 強積金儲備
+  - B) 通脹率
+  - C) 投資回報
+  - D) 以上全部 (&check;)
+
+  > 答案正確。
+5. 試估退休人士從每個強積金帳戶平均提取的金額是多少？
+  - A) 港幣 113,716 元 (&check;)
+  - B) 港幣 213,716 元
+  - C) 港幣 313,716 元
+
+  > 答案正確。（資訊來源：強製性公積金計劃管理局《強製性公積金計劃統計摘要》2021 年 1 月至 9 月數據）
+6. 一般而言，想在香港享受舒適的退休生活，平均需要多少儲備？
+  - A) 港幣 270 萬元
+  - B) 港幣 370 萬元
+  - C) 港幣 470 萬元 (&check;)
+
+  > 答案正確。（資訊來源：匯豐於 2020 年 12 月進行的 FinFit 調查）
+
+### 戰勝倦怠
+
+繁重的工作量和追趕期限的壓力已成現今社會的常態，有時候我們會感到心力交瘁（ㄘㄨㄟˋ）。如您持續感到壓力沈（ㄔㄣˊ）重或十分疲倦，則有可能會進入倦怠狀態。
+
+以下 4 個自助小提示可助您趕走倦怠，恢復生活平衡並避免再次出現倦怠狀態。您準備好迎接更愉快和健康的生活嗎？立即踏出第一步！
+
+**優先考慮自己的身心健康**&#x2E3A;確保您有良好的睡眠習慣、均衡的膳食營養、適度的運動和融洽的社交關係，平衡您的身心靈
+
+**跳出固有框架**&#x2E3A;如您對生活上的某方面不滿意，嘗試想辦法作出改變，或者把部分工作交給其他人，騰出時間完成更重要的事情
+
+**從工作壓力的來源著手**&#x2E3A;確保同事、客戶以及家人清楚知道您願意承擔多少責任，以免他們的期（ㄑㄧˊ）望過高，同時把握這個機會與他們訂立新的原則
+
+**擴展您的關係網**&#x2E3A;尋找您的人生導師，他們可以幫助您建立正面的人際關係，並帶領您尋求學習機遇和發展
+
+### Your Nutrition
+
+2. How often do you cook with olive, rapeseed or groundnut oil, instead of other oils or fats such as butter, coconut oil or palm oil?
+  - Always
+  - Often
+  - Sometimes
+  - Rarely
+  - Never
+3. How often do you limit your salt intake? This means reducing how much you use while cooking or at the table, or by checking how much salt is in the food you buy.
+  - Always
+  - Often
+  - Sometimes
+  - Rarely
+  - Never
+
+  > Try cutting back on salt. Eating too much can raise your blood pressure and contribute to heart disease. Processed foods are often high in salt so always check the labels.
+
+### Wealth management insights - 2 common savings tools
+
+Question 1: What is the difference between time deposits and saving insurance plans?
+
+Generally, time deposits pay higher interest than regular savings accounts, with terms that could range from a few days to several months. Time deposits therefore offer more variety than other types of bank deposits.
+
+Saving insurance plans are primarily insurance plans, with a strong savings element, and provide a guaranteed return at policy maturity as well as life protection during the policy term. Some savings plans even offer terminal illness benefit and premium deferral unemployment protection.
+
+Question 2: I'm planning to start a small business in a few years and want to build up my savings now. Which one would give me higher return, a saving insurance plan or time deposit?
+
+Generally, savings insurance plans offer higher returns than time deposits. If you're prepared to save up over a period of years, a saving insurance plan is worth considering.
+
+Source: HSBC Life: LIFE Talk Series, College of Insuranceology - savings insurance policy (hsbc.com.hk)
+
+Question 3: I'm planning to study for a master's degree in the UK in the future. How do I start saving up for it?
+
+Compared with time deposits, the investment period of a savings insurance plan is generally longer. But studying abroad may require longer-term savings, so a savings insurance plan may well be a more suitable option.
+
+Both time deposits and savings insurance plans offer different currencies for selection. Buying a policy denominated in GBP now means you will be able to withdraw GBP when the policy matures, which is convenient for paying tuitions in the UK.
+
+Source: HSBC Life: LIFE Talk Series, College of Insuranceology - savings insurance policy (hsbc.com.hk)
+
+Great!
+
+You've completed this task.
+
+Choosing the right savings tool can help people reach their life goals sooner! Discover HSBC Swift Save Insurance Plan - a fixed-term endowment plan that helps save in the short term and offers extra benefits.
+
+What's more? Earn a premium rebate of up to 300 RewardCash by joining and completing the Bonus Badge - 'Get Insured Online Challenge.' Offer available util 30 June 2025. T&C apply.
+
+### Take a breath - Lion's Breath
+
+Our breathing is the easiest and most readily available tool we have for easing stress. When we're stressed, our breath becomes shallower and quicker, but with a bit of mindful and conscious breathing we can counteract this and feel calmer in no time. In this goal, you'll learn about the lion's breath exercise.
+
+1. Sit comfortably on the floor or in a chair.
+2. Breathe in through your nose. Fill your belly with air until you can't breathe in anymore.
+3. Open your month wide and breathe out, making an 'ahh' sound with you breath.
+
+Continue this cycle for a minute. Check in once you've done it!
+
+> Do a breathing exercise each day to feel calmer and empowered.
+> Remember to log your progress
