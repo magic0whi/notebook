@@ -181,7 +181,7 @@
 
 突發疾病往往會讓人措手不及。如果沒有足夠的醫療保障，則可能需要動用大筆積蓄來應付治療費用。因此無論年齡或健康狀況如何，選擇一份適合的醫療保險都至關重要。
 
-### 向鹹味食品說不
+## 向鹹味食品說不
 
 大家都知道鹹味零食不太健康。鹽份是種能讓人開懷大吃的調味料，還會增加過重的的風險。食用過量鹽份亦會導致血（ㄒㄧㄝˇ）壓升高。只要我們選擇合適的食物並培養健康的習慣，吃零食是沒有問題的！而市面上亦有很多健康的零食可供選擇。這次您的目標是嘗試以低熱量和低鹽的食物來取代任何鹹味零食，例如無鹽的堅果或豆類食物、低脂酸奶或奶酪、高纖維或原味餅乾，和無添加糖水果乾。
 
@@ -190,7 +190,7 @@
 
 > 爆米花在製造過程中不需過度加工，能保留纖維等營養成分，是零食中相對健康的選擇。不過，預製爆米花或含有大量鹽分或糖份，所以我們建議您嘗試自己動手做！在平底鍋中加入少許油後加熱爆米花
 
-### 守護身、心、財，活出更幸福的人生
+## 守護身、心、財，活出更幸福的人生
 
 1. 疫情後，哪個市場出現最顯著的心理變化？
   - A) 英國 (&check;)
@@ -214,7 +214,7 @@
 
   答對了！與親友隔離雖然是一種令人不安的經歷，但提醒了我們人際關係的珍貴。許多中國內地和香港特區的受訪者表示渴望有更多時間與朋友和家人團聚。
 
-### 眼睛護理
+## 眼睛護理
 
 3. 與屏幕保持最少 30 釐（ㄌㄧˊ）米的距離。
   - 正確 (&check;)
@@ -227,7 +227,7 @@
 
   事實上，Healthline 醫療保健專家以及眾多醫療專業人士都推薦 “20-20-20” 護眼法則，即觀看屏幕 20 分鐘後，望向 20 英尺外的物件 20 秒。這個方法能放鬆和滋潤您的雙眼，舒緩眼睛疲勞。
 
-### 清晨瑜伽
+## 清晨瑜伽
 
 不想早上起來迷迷糊糊，您可以做幾分鐘和緩伸展和肌力訓練。嘗試建立簡單而有規律的運動習慣，每天早上從幾分鐘瑜伽開始。早上起床後做瑜伽對身體特別有益，有助放鬆經過一晚睡眠而繃緊的肌肉，穰您積極迎接新一天，每天只要花數分鐘，爾且很有成功感！
 
@@ -238,7 +238,7 @@
 
 > 除了喝咖啡，做瑜伽也可以提神。早上練習瑜伽時有意識地控制呼吸能煥發您的身心。
 
-### 一夜好眠
+## 一夜好眠
 
 睡眠對我們的身體機能至關重要。充足的睡眠讓我們的大腦能如常運作，並修復我們的身體。事實上，持續睡眠不足可能會增加心臟病、腎病、高血壓、糖尿病和中風的風險。睡眠專家表示，如果你以為睡眠不足沒有什麼大不了，那就大錯特錯了。
 
@@ -247,7 +247,16 @@
 
 > 您的床墊和枕頭對睡眠非常重要，如果您的床墊和枕頭已經使用多年，可能已經不再舒適，也許您應考慮更換。花點時間試用各種產品，選擇能好好支撐您的生體並攘您感到舒適的產品。
 
-### 放棄快餐
+## 用蔬菜煮出健康滋味
+
+蔬菜含有重要的維生素、礦物質和膳食纖維。高纖維含量能幫助消化，並提供更持久的飽腹感。蔬菜含有多種營養成分，但熱量卻很低。只要在每一餐膳食中添加一兩種蔬菜，就能增加每天蔬菜的攝取量。
+
+- 在日常煮食中加入蔬菜，讓每道美餚都為您補充豐富營養。
+- 請記得記錄您的進度
+
+> 想知道有什麼便捷的方式將蔬菜融入日常飲食嗎？您可嘗試煮多一點放在冰箱，接下來慢慢享用。
+
+## 放棄快餐
 
 您知道漢堡包、熱狗、烤肉串和薯條等快餐食物裡有什麼東西嗎？快餐雖然便宜，卻是高熱量又低營養的高度加工食品。接下來，我們來了解如何明智地選擇食物吧。
 
@@ -256,7 +265,7 @@
 
 > 我們進食的方式很重要。相較使用餐具，用手進餐往往會在短時間內攝取更多熱量。
 
-### 及早規劃退休生活
+## 及早規劃退休生活
 
 1. 以下哪個國家獲評為最佳退休國家？
   - 新西蘭
@@ -299,7 +308,7 @@
 
   > 答案正確。（資訊來源：匯豐於 2020 年 12 月進行的 FinFit 調查）
 
-### 戰勝倦怠
+## 戰勝倦怠
 
 繁重的工作量和追趕期限的壓力已成現今社會的常態，有時候我們會感到心力交瘁（ㄘㄨㄟˋ）。如您持續感到壓力沈（ㄔㄣˊ）重或十分疲倦，則有可能會進入倦怠狀態。
 
@@ -313,7 +322,7 @@
 
 **擴展您的關係網**&#x2E3A;尋找您的人生導師，他們可以幫助您建立正面的人際關係，並帶領您尋求學習機遇和發展
 
-### Your Nutrition
+## Your Nutrition
 
 2. How often do you cook with olive, rapeseed or groundnut oil, instead of other oils or fats such as butter, coconut oil or palm oil?
   - Always
@@ -330,7 +339,7 @@
 
   > Try cutting back on salt. Eating too much can raise your blood pressure and contribute to heart disease. Processed foods are often high in salt so always check the labels.
 
-### Wealth management insights - 2 common savings tools
+## Wealth management insights - 2 common savings tools
 
 Question 1: What is the difference between time deposits and saving insurance plans?
 
@@ -370,5 +379,138 @@ Our breathing is the easiest and most readily available tool we have for easing 
 
 Continue this cycle for a minute. Check in once you've done it!
 
-> Do a breathing exercise each day to feel calmer and empowered.
-> Remember to log your progress
+- Do a breathing exercise each day to feel calmer and empowered.
+- Remember to log your progress
+
+## Healthy habits to boost your immune system
+
+1. Do you sleep at least 5 hours every night?
+  - Always
+  - Often
+  - Sometimes
+  - Rarely
+  - Never
+
+  > Getting enough sleep is important for your health. Ideally, you should get 7 to 9 hours of sleep every night. If you're regularly sleeping less than 5 hours, it'll weaken your immune system and you're more likely to get sick.
+2. Do you take any vitamin or mineral supplements?
+  - Always
+  - Often
+  - Sometimes
+  - Rarely
+  - Never
+
+  > Eat a variety of healthy foods from the 5 food groups to get the nutrients you need. Are you getting enough of vitamins and minerals? Take a nutrition test and see if you would benefit from taking supplements.
+3. Do you drink at least 7 glasses of water per day?
+  - Always
+  - Often
+  - Sometimes
+  - Rarely
+  - Never
+
+  > Drinking water is one of the easiest ways to help your immune system work better. Immune health relies on the nutrients flowing through your bloodstream. Staying hydrated helps your body's infection-fighting cells circulate through your body faster.
+4. Do you stay up to date with your vaccinations?
+  - Always
+  - Often
+  - Sometimes
+  - Rarely
+  - Never
+
+  > See your doctor to do a regular checkup and make sure your vaccinations are up to date. As you get older, your immune system becomes slower to respond. This also increases the risk of getting infectious diseases, such as pneumonia, and cancer.
+
+## Choosing the right protection
+
+1. Story 1: Jane is the breadwinner of her family. Her father recently passed away due to cancer, which got her worried about her family's financial future if she became sick. She therefore thinks of setting up an extensive financial safety net that would protect her family if she became ill. Which option will you suggest to Jane?
+  - A) Getting a critical illness insurance plan that covers basic life protection and, more importantly, multiple critical illnesses such as cancer. (&check;)
+  - B) A basic life protection plan that excludes critical illness claims.
+
+  > That's right! A basic life protection plan only provides financial protection in the event of Jane's death. In contrast, such a critical illness insurance plan not only covers life protection but also offers Jane and her loved ones financial support by paying a lump sum if Jane is unexpectedly diagnosed with a specified critical illness. It can be used to help the family with bills and day-to-day expenses or to fund private medical care.
+2. Story 2: Steven and his wife, both 34, are full-time employed and have a young daughter attending primary school. Steven is a big believer in life planning, so he has already started planning for retirement that includes sufficient medical protection if anything happen in the future.
+
+  To be prepared for retirement, which of the following benefits do you suggest Steven add to his medical plan?
+  - A) Benefit with flexible coverage for unknown pre-existing conditions with no waiting period
+  - B) Benefit with tax deduction
+  - C) Both (&check;)
+
+  > That's right! Steven will have to pay for his medical expenses after retirement, so talking comprehensive medical protection that provides flexible coverage will take such pressure off. In addition, a tax-deductible insurance plan, such as the Voluntary Health Insurance Scheme, offers a personal income tax reduction, which can help make savings ahead of retirement.
+3. Story 3: Brandon is an ambitious young man looking to start his own business before he turns 40. He now plans to build his investment portfolio with potential capital growth for new business ventures while supporting him to provide his parents with a financial safety net in case of misfortune ever strikes. So which choice would help Brandon to achieve his goal?
+  - A) A whole life insurance plan with a savings element that covers the entire life of Brandon and provides a cash payout to his family when he passes away (&check;)
+  - B) A market-driven investment such as stocks
+
+  > That's right! A whole life insurance plan with a savings element, such as HSBC Wealth Goal Insurance Plan II, can help Brandon build his wealth gradually and achieve his long-term capital growth. Moreover, the life protection element can also give him peace of mind for future adventures with his loved ones.
+
+## Things you can control right now
+
+We often fixate on events or circumstances that are outside our control. Sometimes our worries and feelings about these things make us feel overwhelmed. Understanding what we can or can't control will help us better manage our focus. Let's take a look:
+
+**What can you control?**
+- Time spent on viewing news and social media
+- Time spent on achieving personal goals
+- Time spent on things you enjoy or that are good for you
+- How you practise sleep hygiene
+- Your nutrition and fitness routine
+- How much you connect with others&mdash;even virtually
+
+**What can you influence?**
+- How and when you connect with loved ones and colleagues
+- How you interact online and offline to boost the morale of those around you
+
+**What have you little, or no, control or influence over?**
+- Public policies
+- Other people's opinions, emotions and actions
+- News
+
+Try not to let things that are out of your control drain your energy, and you'll become much more effective. (Reference: City Mental Health Alliance HK)
+
+## Make breakfast count
+
+What you eat first things really matters. A healthy breakfast kickstarts the metabolism and fills you up so you won't need to snack. Make yours the best it can be every day!
+
+What makes a good breakfast?
+
+Whole grains, lean protein, low-fat dairy, fruits and vegetables.
+
+- Get more from that first meal
+- Remember to log your progress
+
+> Bacon and sausages contain protein but they're also high in fat. If you enjoy these for breakfast, cook until crisp, then wrap in kitchen paper to absorb excess fat. Or switch to lower-fat options such as lean ham.
+
+## Tips to loan more wisely
+
+Use these 4 easy tips to help you loan more wisely!
+
+**Examine your income and expenses honestly**
+
+How much money can you afford to borrow? The only way to find out is to track your spending for 3 months&mdash;every dollar earned and every dollar spent. You'll then know what monthly payment you can afford on a loan, which means you won't take out a loan that's more than you can afford.
+
+Use our [Monthly Repayment Calculator](https://retailbank.hsbc.com.hk/en/mortgage-calculator/budget-planner) to see how much you'll need to pay back every month on your loan.
+
+**Compare interest rates, fees and charges**
+
+Even if you see an offer for a '$0 interest rate', there are almost always hidden fees and charges. That's where the 'annual percentage rate' (APR) comes in. It includes all applicable interest, fees and charges for the year. So, remember to look at APRs to know the full cost of your loan.
+
+**Clean up your credit score**
+
+We never really think about our credit scores until we need them. But how you manage your money today affects which financing you'll qualify for tomorrow. Make sure you always pay your bills on time, don't use too much credit, and check your current credit score regularly. Do those 3 things and your credit score will likely improve.
+
+**Gather your required documents and apply**
+
+Applying for a personal loan is easy if you're prepared. Read the application and make sure you have all your paperwork ready. This could include proof of income, address and any other important files. If you have any questions, don't hesitate to get in touch with our customer service officers.
+
+"To borrow or not to borrow? Borrow only if you can repay!"
+
+## The power of music
+
+Listening to music you love causes your brain's pleasure-reward system to release the feel-good hormone dopamine. It also helps lower cortisol levels, and encourages positive emotions. It all adds up to less stress and an improved quality of life!
+
+Here are some tips for mixing music into your routine:
+
+As music is one of the easiest ways to lift your spirits, create playlists to pair with different activities.
+
+For energetic high-intensity workouts go for upbeat, fast-tempo hip-hop, rock and pop. Sure to boost your motivation.
+
+For quieter activities such as yoga, choose instrumental music with sounds of the natural world. Go for chillout, ambient tunes with a steady beat.
+While you're cooking up a feast in the kitchen, classical music can be inspiring, electronic tracks can lift your mood and soul music adds heart to your culinary creations.
+
+Singing along to your favourite songs can lift your mood and attitude.
+
+Learning to play a musical instrument is one of the best things you can do for your brain! Research shows it helps to improve both your cognitive and muscle memory by stimulating different patterns of brain development. Performing in public can help improve your confidence and this sense of achievement can help you accomplish more in other areas of your life. It's a win win!
