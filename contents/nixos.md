@@ -2,6 +2,8 @@
 
 ## Partition
 
+> I use [disko](https://github.com/nix-community/disko) to automate this processing nowadays.
+
 Recommendations:
 - **ESP**: It is recommended to allocate 512 MiB for the ESP to store bootloaders and related files.
 - **Swap Space**: For systems supporting hibernation, allocate swap space equal to the size of RAM + GPU RAM. Using swap on a zvol is strongly discouraged, as resuming from hibernation may cause pool corruption.
@@ -72,8 +74,10 @@ Encrypt partition for zpool:
 ```shell-session
 # cryptsetup -y -v --sector-size 4096 --pbkdf-memory=114514 --label zroot1 luksFormat /dev/disk/by-partlabel/ZFS\\x20zroot\\x20partition\\x201
 # cryptsetup open /dev/disk/by-partlabel/ZFS\\x20zroot\\x20partition\\x201 zroot1
+# cryptsetup --allow-discards --perf-no_read_workqueue --perf-no_write_workqueue --persistent refresh zroot1
 # cryptsetup -y -v --sector-size 4096 --pbkdf-memory=114514 --label zroot2 luksFormat /dev/disk/by-partlabel/ZFS\\x20zroot\\x20partition\\x202
 # cryptsetup open /dev/disk/by-partlabel/ZFS\\x20zroot\\x20partition\\x202 zroot2
+# cryptsetup --allow-discards --perf-no_read_workqueue --perf-no_write_workqueue --persistent refresh zroot2
 ```
 
 ## ZFS
@@ -129,9 +133,9 @@ Some System Properties (See `zfsprops(7)` for a list of valid properties):
 - `acltype=posix` Use POSIX ACLs.
 - `relatime=on|off` Turning on causes the access time to be updated relative to the modify or change time. Access time is only updated if the previous access time was earlier than the current modify or change time or if the existing access time hasn't been updated within the past 24 hours.
 - `xattr=sa` Use system-attribute-based xattrs (decrease disk I/O, reduce access time).
-- `dnodesize=legacy` Specifies the size of dnodes.
+- `dnodesize=auto` Specifies the size of dnodes.
 - `normalization=formD` Perform a **Unicode** normalization algorithm of file names whenever two file names are compared. If set other than `none`, the `utf8only` property is automatically set to `on`.
-- `mountpoint=none` Prevent the file system from being mounted automatically by `zfs mount -a`
+- `mountpoint=/` Set `none` prevent the file system from being mounted automatically by `zfs mount -a`. Combine `mountpoint=/` and `canmount=off` let the datasets be used solely as a mechanism to inherit properties.
 - `canmount=off` Similar to `mountpoint=none`, except that the dataset still has a normal `mountpoint` property, which can be inherited.
 - `devices=off` Whether device nodes can be opened on this file system.
 
@@ -193,6 +197,14 @@ $ git clone --depth=1 https://github.com/magic0whi/nixos_configs_flake.git && cd
 > # systemd-cryptenroll --wipe-slot=tpm2 /dev/disk/by-partlabel/swap\\x20partition
 > ```
 
+### Impermanence Notice
+
+If using impermanence, move files to `/persistence` before reboot
+```bash
+sudo mv /etc/ssh /persistent/etc/
+sudo mv /var/{log,lib} /persistent/var/
+```
+
 ## Troubleshooting
 
 ### Failed to import zpool
@@ -217,3 +229,21 @@ When the machine boots, interrupt the bootloader and add this to the bootloader 
 ```
 
 Ref: https://discourse.nixos.org/t/boot-into-rescue-mode-with-disabled-root-account/13801
+
+### Lanzaboote failed to install
+
+If you encounter something like this
+```bash
+Failed to install generation.: No such file or directory (os error 2)
+```
+
+Ensure that `/var/lib/sbctl` is not empty by running
+```bash
+sudo sbctl create-keys
+```
+
+Or use backed up `/var/lib/sbctl` beforehand.
+```bash
+sudo mv /somewhere/sbctl /mnt/var/lib/
+```
+

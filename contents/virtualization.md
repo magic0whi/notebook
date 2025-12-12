@@ -1,4 +1,28 @@
-# KVM and GVT-g Configuration Notes
+# Libvirt
+
+- Open a virsh shell (system session)
+  ```
+  virsh -c qemu:///system
+  ```
+- List virtual machines
+  ```
+  list --all
+  ```
+- Edit a VM
+  ```
+  edit --domain win11
+  ```
+
+## Passthrough a USB device
+
+```xml
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source>
+    <vendor id='0x152d'/>
+    <product id='0xa583'/>
+  </source>
+</hostdev>
+```
 
 ## TPM Support
 
@@ -120,16 +144,17 @@ Below is an optimized KVM domain XML configuration for a virtual machine with 8 
       <!-- vendor_id state='on' value='AuthenticAMD'/> --><!-- For AMD -->
       <frequencies state='on'/>
       <reenlightenment state='on'/>
-      <tlbflush state='on'/>
+      <tlbflush state='on'>
+        <direct state='on'/>
+        <extended state='on'/>
+      </tlbflush>
       <ipi state='on'/>
       <evmcs state='on'/>
+      <avic state='on'/>
+      <emsr_bitmap state='on'/>
+      <xmm_input state='on'/>
     </hyperv>
-    <kvm>
-      <hidden state='off'/>
-    </kvm>
-    <ioapic driver='kvm'/>
-    <!-- Secure Boot -->
-    <smm state='on'/>
+    <smm state='on'/><!-- Secure Boot -->
   </features>
   <clock offset='localtime'>
     <timer name='rtc' tickpolicy='catchup' track='guest'/>

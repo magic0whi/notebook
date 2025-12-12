@@ -539,11 +539,16 @@ $ find ./kernel | cpio -o -H newc > SSDT14
 
 - `findmnt`: List all mounted filesystems.
 - List options that are set for a loaded module
-  ```shell-session
-  # systool -v -m module_name
+  ```bash
+  sudo systool -v -m module_name
+  ```
+- Get a process's command environment variables:
+  ```bash
+  # The `-s` inspect the master process
+  sudo cat /proc/$(pidof -s nix-daemon)/environ | tr '\0' '\n'
   ```
 
-## Clean Build
+## Clean Build (Arch Linux)
 
 - Prepare
   ```shell-session
@@ -937,6 +942,27 @@ Get LBA format:
 Generate a password that has 14 length, upper and lowercases, numeric, specials:
 ```shell-session
 keepassxc-cli generate -L14 -lUns
+```
+
+## SSSD
+
+- Show domain status
+```
+sudo sssctl domain-list
+sudo sssctl domain 'LDAP'
+```
+- Check a user's authentication
+```bash
+sudo sssctl user-checks proteus -a auth -s sudo # Any modules in /etc/pam.d
+```
+- Expire all cache
+```bash
+sudo sssctl cache-expire -E
+```
+- Verify a remote user/group
+```bash
+getent passwd proteus@ldap
+getent group proteus@ldap
 ```
 
 ## Obsoleted
