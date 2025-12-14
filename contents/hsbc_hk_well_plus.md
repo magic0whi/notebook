@@ -1,5 +1,14 @@
 # Notes on HSBC HK Well+
 
+## 5 分鐘冥想
+
+無論您之前有沒有試過冥想，您都能體驗到冥想的效果。只要每天幾分鐘，就能幫我們放鬆心情和更加專注，準備隨時面對每天的挑戰！！請嘗試養成每天在同一時段冥想的習慣，以在有需要時好好放鬆。
+
+- 每天花 5 分鐘冥想，心境平靜地迎接每一天。
+- 請記得紀錄您的進度
+
+> 我們的大腦偶爾需要休息，暫時放下日常生活中的各種煩惱，而冥想是幫助您放鬆的好方法！只要花點時間練習，您就可以一整天維持正面的情緒。
+
 ## 正念的力量
 
 1. 什麼是正念？
@@ -514,3 +523,43 @@ While you're cooking up a feast in the kitchen, classical music can be inspiring
 Singing along to your favourite songs can lift your mood and attitude.
 
 Learning to play a musical instrument is one of the best things you can do for your brain! Research shows it helps to improve both your cognitive and muscle memory by stimulating different patterns of brain development. Performing in public can help improve your confidence and this sense of achievement can help you accomplish more in other areas of your life. It's a win win!
+
+## Terms in HSBC
+
+- IBC (International Banking Centre): 國際銀行部
+- Primary Country / Home Country / Primary Market: 主關係行 / 主帳戶國
+- GT (Global Transfer): 環球轉帳
+
+## Notes on HSBC
+
+### Setting an HSBC account as the Primary Country
+
+Choose one of the following:
+- Contact the local Premier Relationship Manager (RM) / Premier Team
+- Contact the Primary Country RM / Premier Team and request the linkage (關聯)
+-  HSBC China: contact HSBC China IBC at +86 400 920 0828 to set your Primary Country
+
+### HSBC China
+
+- It’s generally not recommended to apply for the HSBC China Premier Credit Card before you become an eligible HSBC China Premier customer (maintain AUM equivalent to 500,000 CNY in HSBC China for 3 months).
+- If your HSBC China Premier Credit Card application is rejected, contact your RM to delete the old credit card application record; otherwise, subsequent applications may become difficult.
+- If you do not complete the primary account linkage in time, a service fee of 300 CNY/month may be charged (automatically deducted from your CNY settlement account; e.g. shown as `SVC CHG FOR NOV2025`).
+- After your HSBC China account is successfully linked to the Primary Country profile, you can request a refund for service fees already charged. It is usually better to let the system deduct the \(300\) CNY/month fee in full; partial payments may be re-collected later.
+
+### HSBC US
+
+- As of Oct 2025, HSBC US may label debit card deliveries via DHL as “document”, so customs declarations may no longer be required (depending on local rules).
+- HSBC US is generally experienced with international support. You can use Live Chat to ask about your Global Customer Directory (GCD), including current Primary Country and the status of other-region HSBC accounts on your profile.
+
+### HSBC UK
+
+- Incoming transfers via SWIFT may incur a £5 landing fee (no minimum-amount waiver).
+- To open an Online Bonus Savings Account (“Online Bonus Saver”), you typically need a UK address (often aligned with being a UK tax resident).
+- Similar requirements may apply to the Global Investment Centre (GIC) account, and may additionally require a **permanent** UK residential address.
+- Customer service may be less familiar with international servicing topics.
+- Cards are sent via Royal Mail (including for Premier customers).
+
+## Reference
+
+[Completed - A non-comprehensive HSBC account opening timeline](https://icm.moe/240.html)
+
