@@ -281,8 +281,13 @@ $ gamescope -w 1728 -h 1080 -W 2944 -H 1840 --adaptive-sync -F fsr --fsr-sharpne
 ## OpenLDAP Search
 
 Use the Manager permission to query:
-```shell-session
-$ ldapsearch -x -D'cn=Manager,dc=tailba6c3f,dc=ts,dc=net' -W -b'ou=People,dc=tailba6c3f,dc=ts,dc=net' '(objectClass=*)' | less
+```bash
+ldapsearch -x \
+-H 'ldaps://proteus-nuc.tailba6c3f.ts.net:636' \
+-D'cn=Manager,dc=tailba6c3f,dc=ts,dc=net' \
+-W \
+-b'ou=People,dc=tailba6c3f,dc=ts,dc=net' \
+'(objectClass=*)' | less
 ```
 
 ## Libvirt

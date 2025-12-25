@@ -1,17 +1,25 @@
 # Libvirt
 
 - Open a virsh shell (system session)
-  ```
+  ```bash
   virsh -c qemu:///system
   ```
 - List virtual machines
-  ```
+  ```bash
   list --all
   ```
 - Edit a VM
-  ```
+  ```bash
   edit --domain win11
   ```
+
+## Networking
+
+Enable and start the default network:
+```bash
+virsh net-autostart default
+virsh net-start default
+```
 
 ## Passthrough a USB device
 
