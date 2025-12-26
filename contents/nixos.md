@@ -216,10 +216,13 @@ Last accessed by NixOS (hostid=01919810) at Thu Jan  1 04:05:14 1970
 The pool can be imported, use 'zpool import -f' to import the pool.
 ```
 
-Try `zpool export -a` to safely unmount the zpool before reboot you NixOS installation medium, or
+- Try `zpool export -a` to safely unmount the zpool before reboot you NixOS installation medium, or
 `boot.zfs.forceImportRoot = true;` to force import.
+- boot with the `zfs_force=1` option as a kernel parameter (e.g. by manually editing the kernel params in grub during boot)
 
-Ref: https://www.reddit.com/r/zfs/comments/oywb30/comment/h8cvvii/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+Refs:
+- https://www.reddit.com/r/zfs/comments/oywb30/comment/h8cvvii/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+- https://github.com/NixOS/nixpkgs/blob/3e2499d5539c16d0d173ba53552a4ff8547f4539/nixos/modules/tasks/filesystems/zfs.nix#L369
 
 ### Boot into rescus mode with disabled root account
 
