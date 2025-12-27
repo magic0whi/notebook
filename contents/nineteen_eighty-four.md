@@ -334,6 +334,20 @@ Once again he glanced at his rival in the opposite cubicle. Something seemed to 
 
 ### Chapter Five
 
+In the low-ceilinged canteen, deep underground, the lunch queue jerked slowly forward. The room was already very full and deafeningly noisy. From the grille at the counter the steam of stew came pouring forth, with a sour metallic smell which did not quite overcome the fumes of Victory Gin. On the far side of the room there was a small bar, a mere hole in the wall, where gin could be bought at ten cents the large nip.
+
+"Just the man I was looking for," said a voice at Winston's back.
+
+He turned round. It was his friend Syme, who worked in the Research Department. Perhaps "friend" was not exactly the right word. You did not have friends nowadays, you had comrades, but there were some comrades whose society was pleasanter than that of others. Syme was a philologist, a specialist in Newspeak.
+
+Indeed, he was one of the enormous team of experts now engaged in compiling the *Eleventh Edition of the Newspeak Dictionary*. He was a tiny creature, smaller than Winston, with dark hair and large, protuberant eyes, at once mournful and derisive, which seemed to search your face closely while he was speaking to you.
+
+"I wanted to ask you whether you'd got any razor blades," he said.
+
+"Not one!" said Winston with a sort of guilty haste. "I've tried all over the place. They don't exist any longer."
+
+Everyone kept asking you for razor blades. Actually he had two unused ones which he was hoarding up. There had been a famine of them for months past. At any given moment there was some necessary article which the Party shops were unable to supply. Sometimes it was buttons, sometimes it was darning wool, sometimes it was shoelaces; at present it was razor blades. You could only get hold of them, if at all, by scrounging more or less furtively on the "free" market.
+
 ## Volume Three
 
 ### Chapter Six
