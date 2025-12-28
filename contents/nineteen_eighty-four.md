@@ -348,6 +348,32 @@ Indeed, he was one of the enormous team of experts now engaged in compiling the 
 
 Everyone kept asking you for razor blades. Actually he had two unused ones which he was hoarding up. There had been a famine of them for months past. At any given moment there was some necessary article which the Party shops were unable to supply. Sometimes it was buttons, sometimes it was darning wool, sometimes it was shoelaces; at present it was razor blades. You could only get hold of them, if at all, by scrounging more or less furtively on the "free" market.
 
+"I've been using the same blade for six weeks," he added untruthfully.
+
+The queue gave another jerk forward. As they halted he turned and faced Syme again. Each of them took a greasy metal tray from a pile at the end of the counter.
+
+"Did you go and see the prisoners hanged yesterday?" said Syme.
+
+"I was working," said Winston indifferently. "I shall see it on the flicks, I suppose."
+
+A very inadequate substitute," said Syme.
+
+His mocking eyes roved over Winston's face. "I know you," the eyes seemed to say, "I see through you. I know very well why you didn't go to see those prisoners hanged." In an intellectual way, Syme was venomously orthodox. He would talk with a disagreeable gloating satisfaction of helicopter raids on enemy villages, and trials and confessions of thought-criminals, the executions in the cellars of the Ministry of Love. Talking to him was largely a matter of getting him away from such subjects and entangling him, if possible, in the technicalities of Newspeak, on which he was authoritative and interesting. Winston turned his head a little aside to avoid the scrutiny of the large dark eyes.
+
+"It was a good happening," said Syme reminiscently. "I think it spoils it when they tie their feet together. I like to see them kicking. And above all, at the end, the tongue sticking right out, and blue a quite bright blue. That's the detail that appeals to me."
+
+"Nex, please!" yelled the white-approned prole with the ladle.
+
+Winston and Syme pushed their trays beneath the grille. On to each was dumped swiftly the regulation lunch&mdash;a metal pannikin of pinkish-grey stew, a hunk of bread, a cube of cheese, a mug of milkless Victory Coffee, and one saccharine tablet.
+
+"Nex, please!" yelled the white-approned prole with the ladle.
+
+Winston and Syme pushed their trays beneath the grille. On to each was dumped swiftly the regulation lunch&mdash;a metal pannikin of pinkish-grey stew, a hunk of bread, a cube of cheese, a mug of milkless Victory Coffee, and one saccharine tablet.
+
+"There's a table over there, under that telescreen," said Syme. "Let's pick up a gin on the way."
+
+The gin was served out to them in handleless china mugs. They threaded their way across the crowded room and unpacked their trays on to the metal-topped table, on one corner of which someone had left a pool of stew, a filthy liquid mess that had the appearance of vomit. Winston took up his mug of gin, paused for an instant to collect his nerve, and gulped the oily-tasting stuff down. When he had winked the tears out of his eyes he suddenly discovered that he was hungry. He began swallowing spoonfuls of the stew, which, in among its general sloppiness, had cubes of spongy pinkish stuff which was probably a preparation of meat. Neither of them spoke again till they had emptied their pannikins. From the table at Winston's left, a little behind his back, someone was talking rapidly and continuously, a harsh gabble almost like the quacking of a duck, which pierced the general uproar of the room.
+
 ## Volume Three
 
 ### Chapter Six
