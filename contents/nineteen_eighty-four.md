@@ -366,13 +366,23 @@ His mocking eyes roved over Winston's face. "I know you," the eyes seemed to say
 
 Winston and Syme pushed their trays beneath the grille. On to each was dumped swiftly the regulation lunch&mdash;a metal pannikin of pinkish-grey stew, a hunk of bread, a cube of cheese, a mug of milkless Victory Coffee, and one saccharine tablet.
 
-"Nex, please!" yelled the white-approned prole with the ladle.
-
-Winston and Syme pushed their trays beneath the grille. On to each was dumped swiftly the regulation lunch&mdash;a metal pannikin of pinkish-grey stew, a hunk of bread, a cube of cheese, a mug of milkless Victory Coffee, and one saccharine tablet.
-
 "There's a table over there, under that telescreen," said Syme. "Let's pick up a gin on the way."
 
 The gin was served out to them in handleless china mugs. They threaded their way across the crowded room and unpacked their trays on to the metal-topped table, on one corner of which someone had left a pool of stew, a filthy liquid mess that had the appearance of vomit. Winston took up his mug of gin, paused for an instant to collect his nerve, and gulped the oily-tasting stuff down. When he had winked the tears out of his eyes he suddenly discovered that he was hungry. He began swallowing spoonfuls of the stew, which, in among its general sloppiness, had cubes of spongy pinkish stuff which was probably a preparation of meat. Neither of them spoke again till they had emptied their pannikins. From the table at Winston's left, a little behind his back, someone was talking rapidly and continuously, a harsh gabble almost like the quacking of a duck, which pierced the general uproar of the room.
+
+"How is the *Dictionary* getting on?" said Winston, raising his voice to overcome the noise.
+
+"Slowly," said Syme. "I'm on the adjectives. It's fascinating."
+
+He had brightened up immediately at the mention of Newspeak. He pushed his pannikin aside, took up his hunk of bread in one delicate hand and his cheese in the other, and leaned across the table so as to be able to speak without shouting.
+
+"The *Eleventh Edition* is the definitive edition," he said.
+
+"We're getting the language into its final shape&mdash;the shape it's going to have when nobody speaks anything else. When we've finished with it, people like you will have to learn it all over again. You think, I daresay, that our chief job is inventing new words. But not a bit of it! We're destroying words&mdash;scores of them, hundreds of them, every day. We're cutting the language down to the bone. The *Eleventh Edition* won't contain a single word that will become obsolete before the year 2050."
+
+He bit hungrily into his bread and swallowed a couple of mouthfuls, then continued speaking, with a sort of pedant's passion. His thin dark face had become animated, his eyes had lost their mocking expression and grown almost dreamy.
+
+"It's a beautiful thing, the destruction of words. Of course the great wastage is in the verbs and adjectives, but there are hundreds of nouns that can be got rid of as well. It isn't only the synonyms; there are also the antonyms. After all, what justification is there for a word which is simply the opposite of some other word? A word contains its opposite in itself. Take 'good', for instance. If you have a word like 'good', what need is there for a word like 'bad'? 'Ungood' will do just as well&mdash;better, because it's an exact opposite, which the other is not. Or again, if you want a stronger version of 'good', what sense is there in having a whole string of vague useless words like 'excellent' and 'splendid' and all the rest of them? 'Plusgood' covers the meaning, or 'doubleplusgood' if you want something stronger still. Of course we use those forms already. but in the final version of Newspeak there'll be nothing else. In the end the whole notion of goodness and badness will be covered by only six words&mdash;in reality, only one word. Don't you see the beauty of that, Winston? It was B.B.'s idea originally, of course," he added as an afterthought.
 
 ## Volume Three
 
