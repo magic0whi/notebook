@@ -12,6 +12,11 @@
   ```bash
   edit --domain win11
   ```
+- Force power-off a VM
+  ```bash
+  destroy --domain win11
+  reset --domain win11 # Or reset
+  ```
 
 ## Networking
 
@@ -296,6 +301,8 @@ timer5.name=tsc,timer5.present=yes,timer5.mode=native \
 > mac.address=52:11:45:14:19:19,\
 > model.type=virtio \
 > ```
+
+> For qemu hook for dynamic hugepage allocation, see: https://github.com/magic0whi/nixos_configs_flake/blob/f84655a905a51af50718ecd3976062b2dc801c0e/machines/x86_64-linux/Proteus-NUC/virtualization.nix#L29
 
 ## References
 
