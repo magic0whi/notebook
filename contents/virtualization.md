@@ -179,7 +179,7 @@ Below is an optimized KVM domain XML configuration for a virtual machine with 8 
     <input type='keyboard' bus='virtio'/>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2' cache='none' io='native' discard='unmap' iothread='1' queues='8'/>
-      <source file='/mnt/storage4/win10.qcow2'/>
+      <source file='/var/lib/libvirt/images/win10.qcow2'/>
       <target dev='vda' bus='virtio'/>
     </disk>
     <!-- Enable a shared directory between the host and guest using `virtiofs` -->
@@ -201,6 +201,103 @@ Below is an optimized KVM domain XML configuration for a virtual machine with 8 
 </domain>
 ```
 
+> Use `cpu.numa.cell` if you have multi-sockets motherboard, otherwise you can just add
+> ```xml
+> <memoryBacking>
+>   <source type='memfd'/>
+>   <access mode='shared'/>
+> </memoryBacking>
+> ```
+
+## virt-install
+
+```bash
+sudo virt-install \
+  --name win11 \
+  --memory 8192 \
+  --memorybacking hugepages=yes,source.type=memfd,access.mode=shared \
+  --iothreads 1 \
+  --vcpus 8,sockets=1,cores=4,threads=2 \
+  --cputune \
+vcpupin0.vcpu=0,vcpupin0.cpuset=2,\
+vcpupin1.vcpu=1,vcpupin1.cpuset=10,\
+vcpupin2.vcpu=2,vcpupin2.cpuset=3,\
+vcpupin3.vcpu=3,vcpupin3.cpuset=11,\
+vcpupin4.vcpu=4,vcpupin4.cpuset=4,\
+vcpupin5.vcpu=5,vcpupin5.cpuset=12,\
+vcpupin6.vcpu=6,vcpupin6.cpuset=5,\
+vcpupin7.vcpu=7,vcpupin7.cpuset=13,\
+emulatorpin.cpuset='1,9',\
+iothreadpin0.iothread=1,iothreadpin0.cpuset='1,9' \
+  --cpu mode=host-passthrough,check=none,migratable=off,\
+topology.sockets=1,topology.dies=1,topology.cores=4,topology.threads=2 \
+  --machine q35 \
+  --features \
+hyperv.relaxed.state=on,\
+hyperv.vapic.state=on,\
+hyperv.spinlocks.state=on,\
+hyperv.spinlocks.retries=8191,\
+hyperv.vpindex.state=on,\
+hyperv.runtime.state=on,\
+hyperv.synic.state=on,\
+hyperv.stimer.state=on,\
+hyperv.stimer.direct.state=on,\
+hyperv.reset.state=on,\
+hyperv.frequencies.state=on,\
+hyperv.reenlightenment.state=on,\
+hyperv.tlbflush.state=on,\
+hyperv.tlbflush.direct.state=on,\
+hyperv.tlbflush.extended.state=on,\
+hyperv.ipi.state=on,\
+hyperv.evmcs.state=on,\
+hyperv.avic.state=on,\
+hyperv.emsr_bitmap.state=on,\
+hyperv.xmm_input.state=on,\
+smm=on \
+  --boot \
+loader=/run/libvirt/nix-ovmf/edk2-x86_64-secure-code.fd,\
+loader.readonly=yes,loader.secure=yes,loader.type=pflash,\
+nvram.template=/run/libvirt/nix-ovmf/edk2-i386-vars.fd \
+  --tpm backend.type=emulator,backend.version=2.0,model=tpm-crb \
+  --input type=mouse,bus=virtio \
+  --input type=keyboard,bus=virtio \
+  --disk type=file,device=disk,size=80,\
+driver.name=qemu,\
+driver.type=qcow2,\
+driver.cache=none,\
+driver.io=native,\
+driver.discard=unmap,\
+driver.iothread=1,\
+source.file=/var/lib/libvirt/images/win10.qcow2,format=qcow2,\
+target.dev=vda,target.bus=virtio \
+  --network network=default,mac.address=52:11:45:14:19:19,model.type=virtio \
+  --filesystem type=mount,accessmode=passthrough,\
+driver.type=virtiofs,\
+source.dir=/srv/virt_share_dir,\
+target.dir=mount_tag \
+  --rng model=virtio,backend.model=random,backend=/dev/random \
+  --clock offset=localtime,\
+timer0.name=rtc,timer0.tickpolicy=catchup,timer0.track=guest,\
+timer1.name=pit,timer1.tickpolicy=delay,\
+timer2.name=hpet,timer2.present=no,\
+timer3.name=kvmclock,timer3.present=no,\
+timer4.name=hypervclock,timer4.present=yes,\
+timer5.name=tsc,timer5.present=yes,timer5.mode=native \
+  --panic model=hyperv \
+  --graphics spice \
+  --os-variant win11 \
+  --noautoconsole
+```
+
+> Use `macvtap` if you have wire adapter:
+> ```bash
+>   --network type=direct,\
+> source=macvtap0,source.mode=vepa,\
+> mac.address=52:11:45:14:19:19,\
+> model.type=virtio \
+> ```
+
 ## References
 
 [^1]: ["Using DMA-BUF with UEFI/OVMF - Intel GVT-g"](https://wiki.archlinux.org/title/Intel_GVT-g#Using_DMA-BUF_with_UEFI/OVMF). *wiki.archlinux.org*. Retrieved 2025-07-27.
+[^2]: [libvirt: Domain XML format](https://libvirt.org/formatdomain.html)
