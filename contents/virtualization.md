@@ -184,7 +184,7 @@ Below is an optimized KVM domain XML configuration for a virtual machine with 8 
     <input type='keyboard' bus='virtio'/>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2' cache='none' io='native' discard='unmap' iothread='1' queues='8'/>
-      <source file='/var/lib/libvirt/images/win10.qcow2'/>
+      <source file='/var/lib/libvirt/images/win11.qcow2'/>
       <target dev='vda' bus='virtio'/>
     </disk>
     <!-- Enable a shared directory between the host and guest using `virtiofs` -->
@@ -303,6 +303,10 @@ timer5.name=tsc,timer5.present=yes,timer5.mode=native \
 > ```
 
 > For qemu hook for dynamic hugepage allocation, see: https://github.com/magic0whi/nixos_configs_flake/blob/f84655a905a51af50718ecd3976062b2dc801c0e/machines/x86_64-linux/Proteus-NUC/virtualization.nix#L29
+
+## Virtiofsssss: Shared file system
+
+According to https://github.com/virtio-win/kvm-guest-drivers-windows/wiki/Virtiofs:-Shared-file-system, we need install WinFSP: https://github.com/winfsp/winfsp/releases
 
 ## References
 
