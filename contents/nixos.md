@@ -201,8 +201,8 @@ $ git clone --depth=1 https://github.com/magic0whi/nixos_configs_flake.git && cd
 
 If using impermanence, move files to `/persistence` before reboot
 ```bash
-sudo mv /etc/ssh /persistent/etc/
-sudo mv /var/{log,lib} /persistent/var/
+sudo mv /mnt/etc/ssh /mnt/persistent/etc/
+sudo mv /mnt/var/{log,lib} /mnt/persistent/var/
 ```
 
 ## Troubleshooting
