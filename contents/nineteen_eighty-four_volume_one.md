@@ -1,4 +1,4 @@
-# Nineteen Eighty-Four
+# Nineteen Eighty-Four: Volume One
 
 This novel is an anti-totalitarian cautionary tale about the betrayal of a revolution by its defenders.
 
@@ -412,14 +412,14 @@ Syme looked up. "Here comes Parsons," he said.
 
 Something in the tone of his voice seemed to add, "that bloody fool". Parsons, Winston's fellow-tenant at Victory Mansions, was in fact threading his way across the room&mdash;a tubby, middle-sized man with fair hair and a froglike face. At thirty-five he was already putting on rolls of fat at neck and waistline, but his movements were brisk and boyish. His whole appearance was that of a little boy grown large, so much so that although he was wearing the regulation overalls, it was almost impossible not to think of him as being dressed in the blue shorts, grey shirt, and red neckerchief of the Spies. In visualizing him one saw always a picture of dimpled knees and sleeves rolled back from pudgy forearms. Parsons did, indeed, invariably revert to shorts when a community hike or any other physical activity gave him an excuse for doing so. He greeted them both with a cheery "Hullo, hullo!" and sat down at the table, giving off an intense smell of sweat. Beads of moisture stood out all over his pink face. His powers of sweating were extraordinary. At the Community Centre you could always tell when he had been playing table-tennis by the dampness of the bat handle. Syme had produced a strip of paper on which there was a long column of words, and was studying it with an ink-pencil between his fingers.
 
-## Volume Three
+"Look at him working away in the lunch hour," said Parsons, nudging Winston. "Keenness, eh? What's that you've got there, old boy? Something a bit too brainy for me, I expect. Smith, old boy, I'll tell you why I'm chasing you. It's that sub you forgot to give me."
 
-### Chapter Six
+"Which sub is that?" said Winston, automatically feeling for money. About a quarter of one's salary had to be earmarked for voluntary subscriptions, which were so numerous that it was difficult to keep track of them.
 
-TODO: &mldr;
+"For Hate Week. You know&mdash;the house-by-house fund. I'm treasurer for our block. We're making an all-out effort&mdash;going to put on a tremendous show. I tell you, it won't be my fault if old Victory Mansions doesn't have the biggest outfit of flags in the whole street. Two dollars you promised me." Winston found and handed over two creased and filthy notes, which Parsons entered in a small notebook, in the neat handwriting of the illiterate.
 
-Under the table Winston's feet made convulsive movements. He had not stirred from his seat, but in his mind he was running, swiftly running, he was with the crowds outside, cheering himself deaf. He looked up again at the portrait of Big Brother. The colossus that bestrode the world! The rock against which the hordes of Asia dashed themselves in vain! He thought how ten minutes ago&mdash;yes, only ten minutes&mdash;there had still been equivocation in his heart as he wondered whether the news from the front would be of victory or defeat. Ah, it was more than a Eurasian army that had perished! Much had changed in him since that first day in the Ministry of Love, but the final, indispensable, healing change had never happened, until this moment.
+"By the way, old boy," he said, "I hear that little beggar of mine let fly at you with his catapult yesterday. I gave him a good dressingdown for it. In fact I told him I'd take the catapult away if he does it again."
 
-The voice from the telescreen was still pouring forth its tale of prisoners and booty and slaughter, but the shouting outside had died down a little. The waiters were turning back to their work. One of them approached with the gin bottle. Winston, sitting in a blissful dream, paid no attention as his glass was filled up. He was not running or cheering any longer. He was back in the Ministry of Love, with everything forgiven, his soul white as snow. He was in the public dock, confessing everything, implicating everybody. He was walking down the white-tiled corridor, with the feeling of walking in sunlight, and an armed guard at his back. The longhoped&mdash;for bullet was entering his brain.
+"I think he was a little upset at not going to the execution," said Winston.
 
-He gazed up at the enormous face. Forty years it had taken him to learn what kind of smile was hidden beneath the dark moustache. O cruel, needless misunderstanding! O stubborn, self-willed exile from the loving breast! Two gin-scented tears trickled down the sides of his nose. But it was all right, every thing was all right, the struggle was finished. He had won the victory over himself. He loved Big Brother.
+"Ah, well&mdash;what I mean to say, shows the right spirit, doesn't it? Mischievous little beggars they are, both of them, but talk about keenness! All they think about is the Spies, and the war, of course. D'you know what that little girl of mine did last Saturday, when her troop was on a hike out Berkhamsted way? She got two other girls to go with her, slipped off from the hike, and spent the whole afternoon following a strange man. They kept on his tail for two hours, right through the wood, and then, when they got into Amersham, handed him over to the patrols."

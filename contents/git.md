@@ -94,11 +94,11 @@ $ git blame --color-by-age --color-lines <file>
 
 ## Branch & Remove
 
-- Create a branch and set its upstream:
+- Create a branch and inherit its upstream:
   ```shell-session
   $ git branch <old-branch> <new-branch>
   ```
-  `-t`, `--track` Set "upstream" tracking for the new branch.
+  `-t`, `--track` Inherit "upstream" tracking for the new branch.
 - Delete a branch:
   ```shell-session
   $ git branch -d/--delete <branch>
@@ -142,7 +142,7 @@ Operations:
 Reset work tree and delete untracked files: `git reset --hard HEAD && git clean -fdx`
 
 Reset options explanation:
-- `--soft` Only change pointer HEAD to `<commit>`;
+- `--soft` Only change pointer `HEAD` to `<commit>`;
 - `--mixed` Reset index only;
 - `--hard` Reset both index and working tree;
 - `--keep` Reset working tree only (If a file differs between `<commit>` and `HEAD`, and also has modified copy in index, this reset will be aborted)
@@ -157,12 +157,12 @@ Clean options explanation:
 Restore a file from specify commit: `git restore -s <commit> <file>`
 
 Options explanation:
-`-s <tree>`, `--source=<tree>` Restore the working tree files with the content from the given tree.
+- `-s <tree>`, `--source=<tree>` Restore the working tree files with the content from the given tree.
 
 ## Rvert
 
 Create a revert commit (Useful when in a team): `git revert <commit>`
-                                                         k
+
 ## Submodule
 
 - Show submodule status: `git submodule status`
