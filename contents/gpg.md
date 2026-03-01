@@ -60,7 +60,7 @@ GnuPG generates every secret key separately, and encrypt them with a symmetric k
 
 GnuPG's [OpenPGP protocol specific options](https://gnupg.org/documentation/manuals/gnupg/OpenPGP-Options.html#OpenPGP-Options) shows that:
 
-```less
+```bash
 --s2k-cipher-algo name
 
     Use name as the cipher algorithm for symmetric encryption with a passphrase if --personal-cipher-preferences and --cipher-algo are not given. The default is AES-128.
@@ -658,6 +658,42 @@ gpg: README.md: encryption failed: Unusable public key
 
 But if you delete the `trustdb.gpg` and `pubring.kbx`, then import the revoked public key again, it will be valid and usable again... which is very dangerous.
 
+## GPG: Extending expiration date
+
+Enter key management CLI:
+```bash
+$ gpg --edit-key 75DB252683B07650
+```
+Repeat this for any further subkeys that have expired:
+```bash
+> key 1
+> key 2
+> key 3
+> expire
+Secret key is available.
+
+sec  ed25519/0x75DB252683B07650
+     created: 2025-04-27  expires: 2035-04-25  usage: SC
+     trust: ultimate      validity: ultimate
+ssb  ed25519/0x30973F79B17F9ED3
+     created: 2025-04-27  expired: 2026-03-01  usage: A
+ssb  cv25519/0x940B76AB99D87247
+     created: 2025-04-27  expired: 2026-03-01  usage: E
+ssb  ed25519/0xFC4881A7361DF34E
+     created: 2025-04-27  expired: 2026-03-01  usage: S
+[ultimate] (1). Proteus Qian (What you love is your life) <sudaku233@outlook.com>
+```
+Finally, save the changes and quit:
+```bash
+> save
+```
+Export the subkeys (note I use Zsh so escaped the `!`):
+```bash
+gpg --armor --export 30973F79B17F9ED3\! > /srv/sync_work/3keys/sudaku233@outlook.com.auth.priv.asc
+gpg --armor --export 940B76AB99D87247\! > /srv/sync_work/3keys/sudaku233@outlook.com.enc.priv.asc
+gpg --armor --export FC4881A7361DF34E\! > /srv/sync_work/3keys/sudaku233@outlook.com.sig.priv.asc
+```
+
 ## Troubleshooting
 
 To show expired subkeys add `--list-options show-unusable-subkeys`.
@@ -667,7 +703,10 @@ To show expired subkeys add `--list-options show-unusable-subkeys`.
 - [2021年，用更现代的方法使用PGP（上）][2021年，用更现代的方法使用PGP（上）]
 - [Predictable, Passphrase-Derived PGP Keys][Predictable, Passphrase-Derived PGP Keys]
 - [OpenPGP - The almost perfect key pair][OpenPGP - The almost perfect key pair]
+- [GnuPG - ArchWiki](https://wiki.archlinux.org/title/GnuPG)
 
 [2021年，用更现代的方法使用PGP（上）]: https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/
 [Predictable, Passphrase-Derived PGP Keys]: https://nullprogram.com/blog/2019/07/10/
 [OpenPGP - The almost perfect key pair]: https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/
+
+

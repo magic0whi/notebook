@@ -826,7 +826,7 @@ LIBVA_DRIVER_NAME=
 LIBVA_DRIVER_NAME=radeonsi vainfo --display drm --device /
 ```
 
-## `certbot`
+## certbot
 
 Register a wildcard domain hosted on Cloudflare
 ```shell-session
@@ -954,7 +954,7 @@ keepassxc-cli generate -L14 -lUns
 - Show domain status
 ```
 sudo sssctl domain-list
-sudo sssctl domain 'LDAP'
+sudo sssctl domain-status 'LDAP'
 ```
 - Check a user's authentication
 ```bash

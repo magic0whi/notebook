@@ -68,10 +68,17 @@ $ git add -p/--patch <file>
   ```shell-session
   $ git log --grep=<pattern>
   ```
+- Show discarded commits:
+  ```bash
+  $ git log --reflog
+  ```
 
 - `--author=<pattern>`, `--committer=<pattern>`
 - `-p`, `-u`, `--patch` Generate patch
 - `--cc` Produce dense combined diff output for merge commits. Shortcut for `--diff-merges=dense-combined -p`.
+- `--reflog` Pretend as if all objects mentioned by reflogs are listed on the command line as `<commit>`.
+
+> The `reflog` (reference log) is your local repository's private diary. It records a breadcrumb trail of every commit your `HEAD` or branches have pointed to recently, *even if you abandoned them*. Every time you commit, reset, rebase, or merge, the reflog jots down the commit hash.
 
 ## Diff
 
