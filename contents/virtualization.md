@@ -53,6 +53,24 @@ sudo chattr +C /var/lib/libvirt/images
 ```
 Apply this setting to the directory before creating disk images to ensure data integrity.
 
+## SR-IOV Intel GPU
+
+Manually create Virtual Functions (VFs)
+```bash
+sudo sh -c 'echo 7 > /sys/devices/pci0000:00/0000:00:02.0/sriov_numvfs'
+```
+TODO: For NixOS, add a qemu hook `virtualisation.libvirtd.hooks.qemu."99-sriov_numvfs.sh"`
+
+Then passthrough as a normal PCIe GPU card
+```xml
+<hostdev mode='subsystem' type='pci' managed='yes'>
+  <alias name='ua-igd'/>
+  <source>
+    <address domain='0x0000' bus='0x00' slot='0x02' function='0x1'/>
+  </source>
+</hostdev>
+```
+
 ## GVT-g Configuration with i915ovmfPkg
 
 The `i915ovmfPkg` VBIOS is used to enable DMA-BUF display for UEFI-based guests with Intel GVT-g. As noted in the ArchWiki's Intel GVT-g page, standard OVMF does not create the necessary ACPI OpRegion, causing UEFI guests to fail to display output until the guest OS's GPU driver is loaded. The `i915ovmfPkg` provides a custom VBIOS ROM (`i915ovmf.rom`) that resolves this issue, ensuring proper display output from boot without requiring kernel or OVMF patches.[^1]
@@ -65,6 +83,8 @@ Note that the following QEMU parameters are **no longer supported** with `i915ov
 <qemu:arg value='-set'/>
 <qemu:arg value='device.hostdev0.driver=vfio-pci-nohotplug'/>
 ```
+
+## Qemu GTK
 
 To achieve a smoother graphical experience with QEMU, configure the GTK display with OpenGL enabled:
 ```xml
@@ -81,6 +101,30 @@ To achieve a smoother graphical experience with QEMU, configure the GTK display 
         <qemu:property name='display' type='string' value='on'/>
         <qemu:property name='romfile' type='string' value='/i915ovmf.rom'/><!-- Specify the custom ROM's location -->
         <qemu:property name='x-igd-opregion' type='bool' value='true'/><!-- Enable the IGD OpRegion -->
+      </qemu:frontend>
+    </qemu:device>
+  </qemu:override>
+</domain>
+```
+
+If using PRIME Sync
+```xml
+<domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+  <devices>
+    <graphics type='egl-headless'>
+      <gl rendernode='/dev/dri/nvidia'/>
+    </graphics>
+  </devices>
+  <qemu:commandline>
+    <qemu:arg value='-display'/>
+    <qemu:arg value='gtk'/>
+    <qemu:env name='DISPLAY' value=':0'/>
+  </qemu:commandline>
+  <qemu:override>
+    <qemu:device alias='ua-igd'>
+      <qemu:frontend>
+        <qemu:property name='x-vga' type='bool' value='true'/>
+        <qemu:property name='x-igd-opregion' type='bool' value='true'/>
       </qemu:frontend>
     </qemu:device>
   </qemu:override>
@@ -180,7 +224,7 @@ Below is an optimized KVM domain XML configuration for a virtual machine with 8 
   <devices>
      <!-- Through the VirtIO mouse and keyboard being added, the PS2 devices cannot be removed as they are internal
     function of the emulated Q35/440FX chipsets -->
-    <input type='mouse' bus='virtio'/>
+    <input type='tablet' bus='virtio'/>
     <input type='keyboard' bus='virtio'/>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2' cache='none' io='native' discard='unmap' iothread='1' queues='8'/>
