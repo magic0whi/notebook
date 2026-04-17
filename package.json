@@ -1,14 +1,16 @@
 {
-  "devDependencies": {
-    "honkit": "^5.1.4"
-  },
-  "dependencies": {
-    "api-language-selector": "https://github.com/algorithm-archivists/gitbook-plugin-api-language-selector.git",
-    "gitbook-plugin-intopic-toc": "^1.1.1",
-    "honkit-plugin-prism": "^2.5.3",
-    "katex": "^0.16.11"
-  },
+  "name": "proteus-notebook",
+  "description": "My Notebook",
+  "keywords": [],
+  "author": "Proteus Qian",
   "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "dependencies": {
+    "gitbook-plugin-intopic-toc": "^1.1.1",
+    "honkit": "^6.1.7",
+    "honkit-plugin-katex": "github:magic0whi/honkit-plugin-katex",
+    "honkit-plugin-prism": "^2.5.3"
+  },
   "scripts": {
     "build": "honkit build",
     "serve": "honkit serve"

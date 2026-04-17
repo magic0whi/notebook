@@ -230,24 +230,35 @@ $ git cherry-pick 38361a68
    $ git format-patch <r1>..<r2>
    ```
 2. Single commit patch
-   ```shell-session
-   $ git format-patch -1 <r1>
+   ```bash
+   git format-patch -1 <r1>
    ```
 3. Create patch file since commit r1 (Not inclusive)
-   ```shell-session
-   $ git format-patch <r1>
+   ```
+   git format-patch <r1>
    ```
 4. Apply a series of patches
-   ```shell-session
-   $ git am *.patch
+   ```bash
+   git am *.patch
    ```
 
 ## Limit the Memory Usage of `git-gc`
 
-```shell-session
-$ git config --global pack.windowMemory "100m"
-$ git config --global pack.packSizeLimit "100m"
-$ git config --global pack.threads "1"
+```bash
+git config --global pack.windowMemory "100m"
+git config --global pack.packSizeLimit "100m"
+git config --global pack.threads "1"
+```
+
+## Find keywords from git history
+
+```bash
+git grep "health" $(git rev-list --all)
+```
+
+Show the file content
+```bash
+git show 4ee9f95a821d9626fc9ccc4dfa018779359ce910:machines/x86_64-linux/Proteus-NUC/services_traefik.nix
 ```
 
 ## Reference

@@ -770,9 +770,9 @@ $ busctl --user get-property org.clight.clight /org/clight/clight org.clight.cli
 
 ## SSH
 
-Stop a remote control connection:
-```shell-session
-$ ssh -O stop proteus@proteusdesktop
+Stop/Disconnect a remote control connection:
+```bash
+ssh -O stop proteus@proteusdesktop
 ```
 
 ### ssh-keygen
