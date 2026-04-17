@@ -151,12 +151,12 @@ Reset signal `TERM`'s action to the default: `trap - TERM`
 
 - Integer Operator
   ```plaintext
-  -eq    equal
-  -ne    not equal
-  -gt    greater
-  -ge    geeater or equal
-  -lt    lesser
-  -le    lesser or equal
+  -eq  equal
+  -ne  not equal
+  -gt  greater
+  -ge  geeater or equal
+  -lt  lesser
+  -le  lesser or equal
   ```
 - File Operator
   ```plaintext
@@ -176,10 +176,10 @@ Reset signal `TERM`'s action to the default: `trap - TERM`
   ```plaintext
   # POSIX sh
   str1 = str2
-  str1 > str2    Compare by alphabetical order
+  str1 > str2  Compare by alphabetical order
   str1 < str2
-  -z str         True if the string length is zero
-  -n str         True if the string length is non-zero
+  -z str  True if the string length is zero
+  -n str  True if the string length is non-zero
   # Bash specific (Can use pattern matching '[[' ']]')
   str1 == str2
   str1 != str2
@@ -1028,6 +1028,18 @@ Type=Application
 // java.opts
 -Djpgl.disable.openglarbcontext=1
 ```
+
+### PDF signature
+
+```bash
+nix run nixpkgs#qpdf -- --json example.pdf | jq '.[] | arrays | to_entries[].value[].value? | select(."/Type" == "/Sig")' | bat -ljson
+```
+
+### Troubleshooting
+
+#### Shell freeze with pressed `<C-s>`
+
+Press `<C-q>` to unfreeze.
 
 ## References
 

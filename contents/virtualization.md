@@ -92,8 +92,10 @@ To achieve a smoother graphical experience with QEMU, configure the GTK display 
   <qemu:commandline>
     <qemu:arg value='-display'/>
     <qemu:arg value='gtk,gl=on'/>
-    <qemu:env name='DISPLAY' value=':0'/>
     <qemu:env name='MESA_LOADER_DRIVER_OVERRIDE' value='iris'/>
+    <!-- <qemu:env name='DISPLAY' value=':0'/> --><!-- If using Xorg -->
+    <qemu:env name='WAYLAND_DISPLAY' value='wayland-1'/>
+    <qemu:env name='XDG_RUNTIME_DIR' value='/run/user/1000'/>
   </qemu:commandline>
   <qemu:override>
     <qemu:device alias='hostdev0'>
