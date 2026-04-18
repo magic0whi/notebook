@@ -1,5 +1,7 @@
 name: Build and Deploy
 on: [push]
+env:
+  ARTIFACT_NAME: notebook-build
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,10 +34,9 @@ jobs:
     # --- Forgejo specific upload ---
     - name: Upload artifact for Forgejo
       if: github.server_url != 'https://github.com'
-      # https://github.com/actions/upload-artifact/blob/e454baaac2be505c9450e11b8f3215c6fc023ce8/README.md#ghes-support
-      uses: https://code.forgejo.org/forgejo/upload-artifact@v5
+      uses: ChristopherHX/gitea-upload-artifact@v4
       with:
-        name: artifact
+        name: ${{ env.ARTIFACT_NAME }}
         path: ./_book
 
   deploy-github:
@@ -60,9 +61,9 @@ jobs:
     steps:
       - name: Download artifact
         # https://github.com/actions/download-artifact/tree/484a0b528fb4d7bd804637ccb632e47a0e638317?tab=readme-ov-file#ghes-support
-        uses: https://code.forgejo.org/forgejo/download-artifact@v7
+        uses: ChristopherHX/gitea-download-artifact@v8
         with:
-          name: artifact
+          name: ${{ env.ARTIFACT_NAME }}
           path: ./_book
 
       # Deploy the built site to homelab's Caddy directory over SSH
