@@ -33,8 +33,9 @@ jobs:
     - name: Upload artifact for Forgejo
       if: github.server_url != 'https://github.com'
       # https://github.com/actions/upload-artifact/blob/e454baaac2be505c9450e11b8f3215c6fc023ce8/README.md#ghes-support
-      uses: actions/upload-artifact@v3.2.2
+      uses: https://code.forgejo.org/forgejo/upload-artifact@v5
       with:
+        name: artifact
         path: ./_book
 
   deploy-github:
@@ -59,7 +60,7 @@ jobs:
     steps:
       - name: Download artifact
         # https://github.com/actions/download-artifact/tree/484a0b528fb4d7bd804637ccb632e47a0e638317?tab=readme-ov-file#ghes-support
-        uses: actions/download-artifact@v3.1.0
+        uses: https://code.forgejo.org/forgejo/download-artifact@v7
         with:
           name: artifact
           path: ./_book
