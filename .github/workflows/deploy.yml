@@ -81,6 +81,11 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
           path: ./_book
 
+      # Debug
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3.23
+      # You can also try https://upterm.dev/
+
       # Deploy the built site to homelab's Caddy directory over SSH
       - name: Deploy to homelab's Caddy Server
         uses: appleboy/scp-action@v1.0.0
