@@ -20,8 +20,20 @@ jobs:
 
     - name: Install Nix
       uses: DeterminateSystems/nix-installer-action@v22
+
     - name: Magic Nix Cache
+      if: github.server_url == 'https://github.com'
       uses: DeterminateSystems/magic-nix-cache-action@v13
+
+    # Proteus' Nix Cache (For self-hosted runners like Forgejo/Gitea)
+    - name: Proteus' Nix Cache
+      if: github.server_url != 'https://github.com'
+      run: |
+        mkdir -p ~/.config/nix
+        cat <<EOF >> ~/.config/nix/nix.conf
+        extra-substituters = https://s3.proteus.eu.org/nix-cache/
+        extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
+        EOF
 
     - name: Install and build
       run: nix develop github:magic0whi/dev_flake#node --command sh -c \
