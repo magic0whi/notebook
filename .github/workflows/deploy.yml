@@ -1,7 +1,7 @@
 name: Build and Deploy
 on: [push]
 env:
-  ARTIFACT_NAME: notebook-build
+  ARTIFACT_NAME: notebook-build.zip
   DEPLOY_HOST: proteus-nuc.tailba6c3f.ts.net # Proteus-NUC
   DEPLOY_USER: proteus
   DEPLOY_ROOT: /srv/www
@@ -80,11 +80,15 @@ jobs:
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: ./_book
-          skip-decompress: false
 
-      # Debug
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3.23
+      - name: Extract manually
+        run: |
+          cd ./_book
+          unzip -q ${{ env.ARTIFACT_NAME }}
+
+      # # Debug
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3.23
       # You can also try https://upterm.dev/
 
       # Deploy the built site to homelab's Caddy directory over SSH
