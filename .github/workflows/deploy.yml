@@ -2,6 +2,9 @@ name: Build and Deploy
 on: [push]
 env:
   ARTIFACT_NAME: notebook-build
+  DEPLOY_HOST: proteus-nuc.tailba6c3f.ts.net # Proteus-NUC
+  DEPLOY_USER: proteus
+  DEPLOY_ROOT: /srv/www
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -70,10 +73,10 @@ jobs:
       - name: Deploy to homelab's Caddy Server
         uses: appleboy/scp-action@v1.0.0
         with:
-          host: proteus-nuc.tailba6c3f.ts.net # Proteus-NUC Tailscale IP
-          username: proteus
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "_book/"
-          target: "/var/www/notebook/"
+          target: ${{ env.DEPLOY_ROOT }}
           # Strips the '_book/' folder name so contents go directly into the target
           strip_components: 1
