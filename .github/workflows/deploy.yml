@@ -80,6 +80,7 @@ jobs:
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: ./_book
+          skip-decompress: false
 
       # Debug
       - name: Setup tmate session
