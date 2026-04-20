@@ -144,7 +144,7 @@ Parsons was Winston's fellow-employee at the Ministry of Truth. He was a fattish
 
 "Have you got a spanner?" said Winston, fiddling with the nut on the angle-joint.
 
-"A spanner," said Mrs. Parsons, immediately becoming invertebrate. "I don't know, I'm sure. Perhaps the children&mdash" There was a trampling of boots and another blast on the comb as the children charged into the living-room. Mrs. Parsons brought the spanner. Winston let out the water and disgustedly removed the clot of human hair that had blocked up the pipe. He cleaned his fingers as best he could in the cold water from the tap and went back into the other room.
+"A spanner," said Mrs. Parsons, immediately becoming invertebrate. "I don't know, I'm sure. Perhaps the children&mdash;" There was a trampling of boots and another blast on the comb as the children charged into the living-room. Mrs. Parsons brought the spanner. Winston let out the water and disgustedly removed the clot of human hair that had blocked up the pipe. He cleaned his fingers as best he could in the cold water from the tap and went back into the other room.
 
 "Up with your hands!" yelled a savage voice.
 
