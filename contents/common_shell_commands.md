@@ -1029,10 +1029,23 @@ Type=Application
 -Djpgl.disable.openglarbcontext=1
 ```
 
-### PDF signature
+### Show a PDF's signature
 
 ```bash
 nix run nixpkgs#qpdf -- --json example.pdf | jq '.[] | arrays | to_entries[].value[].value? | select(."/Type" == "/Sig")' | bat -ljson
+```
+
+### Get a License autatically
+
+Automatically retrieve the MIT License text and replace the `[year]` and `[fullname]` placeholders
+```bash
+curl -s https://api.github.com/licenses/mit \
+  | jq -r .body | sed -e "s/\[year\]/$(date +%Y)/" -e "s/\[fullname\]/$( \
+    ldapsearch -x -LLL \
+      -H 'ldaps://openldap.proteus.eu.org' \
+      -b 'ou=People,dc=tailba6c3f,dc=ts,dc=net' \
+      '(uid=proteus)' cn \
+    | sed -n 's/^cn: //p')/"
 ```
 
 ### Troubleshooting
