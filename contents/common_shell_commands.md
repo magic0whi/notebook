@@ -1037,15 +1037,21 @@ nix run nixpkgs#qpdf -- --json example.pdf | jq '.[] | arrays | to_entries[].val
 
 ### Get a License autatically
 
+List available licenses from Github:
+```bash
+curl https://api.github.com/licenses | less
+```
+
 Automatically retrieve the MIT License text and replace the `[year]` and `[fullname]` placeholders
 ```bash
-curl -s https://api.github.com/licenses/mit \
+curl https://api.github.com/licenses/mit \
   | jq -r .body | sed -e "s/\[year\]/$(date +%Y)/" -e "s/\[fullname\]/$( \
     ldapsearch -x -LLL \
       -H 'ldaps://openldap.proteus.eu.org' \
       -b 'ou=People,dc=tailba6c3f,dc=ts,dc=net' \
       '(uid=proteus)' cn \
-    | sed -n 's/^cn: //p')/"
+    | sed -n 's/^cn: //p')/" \
+  > LICENSE
 ```
 
 ### Troubleshooting
