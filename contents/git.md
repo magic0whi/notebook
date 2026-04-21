@@ -261,6 +261,17 @@ Show the file content
 git show 4ee9f95a821d9626fc9ccc4dfa018779359ce910:machines/x86_64-linux/Proteus-NUC/services_traefik.nix
 ```
 
+## Upstream Branch Tracking
+
+```bash
+git branch --set-upstream-to=origin/<branch-name>
+```
+
+To check:
+```bash
+git branch -vv
+```
+
 ## Reference
 
 - [What's the difference between HEAD^ and HEAD~ in Git?](https://stackoverflow.com/a/2222920)
