@@ -1071,6 +1071,23 @@ sudo systemctl --runtime edit <Service>
 >
 > Run `systemctl --runtime revert <Service>` to restore
 
+## Recreate systemd tmpfiles.d
+
+Recreate all temporary files:
+```bash
+sudo systemd-tmpfiles --create
+```
+
+Recreate a specific configuration:
+```bash
+sudo systemd-tmpfiles --create /etc/tmpfiles.d/your-config.conf
+```
+
+List active configurations:
+```bash
+systemd-tmpfiles --cat-config
+```
+
 ### Troubleshooting
 
 #### Shell freeze with pressed `<C-s>`
