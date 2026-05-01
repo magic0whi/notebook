@@ -1054,6 +1054,23 @@ curl https://api.github.com/licenses/mit \
   > LICENSE
 ```
 
+## Calibrate/Sync Time on macOS
+
+```bash
+sudo sntp -sS time.apple.com
+```
+
+## Modify a Service Temporary on NixOS
+
+Using the `--runtime` flag:
+```
+sudo systemctl --runtime edit <Service>
+```
+
+> `--runtime` Edit/enable/disable/mask unit files temporarily until next reboot.
+>
+> Run `systemctl --runtime revert <Service>` to restore
+
 ### Troubleshooting
 
 #### Shell freeze with pressed `<C-s>`
