@@ -1088,6 +1088,21 @@ List active configurations:
 systemd-tmpfiles --cat-config
 ```
 
+## ACLs
+
+- Copying the ACL of one file to another: `getfacl file1 | setfacl --set-file=- file2`
+- Sync default ACL to the access ACL: `getfacl --default dir | setfacl --set-file - dir`
+- Copying the access ACL into the default ACL: `getfacl --access dir | setfacl -d -M - dir`
+
+| Command                     | Effect                    |
+| --------------------------- | ------------------------- |
+| `setfacl -x g:storage path` | Remove one specific entry |
+| `setfacl -k path`           | Remove default ACLs only  |
+| `setfacl -b path`           | Remove all ACL entries    |
+| Add `-R` to any             | Apply recursively         |
+
+Ref: setfacl(1)
+
 ### Troubleshooting
 
 #### Shell freeze with pressed `<C-s>`
