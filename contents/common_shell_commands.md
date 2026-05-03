@@ -344,45 +344,45 @@ ldapsearch -x \
 ## OpenSSL Self signing
 
 Generate CA certificate & private key:
-```shell-session
-$ openssl req -noenc \
--newkey EC -pkeyopt ec_paramgen_curve:P-384 -keyout ca.key.pem \
--x509 -new -sha384 -days 730 \
--subj '/C=JP/ST=Toukyouto/L=Setagayaku Kitazawa/O=Homo114514/OU=Yajuu Sa-ba-/CN=Homo home/emailAddress=sudaku233@outlook.com' \
--out ca.pem
+```bash
+openssl req -noenc \
+  -newkey EC -pkeyopt ec_paramgen_curve:P-384 -keyout proteus_ca.priv.pem \
+  -x509 -new -sha384 -days 730 \
+  -subj '/C=JP/ST=Toukyouto/L=Setagayaku Kitazawa/O=Homo114514/OU=Yajuu Sa-ba-/CN=Homo home/emailAddress=sudaku233@outlook.com' \
+  -addext "keyUsage=critical,keyCertSign,cRLSign" \
+  -out proteus_ca.pub.pem
 ```
 
-Generate certificate signing request (CSR) & private key (optional, can reuse CA key):
-```shell-session
-$ openssl req -noenc \
--newkey EC -pkeyopt ec_paramgen_curve:P-384 -keyout server.key.pem \
--new -sha384 \
--subj '/C=JP/ST=Toukyouto/L=Setagayaku Kitazawa/O=Homo114514/OU=Yajuu Sa-ba-/CN=*.tailba6c3f.ts.net/emailAddress=sudaku233@outlook.com' \
--out server.csr.pem
+Generate certificate signing request (CSR) & server private key (reuse CA's key is not recommend):
+```bash
+openssl req -noenc \
+  -newkey EC -pkeyopt ec_paramgen_curve:P-384 -keyout proteus_server.priv.pem \
+  -new -sha384 \
+  -subj '/C=JP/ST=Toukyouto/L=Setagayaku Kitazawa/O=Homo114514/OU=Yajuu Sa-ba-/CN=*.tailba6c3f.ts.net/emailAddress=sudaku233@outlook.com' \
+  -out proteus_server.csr
 ```
 
 Generate certificate by signing CSR with a CA certificate:
-```shell-session
-$ openssl x509 -CA ca.pem -CAkey ca.key.pem -CAcreateserial \
--days 730 -sha384 \
--extfile <(<<EOF
-subjectAltName = DNS:localhost,DNS:*.tailba6c3f.ts.net
+```bash
+openssl x509 -CA proteus_ca.pub.pem -CAkey proteus_ca.priv.pem -CAserial proteus_ca.srl \
+  -days 730 -sha384 \
+  -extfile <(<<EOF
+subjectAltName = DNS:localhost,DNS:*.tailba6c3f.ts.net,DNS:*.proteus.eu.org
 authorityKeyIdentifier = keyid,issuer
 basicConstraints = CA:FALSE
 keyUsage = digitalSignature, keyEncipherment
 extendedKeyUsage=serverAuth
-EOF
-) \
--req -in server.csr.pem -out server.pem
+EOF) \
+  -req -in server.csr.pem -out server.pem
 ```
 
-> `-CAcreateserial` will generate `ca.srl`, afterward using `-CAserial ca.srl`.
+> First time use `-CAcreateserial` to generate `proteus_ca.srl`, afterwards using `-CAserial proteus_ca.srl`.
 
 Show information:
-```shell-session
-$ openssl ec -text -noout -in server.key.pem
-$ openssl req -text -verify -in server.csr.pem
-$ openssl x509 -noout -text -in server.pem
+```bash
+openssl ec -text -noout -in proteus_server.priv.pem
+openssl req -text -verify -in proteus_server.csr
+openssl x509 -noout -text -in proteus_server.csr
 ```
 
 ## gawk
