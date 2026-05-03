@@ -35,7 +35,7 @@ $ git clone --recurse-submodules git@domain.tld:repo.git`
 
 ## Add & Move & Remove
 
-Add file in a interactive patch way
+Add file in a interactive patch way (add by hunks)
 ```shell-session
 $ git add -p/--patch <file>
 ```
