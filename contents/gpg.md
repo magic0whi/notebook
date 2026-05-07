@@ -399,7 +399,7 @@ nix run nixpkgs#pgpdump ryan4yin-gpg-keys.pub
 
 Export Primary Key (The exported key is still encrypted by your passphrase):
 
-> The `!` at the end of the key ID is to force GnuPG to export only the specified key, not the sub keys.
+> The `!` at the end of the key ID is to force GnuPG to export only the specified key.
 
 > GnuPG will ask you to input your passphrase to unlock your key pair, because GnuPG need to convert the secret key's format from its internal protection format to the one specified by the OpenPGP protocol.
 
@@ -440,9 +440,9 @@ rm ryan4yin.primary.priv.asc
 Export Sub Keys one-by-one (The exported keys is still encrypted by your passphrase):
 
 ```bash
-gpg --armor --export-secret-subkeys 6CB4A81FFB3C99B6! > ryan4yin.authsub.priv.asc
-gpg --armor --export-secret-subkeys A42813E03A10F504! > ryan4yin.sigsub.priv.asc
-gpg --armor --export-secret-subkeys 5469C4FACC81B60F! > ryan4yin.encsub.priv.asc
+gpg --armor --export-secret-keys 30973F79B17F9ED3\! > ~/Secrets/sudaku233@outlook.com.auth.priv.asc
+gpg --armor --export-secret-keys 940B76AB99D87247\! > ~/Secrets/sudaku233@outlook.com.enc.priv.asc
+gpg --armor --export-secret-keys FC4881A7361DF34E\! > ~/Secrets/sudaku233@outlook.com.sig.priv.asc
 
 # Check the exported primary key's detail info,
 nix run nixpkgs#pgpdump ryan4yin.authsub.priv.asc
@@ -687,12 +687,7 @@ Finally, save the changes and quit:
 ```bash
 > save
 ```
-Export the subkeys (note I use Zsh so escaped the `!`):
-```bash
-gpg --armor --export 30973F79B17F9ED3\! > /srv/sync_work/3keys/sudaku233@outlook.com.auth.priv.asc
-gpg --armor --export 940B76AB99D87247\! > /srv/sync_work/3keys/sudaku233@outlook.com.enc.priv.asc
-gpg --armor --export FC4881A7361DF34E\! > /srv/sync_work/3keys/sudaku233@outlook.com.sig.priv.asc
-```
+Export the subkeys (note I use Zsh so escaped the `!`): [4. Backup & Restore](#4-backup--restore)
 
 ## Troubleshooting
 

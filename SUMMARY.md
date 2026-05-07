@@ -19,6 +19,7 @@
 - [Literatures](/contents/literatures.md)
 - [NixOS](/contents/nixos.md)
 - [Options](/contents/options.md)
+- [PostgreSQL](/contents/postgresql.md)
 - [Proteus Journals](/contents/proteus_journals.md)
 - [Python in Mathematics](/contents/python_in_mathematics.md)
 - [Time Schedule](/contents/time_schedule.md)

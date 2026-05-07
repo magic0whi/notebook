@@ -169,7 +169,7 @@ Reset signal `TERM`'s action to the default: `trap - TERM`
   ! -d "dir"  Whether a directioy not exists
   -c          Whether a char file
   -b          Whether a block file
-  -s          Ture if file size is not zero
+  -s          True if file size is not zero
   -t          Whether a tty file
   ```
 - String Operator
@@ -367,13 +367,14 @@ Generate certificate by signing CSR with a CA certificate:
 openssl x509 -CA proteus_ca.pub.pem -CAkey proteus_ca.priv.pem -CAserial proteus_ca.srl \
   -days 730 -sha384 \
   -extfile <(<<EOF
-subjectAltName = DNS:localhost,DNS:*.tailba6c3f.ts.net,DNS:*.proteus.eu.org
+subjectAltName = DNS:localhost,DNS:*.tailba6c3f.ts.net,DNS:*.proteus.eu.org,DNS:*.s3-garage.proteus.eu.org,DNS:*.s3-garage-web.proteus.eu.org
 authorityKeyIdentifier = keyid,issuer
 basicConstraints = CA:FALSE
 keyUsage = digitalSignature, keyEncipherment
 extendedKeyUsage=serverAuth
-EOF) \
-  -req -in server.csr.pem -out server.pem
+EOF
+) \
+  -req -in proteus_server.csr -out proteus_server.pub.pem
 ```
 
 > First time use `-CAcreateserial` to generate `proteus_ca.srl`, afterwards using `-CAserial proteus_ca.srl`.
