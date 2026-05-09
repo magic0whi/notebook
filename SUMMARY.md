@@ -3,7 +3,7 @@
 - [Bookmarks and Links (Public)](/contents/bookmarks.md)
 - [C++](/contents/cpp.md)
 - [CMake](/contents/cmake.md)
-- [Common Shell Commands](/contents/common_shell_commands.md)
+- [Shell & System Administration Cheat SheetCommon Shell Commands](/contents/Shell_amp_System_Administration_Cheat_Sheet.md)
 - [Computer Graphics](/contents/computer_graphics.md)
 - [Concepts on Linux](/contents/linux.md)
 - [Excerpts from Nineteen Eighty-Four: Volume One](/contents/nineteen_eighty-four_volume_one.md)
