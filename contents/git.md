@@ -272,6 +272,14 @@ To check:
 git branch -vv
 ```
 
+## Search for an exact string (The Pickaxe)
+
+Use the `-S` flag to find commits where a specific string of code was either added or removed.
+```bash
+git log -S "code snippet" -p
+```
+> The `-p` flag displays the actual code diffs
+
 ## Reference
 
 - [What's the difference between HEAD^ and HEAD~ in Git?](https://stackoverflow.com/a/2222920)
