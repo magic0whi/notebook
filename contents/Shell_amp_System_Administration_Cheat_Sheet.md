@@ -343,6 +343,7 @@ sudo umount $CHROOT /mnt/chroots/tmp
 
 ### NixOS / systemd
 
+- Re-run the system activation script: `sudo /run/current-system/bin/switch-to-configuration test`
 - Get a process's env vars: `sudo cat /proc/$(pidof -s nix-daemon)/environ | tr '\0' '\n'`
 - Modify a service temporarily: `sudo systemctl --runtime edit <Service>` (Restore with `--runtime revert`).
 - Recreate `tmpfiles.d`: `sudo systemd-tmpfiles --create` (List with `--cat-config`).
