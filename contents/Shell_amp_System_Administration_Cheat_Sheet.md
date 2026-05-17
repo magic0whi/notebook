@@ -270,11 +270,27 @@ Reset signal `TERM`'s action to default: `trap - TERM`
   - Exchange first and second column using groups `()`: `sed -r 's/^([0-9]*)([\t ]*)([^\t ]*)/\3\2\1/' data.txt`
   - Delete line starting with `std`: `sed -r '/^std/d' main.txt`
 
-> Note: The numbering of the groups depend on the appear order of the left parentheses `(`:
-> ```plaintext
-> (( )( )( ))
-> 12  3  4
-> ```
+  > Note: The numbering of the groups depend on the appear order of the left parentheses `(`:
+  > ```plaintext
+  > (( )( )( ))
+  > 12  3  4
+  > ```
+- **fd**
+  Merge all text file in a codebase
+  ```bash
+  fd --type f \
+    --exclude '*.lock' \
+    --exclude '*.pem' \
+    --exclude '*.png' \
+    --exclude '*.sops' \
+    --exclude '*.sops.yaml' \
+    --exclude '*.ldif' \
+    --exclude '*.olcSudo' \
+    | while IFS= read -r file; do
+      echo "=== $file ==="
+      cat "$file"
+    done | hx
+  ```
 
 ## 4. File System & Storage
 
@@ -655,7 +671,16 @@ Useful python snippets
 >>> print('LTK: ', LTK, '\n', 'ERand: ', ERand, '\n', 'EDIV: ', EDIV, '\n', 'IRK: ', ''.join(IRK))
 ```
 
-## 8. Obsolete & Miscellaneous Tools
+## 8. Access a S3 bucket
+
+```bash
+export AWS_ACCESS_KEY_ID="GKa80ba5756034df47aadc5b8f"
+export AWS_CA_BUNDLE=/path/to/self-signed/proteus_ca.pub.pem
+export AWS_SECRET_ACCESS_KEY=$(systemd-ask-password)
+aws --endpoint-url https://s3.proteus.eu.org --region cn-east1-a s3 ls s3://backups/
+```
+
+## 9. Obsolete & Miscellaneous Tools
 
 - **keepassxc-cli**: Generate 15-char secure password: `keepassxc-cli generate -L15 -lUns`
 - **nohup**: Prevent process termination on session exit: `nohup bash run0.sh &`
