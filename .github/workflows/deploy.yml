@@ -103,6 +103,7 @@ jobs:
       - name: Deploy to homelab's Caddy Root
         uses: burnett01/rsync-deployments@v8
         with:
+          debug: true
           switches: -avzr --delete
           path: _book/
           remote_host: ${{ env.DEPLOY_HOST }}
