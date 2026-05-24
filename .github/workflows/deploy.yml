@@ -35,19 +35,23 @@ jobs:
         extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
         EOF
 
-    - name: Install and build
+    - name: Install and build (Github)
+      if: github.server_url == 'https://github.com'
       run: nix develop github:magic0whi/dev_flake#node --command sh -c \
         'pnpm install && pnpm build'
 
-    # --- GitHub Pages specific upload ---
-    - name: Upload GitHub Pages artifact
+    - name: Install and build (Forgejo)
+      if: github.server_url != 'https://github.com'
+      run: nix develop git+https://git.proteus.eu.org/proteus/dev_flake#node --command sh -c \
+        'pnpm install && pnpm build'
+
+    - name: Upload artifact (Github)
       if: github.server_url == 'https://github.com'
       uses: actions/upload-pages-artifact@v4.0.0
       with:
         path: ./_book
 
-    # --- Forgejo specific upload ---
-    - name: Upload artifact for Forgejo
+    - name: Upload artifact (Forgejo)
       if: github.server_url != 'https://github.com'
       uses: ChristopherHX/gitea-upload-artifact@v4
       with:
@@ -95,7 +99,7 @@ jobs:
       - name: Deploy to homelab's Caddy Root
         uses: burnett01/rsync-deployments@v8
         with:
-          debug: true
+          # debug: true
           switches: -avzr --delete
           path: _book/
           remote_host: ${{ env.DEPLOY_HOST }}
