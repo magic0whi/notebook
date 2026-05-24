@@ -35,14 +35,6 @@ jobs:
         extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
         EOF
 
-    - name: Proteus' Nix Cache
-      if: github.server_url != 'https://github.com'
-      shell: bash
-      run: |
-        sed -i -e 's|^\(extra-substituters\ = \)|\1https://s3.proteus.eu.org/nix-cache/ |' \
-        -e 's|^\(extra-trusted-public-keys\ =\ \)|\1s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E= |' \
-        /etc/nix/nix.conf
-
     - name: Install and build
       run: nix develop github:magic0whi/dev_flake#node --command sh -c \
         'pnpm install && pnpm build'
@@ -107,7 +99,7 @@ jobs:
           switches: -avzr --delete
           path: _book/
           remote_host: ${{ env.DEPLOY_HOST }}
-          remote_user: ${{ env.REMOTE_USER }}
+          remote_user: ${{ env.DEPLOY_USER }}
           remote_path: ${{ env.DEPLOY_ROOT }}
           remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
           remote_key_pass: ${{ secrets.DEPLOY_SSH_KEY_PASS }}
