@@ -2,8 +2,8 @@ name: Build and Deploy
 on: [push]
 env:
   ARTIFACT_NAME: notebook-build.zip
-  DEPLOY_HOST: proteus-nuc.tailba6c3f.ts.net # Proteus-NUC
-  DEPLOY_USER: proteus
+  DEPLOY_HOST: notebook.proteus.eu.org # Proteus-NUC
+  DEPLOY_USER: caddy
   DEPLOY_ROOT: /srv/www
 jobs:
   build:
@@ -34,6 +34,14 @@ jobs:
         extra-substituters = https://s3.proteus.eu.org/nix-cache/
         extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
         EOF
+
+    - name: Proteus' Nix Cache
+      if: github.server_url != 'https://github.com'
+      shell: bash
+      run: |
+        sed -i -e 's|^\(extra-substituters\ = \)|\1https://s3.proteus.eu.org/nix-cache/ |' \
+        -e 's|^\(extra-trusted-public-keys\ =\ \)|\1s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E= |' \
+        /etc/nix/nix.conf
 
     - name: Install and build
       run: nix develop github:magic0whi/dev_flake#node --command sh -c \
@@ -91,14 +99,13 @@ jobs:
       #   uses: mxschmitt/action-tmate@v3.23
       # You can also try https://upterm.dev/
 
-      # Deploy the built site to homelab's Caddy directory over SSH
-      - name: Deploy to homelab's Caddy Server
-        uses: appleboy/scp-action@v1.0.0
+      # Deploy the built site to homelab's Caddy directory over rsync
+      - name: Deploy to homelab's Caddy Root
+        uses: burnett01/rsync-deployments@v8
         with:
-          host: ${{ env.DEPLOY_HOST }}
-          username: ${{ env.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "_book/"
-          target: ${{ env.DEPLOY_ROOT }}
-          # Strips the '_book/' folder name so contents go directly into the target
-          strip_components: 1
+          switches: -avzr --delete
+          path: _book/
+          remote_host: ${{ env.DEPLOY_HOST }}
+          remote_user: ${{ env.REMOTE_USER }}
+          remote_path: ${{ env.DEPLOY_ROOT }}
+          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
