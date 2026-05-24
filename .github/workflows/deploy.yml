@@ -110,3 +110,4 @@ jobs:
           remote_user: ${{ env.REMOTE_USER }}
           remote_path: ${{ env.DEPLOY_ROOT }}
           remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          remote_key_pass: ${{ secrets.DEPLOY_SSH_KEY_PASS }}
