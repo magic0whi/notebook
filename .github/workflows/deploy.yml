@@ -31,7 +31,7 @@ jobs:
       run: |
         mkdir -p ~/.config/nix
         cat <<EOF >> ~/.config/nix/nix.conf
-        extra-substituters = https://s3.proteus.eu.org/nix-cache/
+        extra-substituters = https://nix-cache.s3-pub.proteus.eu.org/
         extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
         EOF
 
