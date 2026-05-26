@@ -4,7 +4,7 @@ env:
   ARTIFACT_NAME: notebook-build.zip
   DEPLOY_HOST: notebook.proteus.eu.org # Proteus-NUC
   DEPLOY_USER: caddy
-  DEPLOY_ROOT: ./
+  DEPLOY_ROOT: ./notebook
 jobs:
   build:
     runs-on: ubuntu-latest
