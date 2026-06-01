@@ -2,7 +2,10 @@
 
 ## Difference between `^` and `~`
 
-`commit^n` choose the nth parent of the commit. `HEAD^` is equivalent to `HEAD^1`, `HEAD~`, `HEAD~1`.
+A commit can have multiple parents when a merge occurs. When two branches are combined via `git merge`, Git creates a special "merge commit" that points back to the tips of `both` branches that were joined together.
+
+The caret (`^`): Choose which parent whereas the tilde (`~`) go back in generations and always following the **first parent**.
+
 ```plaintext
 G   H   I   J
  \ /     \ /
@@ -26,6 +29,9 @@ H = D^2  = B^^2    = A^^^2  = A~2^2
 I = F^   = B^3^    = A^^3^
 J = F^2  = B^3^2   = A^^3^2
 ```
+
+If you want to select the commit `E`, you can use `A~1^2` (`~1` go back one generation, which is `B`, and `^` select `B`'s second parent)
+
 ## Clone
 
 Clone a repository with its submodules:

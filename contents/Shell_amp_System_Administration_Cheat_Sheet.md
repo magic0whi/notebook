@@ -363,6 +363,7 @@ sudo umount $CHROOT /mnt/chroots/tmp
 - Get a process's env vars: `sudo cat /proc/$(pidof -s nix-daemon)/environ | tr '\0' '\n'`
 - Modify a service temporarily: `sudo systemctl --runtime edit <Service>` (Restore with `--runtime revert`).
 - Recreate `tmpfiles.d`: `sudo systemd-tmpfiles --create` (List with `--cat-config`).
+- Refresh Flake caching with direnv reload: `nix flake metadata --refresh github:magic0whi/dev_flake && direnv reload`
 
 ### macOS Time Calibration
 
@@ -605,8 +606,6 @@ openssl x509 -noout -text -in proteus_server.csr
     - `b`, `best`: Select the best quality format that **contains both** video and audio. Equivalent to `best*[vcodec!=none][acodec!=none]`.
     - `/`: Logical `Or`
 
-
-
 ### Binary File Modify
 
 - Dump: `xxd in.bin > out.txt`
@@ -680,7 +679,28 @@ export AWS_SECRET_ACCESS_KEY=$(systemd-ask-password)
 aws --endpoint-url https://s3.proteus.eu.org --region cn-east1-a s3 ls s3://backups/
 ```
 
-## 9. Obsolete & Miscellaneous Tools
+## 9. OIDC
+
+```bash
+oauth2c "$OIDC_ISSUER" \
+  --auth-method client_secret_basic \
+  --client-id "$CLIENT_ID" \
+  --client-secret "${CLIENT_SECRET:-$(systemd-ask-password)}" \
+  --grant-type authorization_code \
+  --redirect-url 'http://127.0.0.1:8000/callback' \
+  --response-mode query \
+  --response-types code \
+  --scopes openid,email,profile
+```
+
+Get attributes of an Access Token:
+```bash
+./fetch-authelia-token-ac.sh | jq '.token' \
+  | awk -F. '{print $2}' | tr '_-' '/+' \
+  | base64 -d 2>/dev/null | jq
+```
+
+## 10. Obsolete & Miscellaneous Tools
 
 - **keepassxc-cli**: Generate 15-char secure password: `keepassxc-cli generate -L15 -lUns`
 - **nohup**: Prevent process termination on session exit: `nohup bash run0.sh &`
