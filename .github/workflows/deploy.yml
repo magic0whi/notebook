@@ -2,7 +2,7 @@ name: Build and Deploy
 on: [push]
 env:
   ARTIFACT_NAME: notebook-build.zip
-  DEPLOY_HOST: notebook.proteus.eu.org # Proteus-NUC
+  DEPLOY_HOST: notebook.proteus.eu.org
   DEPLOY_USER: caddy
   DEPLOY_ROOT: ./notebook
 jobs:
@@ -29,11 +29,9 @@ jobs:
     - name: Proteus' Nix Cache
       if: github.server_url != 'https://github.com'
       run: |
-        mkdir -p ~/.config/nix
-        cat <<EOF >> ~/.config/nix/nix.conf
-        extra-substituters = https://nix-cache.s3-pub.proteus.eu.org/
-        extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
-        EOF
+        sed -i -e 's|^\(extra-substituters\ = \)|\1https://nix-cache.s3-pub.proteus.eu.org/ |' \
+        -e 's|^\(extra-trusted-public-keys\ =\ \)|\1s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E= |' \
+        /etc/nix/nix.conf
 
     - name: Install and build (Github)
       if: github.server_url == 'https://github.com'
