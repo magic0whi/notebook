@@ -18,26 +18,18 @@ jobs:
         path: node_modules
         key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml')}}
 
-    - name: Install Nix
-      uses: DeterminateSystems/nix-installer-action@v22
-      with:
-          github-server-url: https://github.com
-          github-token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
-          extra-conf: |
-            extra-substituters = https://nix-cache.s3-pub.proteus.eu.org/
-            extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
-
-    - name: Magic Nix Cache
+    - name: Install Lix
       if: github.server_url == 'https://github.com'
-      uses: DeterminateSystems/magic-nix-cache-action@v13
+      uses: samueldr/lix-gha-installer-action@f5e94192f565f53d84f41a056956dc0d3183b343
 
-    # Proteus' Nix Cache (For self-hosted runners like Forgejo/Gitea)
-    - name: Proteus' Nix Cache
+    - name: Install Lix (Single User)
       if: github.server_url != 'https://github.com'
-      run: |
-        sed -i -e 's|^\(extra-substituters\ = \)|\1https://nix-cache.s3-pub.proteus.eu.org/ |' \
-        -e 's|^\(extra-trusted-public-keys\ =\ \)|\1s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E= |' \
-        /etc/nix/nix.conf
+      uses: canidae-solutions/lix-quick-install-action@v4.0.1
+      with:
+        github_access_token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+        lix_conf: |
+          extra-substituters = https://nix-cache.s3-pub.proteus.eu.org/
+          extra-trusted-public-keys = s3.proteus.eu.org-1:IxrRwk4uC5ittHeG9menkuajABnrX9cboEWwZz/m4+E=
 
     - name: Install and build (Github)
       if: github.server_url == 'https://github.com'
